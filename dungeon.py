@@ -1,0 +1,410 @@
+import sys
+import pygame as pg
+import random
+from utils import round_down, plot_line
+from operator import attrgetter
+# Classes
+from tiles import Tile
+from room import Room
+# Needed globals
+from config import TILESIZE, ROOMFRAC, MAX_SLICE_OFFSET, Point
+"""
+A random dungeon generator.
+Design based on a simple binary spatial partitioning algorithm.
+
+Follows the following main steps:
+1. Start with a space that fits a minimum tile size.
+2. Organize the space into a to dimensional list containing tiles.
+3. Recursively split into sub-spaces.
+4. Fill each smallest space with a randomly shaped room.
+5. Randomly dig corridors until there are no unconnected rooms left.
+
+Made by: Raymon Skjørten Hansen, 2017
+"""
+
+
+class Generator():
+    """Class to manage the dungeon generator demo."""
+    def __init__(self, width, height, recursiondepth):
+        """Constructor for the Generator class.
+
+        Caps the desired space to a size that will
+        fit the algorithm.
+        """
+        pg.init()
+        # STEP 1: Limit the map fit the necessary specs
+        self.width_px = round_down(width, TILESIZE)
+        self.height_px = round_down(height, TILESIZE)
+        if not (self.width_px//TILESIZE) % 2:
+            self.width_px += TILESIZE
+        if not (self.height_px//TILESIZE) % 2:
+            self.height_px += TILESIZE
+        print(f"Width: {self.width_px} Height: {self.height_px}")
+        self.rec_depth = recursiondepth
+        min_space_in_px = min(self.width_px//ROOMFRAC, self.width_px//ROOMFRAC)
+        # minimum number of tiles that the side of a space can have.
+        self.min_space = round_down(min_space_in_px//TILESIZE, TILESIZE)
+        # Setup the screen etc.
+        self.screen = pg.display.set_mode((self.width_px, self.height_px), 0, 32)
+        self.width_tiles = self.width_px//TILESIZE
+        self.height_tiles = self.height_px//TILESIZE
+        print(f"Width: {self.width_tiles} Height: {self.height_tiles}")        
+        pg.display.set_caption("Dungeon Generator")
+        self.screen.fill(pg.color.THECOLORS["black"])
+        self.done = False
+        # List of calculated spaces and the rooms
+        self.spacelist = []
+        self.roomlist = []
+
+    def setup(self):
+        """STEP 2: Sets up the two dimentional list of tiles"""
+        print("Generating tiles...")
+        self.wall_image = pg.image.load("wall2.png").convert_alpha()
+        self.wall_image = pg.transform.scale(self.wall_image, (TILESIZE, TILESIZE))
+        self.floor_image = pg.image.load("floor2.png").convert_alpha()
+        self.floor_image = pg.transform.scale(self.floor_image, (TILESIZE, TILESIZE))
+        hordoor = pg.image.load("hor_door.png").convert_alpha()
+        hordoor = pg.transform.scale(hordoor, (TILESIZE, TILESIZE))
+        vertdoor = pg.image.load("vert_door.png").convert_alpha()
+        vertdoor = pg.transform.scale(vertdoor, (TILESIZE, TILESIZE))
+        
+        self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, self.wall_image, self.floor_image, vertdoor, hordoor) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
+        print("Done")
+
+    def handle_events(self):
+        """Method for handling input/output events"""
+        events = pg.event.get()
+        for event in events:
+            if event.type == pg.QUIT:
+                self.done = True
+                break
+            if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                self.done = True
+                break
+            # Manually clear the screen
+            if event.type == pg.KEYDOWN and event.key == pg.K_c:
+                self.screen.fill(pg.color.THECOLORS["black"])
+            if event.type == pg.KEYDOWN and event.key == pg.K_r:
+                self.spacelist.clear()
+                print("Running BSP...")
+                vert = False
+                if (self.width_tiles > self.height_tiles):
+                    vert = True
+                self.split_space(0, 0, self.width_tiles, self.height_tiles, vert, 0)
+                print("Done")
+                # print(self.spacelist)
+            if event.type == pg.KEYDOWN and event.key == pg.K_s:
+                i = 0
+                for spaceparam in self.spacelist:
+                    x, y, width, height = spaceparam
+                    for col in range(x, x+width):
+                        for row in range(y, y+height):
+                            self.map[col][row].draw_tile(self.screen)
+                    i += 1
+            if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                line = plot_line(random.randint(0, self.width_tiles-1),
+                                 random.randint(0, self.height_tiles-1),
+                                 random.randint(0, self.width_tiles-1),
+                                 random.randint(0, self.height_tiles-1))
+                for point in line:
+                    self.map[point.x][point.y].draw_tile(self.screen)
+            if event.type == pg.KEYDOWN and event.key == pg.K_y:
+                self.screen.fill(pg.color.THECOLORS["black"])
+                self.roomlist.clear()
+                self.reset_map()
+                self.spawn_rooms()
+                for i, room in enumerate(self.roomlist):
+                    room.draw_nodes(self.screen)
+                    print(f"Room id: {room.id} Area: {room.area} Doors: {room.doornum} Color: {room.color}")
+                for x in range(self.width_tiles):
+                    for y in range(self.height_tiles):
+                        self.map[x][y].draw_tile(self.screen)
+            if event.type == pg.KEYDOWN and event.key == pg.K_m:
+                self.maze()
+
+    def reset_map(self):
+        for x in range(self.width_tiles):
+            for y in range(self.height_tiles):
+                self.map[x][y].dug = False
+
+    def calc_padding(self, distance):
+        """Calculates an offset from a slice-point.
+        Return the offset as number of tiles."""
+        percent = random.randint(0, MAX_SLICE_OFFSET)/100
+        padding = int(distance*percent)
+        return round_down(padding, 1)
+
+    def slicing(self, start, distance, padding):
+        """Calculate a spot to do a slice along
+        the given distance. Return number of the tile."""
+        if random.randint(0, 1):
+            slicing = start + (distance // 2) - padding
+        else:
+            slicing = start + (distance // 2) + padding
+        return round_down(slicing, 1)
+
+    def split_space(self, startx, starty, width, height, vertical, depth):
+        """STEP 3: Recursively split into smaller sub-spaces
+        until each sub-space fits the specifications or it
+        reaches the maximum recursion depth.
+
+        Returns a list of the final spaces.
+        """
+        # Return-conditions: too small rooms or maxdepth
+        con1 = width < random.randint(self.width_tiles//8, self.width_tiles//5)
+        con2 = height < random.randint(self.width_tiles//8, self.width_tiles//5)
+        con3 = depth == self.rec_depth
+        if (con1 or con2 or con3):
+            # Store all we need to know about a space
+            # Constrain space
+            if not (startx + 1) % 2:
+                startx += 1
+            else:
+                startx += 2
+            if not (starty + 1) % 2:
+                starty += 1
+            else:
+                starty += 2
+            if not (width - 3) % 2:
+                width -= 3
+            else:
+                width -= 4
+            if not (height - 3) % 2:
+                height -= 3
+            else:
+                height -= 4
+            spaceparam = (startx, starty, width, height)
+            self.spacelist.append(spaceparam)
+            return
+            # Keep slicing alternate directions
+        else:
+            if vertical:
+                padding = self.calc_padding(width)
+                slicex = self.slicing(startx, width, padding)
+                # Calculate sub-space width
+                left_width = slicex - startx
+                right_width = width - left_width
+                # Dig deeper in both sub-spaces
+                # LEFT:
+                self.split_space(startx, starty, left_width, height, False, depth+1)
+                # RIGHT:
+                self.split_space(slicex, starty, right_width, height, False, depth+1)
+            else:
+                padding = self.calc_padding(height)
+                slicey = self.slicing(starty, height, padding)
+                # Calculate sub-space height
+                upper_height = slicey - starty
+                lower_height = height - upper_height
+                # Dig deeper in both sub-spaces
+                # UPPER:
+                self.split_space(startx, starty, width, upper_height, True, depth+1)
+                # LOWER:
+                self.split_space(startx, slicey, width, lower_height, True, depth+1)
+
+    def validate(self, x, y, space):
+        if x >= (space[0] + space[2]) or x <= space[0]:
+            return False
+        if y >= (space[1] + space[3]) or y <= space[1]:
+            return False
+        if self.map[x][y].dug:
+            return False
+        return True
+
+    def recursive_dig(self, x, y, space, pointlist):
+        if not self.food:
+            return
+        # Define the eight possible directions to go
+        north = Point(x, y-1)
+        south = Point(x, y+1)
+        west = Point(x-1, y)
+        east = Point(x+1, y)
+        northwest = Point(x-1, y-1)
+        northeast = Point(x+1, y-1)
+        southwest = Point(x-1, y+1)
+        southeast = Point(x+1, y+1)
+        weirddirections = [northwest, northeast, southwest, southeast]
+        # Put them in a list for random pick
+        directions = [north, south, west, east]
+        # Check in a random direction...
+        if random.randint(0, 100) < 5:
+            pass
+            #directions += weirddirections
+        random.shuffle(directions)
+        for point in directions:
+            if not self.food:
+                return
+            # If its allowed to dig
+            if self.validate(point.x, point.y, space):
+                self.map[point.x][point.y].dug = True
+                self.map[point.x][point.y].is_wall = False
+                self.food = self.food - 1
+                pointlist.append(point)
+                self.recursive_dig(point.x, point.y, space, pointlist)
+        return
+
+    def spawn_rooms(self):
+        """Populate each space with a room that fits within
+        its constraints. Perhaps pick randomly from a list
+        of shapes?
+        Return a list of these room-objects"""
+        for index, space in enumerate(self.spacelist):
+            x, y, w, h = space
+            # How many tiles should be dug?
+            self.food = (w*h)//4
+            if self.food <= 4:
+                self.food = 4
+            # Pick a point to start digging
+            seedx = (x + (w//2))
+            seedy = (y + (h//2))
+            space = (x, y, w, h)
+            # Make a list to fill with points
+            pointlist = list()
+            self.recursive_dig(seedx, seedy, space, pointlist)
+            tiles_in_room = list()
+            for point in pointlist:
+                self.map[point.x][point.y].id = index
+                tiles_in_room.append(self.map[point.x][point.y])
+            # Mark the space not allowed to dig
+            smallestx = sorted(tiles_in_room, key=attrgetter('pos.x'))[0].pos.x//TILESIZE 
+            greatestx = sorted(tiles_in_room, key=attrgetter('pos.x'), reverse=True)[0].pos.x//TILESIZE
+            smallesty = sorted(tiles_in_room, key=attrgetter('pos.y'))[0].pos.y//TILESIZE
+            greatesty = sorted(tiles_in_room, key=attrgetter('pos.y'), reverse=True)[0].pos.y//TILESIZE
+            for x in range(smallestx-1, greatestx+2):
+                for y in range(smallesty-1, greatesty+2):
+                    self.map[x][y].space = True
+            # Finally add the individual rooms to the list of rooms
+            self.roomlist.append(Room(tiles_in_room, index, self.map))
+
+    def candig_list(self, x, y):
+        """Takes in tile coordinates and returns one list of its
+        valid neighbours, or None if we're off grid.
+        Also returns a list of the tiles to be dug to get to the valid
+        neighbours.
+        """
+        neighbours = list()
+        candig = list()
+        north = True
+        south = True
+        west = True
+        east = True
+        # Check if its inside the map
+        if (x*TILESIZE)-(TILESIZE*2) < 0:
+            west = False
+        if (x*TILESIZE)+(TILESIZE*2) >= self.width_px:
+            east = False
+        if (y*TILESIZE)-(TILESIZE*2) < 0:
+            north = False
+        if (y*TILESIZE)+(TILESIZE*2) >= self.height_px:
+            south = False
+        # Now that we are inside the map...
+        # The neighbours must also not have been dug before
+        if west:
+            if not self.map[x-2][y].dug and not self.map[x-1][y].dug:
+                if not self.map[x-2][y].space and not self.map[x-1][y].space:
+                    neighbours.append(self.map[x-2][y])
+                    candig.append(self.map[x-1][y])
+        if east:
+            if not self.map[x+2][y].dug and not self.map[x+1][y].dug:
+                if not self.map[x+2][y].space and not self.map[x+1][y].space:
+                    neighbours.append(self.map[x+2][y])
+                    candig.append(self.map[x+1][y])
+        if north:
+            if not self.map[x][y-2].dug and not self.map[x][y-1].dug:
+                if not self.map[x][y-2].space and not self.map[x][y-1].space:
+                    neighbours.append(self.map[x][y-2])
+                    candig.append(self.map[x][y-1])
+        if south:
+            if not self.map[x][y+2].dug and not self.map[x][y+1].dug:
+                if not self.map[x][y+2].space and not self.map[x][y+1].space:
+                    neighbours.append(self.map[x][y+2])
+                    candig.append(self.map[x][y+1])
+        # Return both lists
+        return neighbours, candig
+
+    def maze_runner(self, startx, starty):
+        """An iterative maze carver."""
+        # STEP 1: Make an empty list of tiles
+        cells = list()
+        # STEP 2: Add a tile.
+        cells.append(self.map[startx][starty])
+        while cells:
+            # Pick a tile and dig it
+            current = random.choice(cells)
+            current.carve(self.screen)
+            # Get valid neighbours if any and the tiles to dig in between
+            neighbours, candig = self.candig_list(current.pos.x//TILESIZE, current.pos.y//TILESIZE)
+            if not neighbours:
+                cells.remove(current)
+            else:
+                index = random.randint(0, len(neighbours)-1)
+                neighbours[index].carve(self.screen)
+                candig[index].carve(self.screen)
+                cells.append(neighbours[index])
+
+    def carve_doors(self):
+        """Goes through the possible entry points for each room
+        and connects some of them to the main corridor."""
+        for room in self.roomlist:
+            doortiles = list()
+            for entry in room.entry:
+                x = entry.pos.x//TILESIZE
+                y = entry.pos.y//TILESIZE
+                if x - 2 > 0:
+                    west = self.map[x-2][y]
+                    if west.corridor:
+                        doortiles.append(self.map[x-1][y])
+                if x + 2 < self.width_tiles:
+                    east = self.map[x+2][y]
+                    if east.corridor:
+                        doortiles.append(self.map[x+1][y])
+                if y - 2 > 0:
+                    north = self.map[x][y-2]
+                    if north.corridor:
+                        self.map[x][y-1].door_image = self.map[x][y-1].hor_door
+                        doortiles.append(self.map[x][y-1])
+                if y + 2 < self.height_tiles:
+                    south = self.map[x][y+2]
+                    if south.corridor:
+                        self.map[x][y+1].door_image = self.map[x][y+1].hor_door
+                        doortiles.append(self.map[x][y+1])
+            # Now we know the number of possible doortiles to each room
+            # Pick a few and connect them to the main corridor
+            print(len(doortiles))
+            k = random.randint(1, 4)
+            finaldoors = random.sample(doortiles, k)
+            for tile in finaldoors:
+                tile.is_door = True
+                tile.is_wall = False
+                tile.dug = True
+                tile.corridor = False
+                tile.draw_tile(self.screen)
+
+    def maze(self):
+        """Attempts to carve out all "dead" space
+        between the rooms.
+        """
+        # Dig a maze in all space that is NOT dug
+        """
+        for x in range(self.width_tiles):
+            for y in range(self.height_tiles):
+                if not self.map[x][y].dug:"""
+        self.maze_runner(1, 1)
+        self.carve_doors()
+
+    def run(self):
+        """Main loop to get input and quit"""
+        # Setup stuff
+        self.setup()
+        while not self.done:
+            self.handle_events()
+            pg.display.update()
+        pg.quit()
+
+
+if __name__ == '__main__':
+    if len(sys.argv) != 4:
+        print("Usage: python dungeon.py <width> <height> <recursion_depth>")
+        print("There will be 2**<recursion_depth> number of rooms!")
+        exit()
+    gen = Generator(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+    gen.run()
