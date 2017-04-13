@@ -47,7 +47,13 @@ class Tile():
         self.dug = True
         self.is_wall = False
         self.corridor = True
-        self.dug = True
+        self.draw_tile(screen)
+        pg.display.update(self.rect)
+
+    def uncarve(self, screen):
+        self.dug = False
+        self.is_wall = True
+        self.corridor = False
         self.draw_tile(screen)
         pg.display.update()
 
@@ -59,6 +65,7 @@ class Tile():
             pg.draw.rect(screen, colors[self.id % len(colors)], self.rect, 1)
         if self.is_door:
             screen.blit(self.door_image, self.rect)
+            pg.draw.rect(screen, pg.color.THECOLORS["white"], self.rect, 1)
         if self.corridor:
             screen.blit(self.floor_image, self.rect)
             pg.draw.rect(screen, pg.color.THECOLORS["white"], self.rect, 1)

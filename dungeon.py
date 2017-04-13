@@ -55,6 +55,7 @@ class Generator():
         # List of calculated spaces and the rooms
         self.spacelist = []
         self.roomlist = []
+        self.corridorlist = []
 
     def setup(self):
         """STEP 2: Sets up the two dimentional list of tiles"""
@@ -331,6 +332,8 @@ class Generator():
             # Pick a tile and dig it
             current = random.choice(cells)
             current.carve(self.screen)
+            # Keep tabs of all carved corridor tiles
+            self.corridorlist.append(current)
             # Get valid neighbours if any and the tiles to dig in between
             neighbours, candig = self.candig_list(current.pos.x//TILESIZE, current.pos.y//TILESIZE)
             if not neighbours:
@@ -339,57 +342,94 @@ class Generator():
                 index = random.randint(0, len(neighbours)-1)
                 neighbours[index].carve(self.screen)
                 candig[index].carve(self.screen)
+                self.corridorlist.append(candig[index])
                 cells.append(neighbours[index])
 
     def carve_doors(self):
         """Goes through the possible entry points for each room
         and connects some of them to the main corridor."""
         for room in self.roomlist:
-            doortiles = list()
+            westerndoors = list()
+            easterndoors = list()
+            northerndoors = list()
+            southerndoors = list()
+            alldoors = list()
             for entry in room.entry:
                 x = entry.pos.x//TILESIZE
                 y = entry.pos.y//TILESIZE
                 if x - 2 > 0:
                     west = self.map[x-2][y]
                     if west.corridor:
-                        doortiles.append(self.map[x-1][y])
+                        westerndoors.append(self.map[x-1][y])
                 if x + 2 < self.width_tiles:
                     east = self.map[x+2][y]
                     if east.corridor:
-                        doortiles.append(self.map[x+1][y])
+                        easterndoors.append(self.map[x+1][y])
                 if y - 2 > 0:
                     north = self.map[x][y-2]
                     if north.corridor:
                         self.map[x][y-1].door_image = self.map[x][y-1].hor_door
-                        doortiles.append(self.map[x][y-1])
+                        northerndoors.append(self.map[x][y-1])
                 if y + 2 < self.height_tiles:
                     south = self.map[x][y+2]
                     if south.corridor:
                         self.map[x][y+1].door_image = self.map[x][y+1].hor_door
-                        doortiles.append(self.map[x][y+1])
-            # Now we know the number of possible doortiles to each room
-            # Pick a few and connect them to the main corridor
-            print(len(doortiles))
-            k = random.randint(1, 4)
-            finaldoors = random.sample(doortiles, k)
-            for tile in finaldoors:
+                        southerndoors.append(self.map[x][y+1])
+            if westerndoors:
+                alldoors.append(westerndoors)
+            if easterndoors:
+                alldoors.append(easterndoors)
+            if northerndoors:
+                alldoors.append(northerndoors)
+            if southerndoors:
+                alldoors.append(southerndoors)
+            # Pick one door on each side and connect to corridor.
+            for doorslist in alldoors:
+                tile = random.choice(doorslist)
                 tile.is_door = True
                 tile.is_wall = False
                 tile.dug = True
                 tile.corridor = False
                 tile.draw_tile(self.screen)
 
+    def is_dead_end(self, tile):
+        """Returns true if the tile is a dead end"""
+        x = tile.pos.x//TILESIZE
+        y = tile.pos.y//TILESIZE
+        i = 0
+        if self.map[x][y-1].dug:
+            i+=1
+        if self.map[x][y+1].dug:
+            i+=1
+        if self.map[x-1][y].dug:
+            i+=1
+        if self.map[x+1][y].dug:
+            i+=1
+        return 0 < i < 2
+
+    def remove_dead_ends(self):
+        """Removes some of the dead ends of the maze"""
+        done = False
+        while not done:
+            done = True
+            # Check for dead ends
+            for tile in self.corridorlist:
+                if self.is_dead_end(tile):
+                    # Unncarve and remove the tile
+                    tile.uncarve(self.screen)
+                    self.corridorlist.remove(tile)
+                    # Keep checking
+                    done = False
+        print("Dead ends removed")
+
     def maze(self):
         """Attempts to carve out all "dead" space
-        between the rooms.
+        between the rooms. Then it places doors.
+        One on each possible side of a room.
         """
-        # Dig a maze in all space that is NOT dug
-        """
-        for x in range(self.width_tiles):
-            for y in range(self.height_tiles):
-                if not self.map[x][y].dug:"""
         self.maze_runner(1, 1)
         self.carve_doors()
+        self.remove_dead_ends()
 
     def run(self):
         """Main loop to get input and quit"""
