@@ -45,7 +45,7 @@ class Generator():
         # minimum number of tiles that the side of a space can have.
         self.min_space = round_down(min_space_in_px//TILESIZE, TILESIZE)
         # Setup the screen etc.
-        self.screen = pg.display.set_mode((self.width_px, self.height_px), 0, 32)
+        self.screen = pg.display.set_mode((self.width_px, self.height_px), pg.FULLSCREEN)
         self.width_tiles = self.width_px//TILESIZE
         self.height_tiles = self.height_px//TILESIZE
         print(f"Width: {self.width_tiles} Height: {self.height_tiles}")        
@@ -68,8 +68,9 @@ class Generator():
         hordoor = pg.transform.scale(hordoor, (TILESIZE, TILESIZE))
         vertdoor = pg.image.load("vert_door.png").convert_alpha()
         vertdoor = pg.transform.scale(vertdoor, (TILESIZE, TILESIZE))
-        
-        self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, self.wall_image, self.floor_image, vertdoor, hordoor) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
+        rockimage = pg.image.load("rock.png").convert_alpha()
+        rockimage = pg.transform.scale(rockimage, (TILESIZE, TILESIZE))
+        self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, rockimage, self.wall_image, self.floor_image, vertdoor, hordoor) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
         print("Done")
 
     def handle_events(self):
@@ -82,9 +83,6 @@ class Generator():
             if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 self.done = True
                 break
-            # Manually clear the screen
-            if event.type == pg.KEYDOWN and event.key == pg.K_c:
-                self.screen.fill(pg.color.THECOLORS["black"])
             if event.type == pg.KEYDOWN and event.key == pg.K_r:
                 self.spacelist.clear()
                 print("Running BSP...")
@@ -93,7 +91,6 @@ class Generator():
                     vert = True
                 self.split_space(0, 0, self.width_tiles, self.height_tiles, vert, 0)
                 print("Done")
-                # print(self.spacelist)
             if event.type == pg.KEYDOWN and event.key == pg.K_s:
                 i = 0
                 for spaceparam in self.spacelist:
@@ -102,31 +99,30 @@ class Generator():
                         for row in range(y, y+height):
                             self.map[col][row].draw_tile(self.screen)
                     i += 1
-            if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                line = plot_line(random.randint(0, self.width_tiles-1),
-                                 random.randint(0, self.height_tiles-1),
-                                 random.randint(0, self.width_tiles-1),
-                                 random.randint(0, self.height_tiles-1))
-                for point in line:
-                    self.map[point.x][point.y].draw_tile(self.screen)
             if event.type == pg.KEYDOWN and event.key == pg.K_y:
-                self.screen.fill(pg.color.THECOLORS["black"])
                 self.roomlist.clear()
                 self.reset_map()
                 self.spawn_rooms()
-                for i, room in enumerate(self.roomlist):
-                    room.draw_nodes(self.screen)
-                    print(f"Room id: {room.id} Area: {room.area} Doors: {room.doornum} Color: {room.color}")
-                for x in range(self.width_tiles):
-                    for y in range(self.height_tiles):
-                        self.map[x][y].draw_tile(self.screen)
+                self.draw_map()
             if event.type == pg.KEYDOWN and event.key == pg.K_m:
                 self.maze()
+            if event.type == pg.KEYDOWN and event.key == pg.K_n:
+                self.remove_dead_ends()
+            if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                self.build_walls()
+            if event.type == pg.KEYDOWN and event.key == pg.K_d:
+                self.draw_map()
 
     def reset_map(self):
         for x in range(self.width_tiles):
             for y in range(self.height_tiles):
                 self.map[x][y].dug = False
+
+    def draw_map(self):
+        """Draws all tiles in the map"""
+        for x in range(self.width_tiles):
+            for y in range(self.height_tiles):
+                self.map[x][y].draw_tile(self.screen)
 
     def calc_padding(self, distance):
         """Calculates an offset from a slice-point.
@@ -223,13 +219,13 @@ class Generator():
         northeast = Point(x+1, y-1)
         southwest = Point(x-1, y+1)
         southeast = Point(x+1, y+1)
-        weirddirections = [northwest, northeast, southwest, southeast]
+        # weirddirections = [northwest, northeast, southwest, southeast]
         # Put them in a list for random pick
         directions = [north, south, west, east]
         # Check in a random direction...
         if random.randint(0, 100) < 5:
             pass
-            #directions += weirddirections
+            # directions += weirddirections
         random.shuffle(directions)
         for point in directions:
             if not self.food:
@@ -265,16 +261,17 @@ class Generator():
             for point in pointlist:
                 self.map[point.x][point.y].id = index
                 tiles_in_room.append(self.map[point.x][point.y])
-            # Mark the space not allowed to dig
-            smallestx = sorted(tiles_in_room, key=attrgetter('pos.x'))[0].pos.x//TILESIZE 
-            greatestx = sorted(tiles_in_room, key=attrgetter('pos.x'), reverse=True)[0].pos.x//TILESIZE
-            smallesty = sorted(tiles_in_room, key=attrgetter('pos.y'))[0].pos.y//TILESIZE
-            greatesty = sorted(tiles_in_room, key=attrgetter('pos.y'), reverse=True)[0].pos.y//TILESIZE
-            for x in range(smallestx-1, greatestx+2):
-                for y in range(smallesty-1, greatesty+2):
-                    self.map[x][y].space = True
-            # Finally add the individual rooms to the list of rooms
-            self.roomlist.append(Room(tiles_in_room, index, self.map))
+            if pointlist:
+                # Mark the space not allowed to dig
+                smallestx = sorted(tiles_in_room, key=attrgetter('pos.x'))[0].pos.x//TILESIZE 
+                greatestx = sorted(tiles_in_room, key=attrgetter('pos.x'), reverse=True)[0].pos.x//TILESIZE
+                smallesty = sorted(tiles_in_room, key=attrgetter('pos.y'))[0].pos.y//TILESIZE
+                greatesty = sorted(tiles_in_room, key=attrgetter('pos.y'), reverse=True)[0].pos.y//TILESIZE
+                for x in range(smallestx-1, greatestx+2):
+                    for y in range(smallesty-1, greatesty+2):
+                        self.map[x][y].space = True
+                # Finally add the individual rooms to the list of rooms
+                self.roomlist.append(Room(tiles_in_room, index, self.map))
 
     def candig_list(self, x, y):
         """Takes in tile coordinates and returns one list of its
@@ -429,7 +426,76 @@ class Generator():
         """
         self.maze_runner(1, 1)
         self.carve_doors()
-        self.remove_dead_ends()
+
+    def build_walls(self):
+        """All non-dug tiles adjacent to a dug tile
+        should be a wall"""
+        for x in range(1, self.width_tiles-1):
+            for y in range(1, self.height_tiles-1):
+                tile = self.map[x][y]
+                n = self.map[x][y-1]
+                nw = self.map[x-1][y-1]
+                ne = self.map[x+1][y-1]
+                s = self.map[x][y+1]
+                sw = self.map[x-1][y+1]
+                se = self.map[x+1][y+1]
+                w = self.map[x-1][y]
+                e = self.map[x+1][y]
+                if not tile.dug:
+                    if n.dug or nw.dug or ne.dug or s.dug or sw.dug or se.dug or w.dug or e.dug:
+                        tile.is_wall = True
+                        tile.dug = False
+                        tile.draw_tile(self.screen)
+        # Top row...
+        for x in range(1, self.width_tiles-1):
+            tile = self.map[x][0]
+            s = self.map[x][1]
+            sw = self.map[x-1][1]
+            se = self.map[x+1][1]
+            if not tile.dug:
+                if s.dug or sw.dug or se.dug:
+                    tile.is_wall = True
+                    tile.dug = False
+                    tile.draw_tile(self.screen)
+        # Bottom row...
+        for x in range(1, self.width_tiles-1):
+            tile = self.map[x][self.height_tiles-1]
+            n = self.map[x][self.height_tiles-2]
+            nw = self.map[x-1][self.height_tiles-2]
+            ne = self.map[x+1][self.height_tiles-2]
+            if not tile.dug:
+                if n.dug or nw.dug or ne.dug:
+                    tile.is_wall = True
+                    tile.dug = False
+                    tile.draw_tile(self.screen)
+        # Left side...
+        for y in range(1, self.height_tiles-1):
+            tile = self.map[0][y]
+            e = self.map[1][y]
+            se = self.map[1][y+1]
+            ne = self.map[1][y-1]
+            if not tile.dug:
+                if e.dug or se.dug or ne.dug:
+                    tile.is_wall = True
+                    tile.dug = False
+                    tile.draw_tile(self.screen)
+        # Right side...
+        for y in range(1, self.height_tiles-1):
+            tile = self.map[self.width_tiles-1][y]
+            w = self.map[self.width_tiles-2][y]
+            sw = self.map[self.width_tiles-2][y+1]
+            nw = self.map[self.width_tiles-2][y-1]
+            if not tile.dug:
+                if w.dug or sw.dug or nw.dug:
+                    tile.is_wall = True
+                    tile.dug = False
+                    tile.draw_tile(self.screen)
+        # Corners, wow there must be a better way of doing this...
+        tile = self.map[0][0]
+        if self.map[1][1].dug or self.map[1][0].dug or self.map[0][1].dug:
+            tile.is_wall = True
+            tile.dug = False
+            tile.draw_tile(self.screen)
 
     def run(self):
         """Main loop to get input and quit"""

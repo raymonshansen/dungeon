@@ -9,7 +9,7 @@ Point = namedtuple("Point", ["x", "y"])
 # Minimum roomsize
 ROOMFRAC = 20
 # Corridor width
-TILESIZE = 20
+TILESIZE = 16
 # Maximum slice offset from middle
 MAX_SLICE_OFFSET = 20
 MAX_SPACE_SHRINKAGE = 80

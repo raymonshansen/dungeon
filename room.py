@@ -43,8 +43,3 @@ class Room():
     @property
     def area(self):
         return len(self.tiles)
-
-    def draw_nodes(self, screen):
-        """Draw each node N of the polygon that makes up the room"""
-        for tile in self.tiles:
-            tile.draw_tile(screen)
