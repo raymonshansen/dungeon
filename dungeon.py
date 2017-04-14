@@ -1,7 +1,7 @@
 import sys
 import pygame as pg
 import random
-from utils import round_down, plot_line
+from utils import round_down
 from operator import attrgetter
 # Classes
 from tiles import Tile
@@ -45,32 +45,38 @@ class Generator():
         # minimum number of tiles that the side of a space can have.
         self.min_space = round_down(min_space_in_px//TILESIZE, TILESIZE)
         # Setup the screen etc.
-        self.screen = pg.display.set_mode((self.width_px, self.height_px), pg.FULLSCREEN)
+        self.screen = pg.display.set_mode((self.width_px, self.height_px))
         self.width_tiles = self.width_px//TILESIZE
         self.height_tiles = self.height_px//TILESIZE
-        print(f"Width: {self.width_tiles} Height: {self.height_tiles}")        
+        print(f"Width: {self.width_tiles} Height: {self.height_tiles}")
         pg.display.set_caption("Dungeon Generator")
         self.screen.fill(pg.color.THECOLORS["black"])
         self.done = False
-        # List of calculated spaces and the rooms
-        self.spacelist = []
-        self.roomlist = []
-        self.corridorlist = []
 
     def setup(self):
         """STEP 2: Sets up the two dimentional list of tiles"""
         print("Generating tiles...")
+        # List of calculated spaces and the rooms
+        self.spacelist = []
+        self.roomlist = []
+        self.corridorlist = []
         self.wall_image = pg.image.load("wall2.png").convert_alpha()
         self.wall_image = pg.transform.scale(self.wall_image, (TILESIZE, TILESIZE))
         self.floor_image = pg.image.load("floor2.png").convert_alpha()
         self.floor_image = pg.transform.scale(self.floor_image, (TILESIZE, TILESIZE))
-        hordoor = pg.image.load("hor_door.png").convert_alpha()
-        hordoor = pg.transform.scale(hordoor, (TILESIZE, TILESIZE))
-        vertdoor = pg.image.load("vert_door.png").convert_alpha()
-        vertdoor = pg.transform.scale(vertdoor, (TILESIZE, TILESIZE))
-        rockimage = pg.image.load("rock.png").convert_alpha()
-        rockimage = pg.transform.scale(rockimage, (TILESIZE, TILESIZE))
-        self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, rockimage, self.wall_image, self.floor_image, vertdoor, hordoor) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
+        self.hordoor = pg.image.load("hor_door.png").convert_alpha()
+        self.hordoor = pg.transform.scale(self.hordoor, (TILESIZE, TILESIZE))
+        self.vertdoor = pg.image.load("vert_door.png").convert_alpha()
+        self.vertdoor = pg.transform.scale(self.vertdoor, (TILESIZE, TILESIZE))
+        self.rockimage = pg.image.load("rock.png").convert_alpha()
+        self.rockimage = pg.transform.scale(self.rockimage, (TILESIZE, TILESIZE))
+        self.enterimage = pg.image.load("enter.png").convert_alpha()
+        self.enterimage = pg.transform.scale(self.enterimage, (TILESIZE, TILESIZE))
+        self.exitimage = pg.image.load("exit.png").convert_alpha()
+        self.exitimage = pg.transform.scale(self.exitimage, (TILESIZE, TILESIZE))
+        self.playerimage = pg.image.load("alfa.png").convert_alpha()
+        self.playerimage = pg.transform.scale(self.playerimage, (TILESIZE, TILESIZE))
+        self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, self.rockimage, self.wall_image, self.floor_image, self.vertdoor, self.hordoor, self.enterimage, self.exitimage, self.playerimage) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
         print("Done")
 
     def handle_events(self):
@@ -103,7 +109,7 @@ class Generator():
                 self.roomlist.clear()
                 self.reset_map()
                 self.spawn_rooms()
-                self.draw_map()
+                self.enter_exit()
             if event.type == pg.KEYDOWN and event.key == pg.K_m:
                 self.maze()
             if event.type == pg.KEYDOWN and event.key == pg.K_n:
@@ -112,11 +118,29 @@ class Generator():
                 self.build_walls()
             if event.type == pg.KEYDOWN and event.key == pg.K_d:
                 self.draw_map()
+            if event.type == pg.KEYDOWN and event.key == pg.K_l:
+                self.new_level()
+
+    def new_level(self):
+        self.spacelist.clear()
+        self.roomlist.clear()
+        self.corridorlist.clear()
+        vert = False
+        if (self.width_tiles > self.height_tiles):
+            vert = True
+        self.split_space(0, 0, self.width_tiles, self.height_tiles, vert, 0)
+        self.reset_map()
+        self.spawn_rooms()
+        self.enter_exit()
+        self.draw_map()
+        self.maze()
+        self.remove_dead_ends()
+        self.build_walls()
 
     def reset_map(self):
         for x in range(self.width_tiles):
             for y in range(self.height_tiles):
-                self.map[x][y].dug = False
+                self.map[x][y].__init__(x*TILESIZE, y*TILESIZE, 0, self.rockimage, self.wall_image, self.floor_image, self.vertdoor, self.hordoor, self.enterimage, self.exitimage, self.playerimage)
 
     def draw_map(self):
         """Draws all tiles in the map"""
@@ -272,6 +296,17 @@ class Generator():
                         self.map[x][y].space = True
                 # Finally add the individual rooms to the list of rooms
                 self.roomlist.append(Room(tiles_in_room, index, self.map))
+
+    def enter_exit(self):
+        """Set enter/exit points"""
+        startroom = random.choice(self.roomlist)
+        exitroom = random.choice(self.roomlist)
+        while exitroom is startroom:
+            exitroom = random.choice(self.roomlist)
+        starttile = random.choice(startroom.tiles)
+        starttile.enter = True
+        starttile.player = True
+        random.choice(exitroom.tiles).exit = True
 
     def candig_list(self, x, y):
         """Takes in tile coordinates and returns one list of its

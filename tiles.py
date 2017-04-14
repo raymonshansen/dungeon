@@ -16,13 +16,16 @@ A tile can be dug or filled.
 
 class Tile():
     """Class to manage tiles."""
-    def __init__(self, x, y, regionid, rockimage, wallimage, floorimage, vertdoor, hordoor):
+    def __init__(self, x, y, regionid, rockimage, wallimage, floorimage, vertdoor, hordoor, enter, exiti, playerimage):
         """Constructor for tiles."""
         self.rockimage = rockimage
         self.wall_image = wallimage
         self.floor_image = floorimage
         self.door_image = vertdoor
         self.hor_door = hordoor
+        self.enter_image = enter
+        self.exit_image = exiti
+        self.playerimage = playerimage
         self.pos = Point(x, y)
         self.rect = pg.Rect(x, y, TILESIZE, TILESIZE)
         self.id = regionid
@@ -36,6 +39,9 @@ class Tile():
         self.is_door = False
         self.is_wall = False
         self.space = False
+        self.enter = False
+        self.exit = False
+        self.player = False
 
     def __repr__(self):
         """Who are you?"""
@@ -68,10 +74,16 @@ class Tile():
             screen.blit(self.wall_image, self.rect)
         if self.dug:
             screen.blit(self.floor_image, self.rect)
-            pg.draw.rect(screen, colors[self.id % len(colors)], self.rect, 1)
+            # pg.draw.rect(screen, colors[self.id % len(colors)], self.rect, 1)
         if self.is_door:
             screen.blit(self.door_image, self.rect)
             # pg.draw.rect(screen, pg.color.THECOLORS["white"], self.rect, 1)
         if self.corridor:
             screen.blit(self.floor_image, self.rect)
             # pg.draw.rect(screen, pg.color.THECOLORS["white"], self.rect, 1)
+        if self.exit:
+            screen.blit(self.exit_image, self.rect)
+        if self.enter:
+            screen.blit(self.enter_image, self.rect)
+        if self.player:
+            screen.blit(self.playerimage, self.rect)
