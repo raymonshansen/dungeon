@@ -4,17 +4,22 @@ This is a random dungeon generator. It is a personal pet-project whose long term
 
 ## Getting Started
 
-Copy the project folder or clone it. 
-Run with:
-python3 dungeon.py <width in pixels> <height in pixels> <recursive depth>
+Copy the project folder or clone it.
 
-```
-python3 dungeon.py 1000 500 4
-```
 ### Prerequisites
 
 python3.6
 pygame for linux and python3
+
+Run with:
+python3 dungeon.py <width in pixels> <height in pixels> <recursive depth>
+Example:
+```
+python3 dungeon.py 1300 700 4
+```
+
+## Screenshot using example
+![alt tag](dungeon.png)
 
 ## Built With
 
