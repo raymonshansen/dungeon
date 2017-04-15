@@ -1,5 +1,3 @@
-import random
-import sys
 from collections import namedtuple
 import pygame as pg
 

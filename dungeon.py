@@ -77,6 +77,10 @@ class Generator():
         self.playerimage = pg.image.load("alfa.png").convert_alpha()
         self.playerimage = pg.transform.scale(self.playerimage, (TILESIZE, TILESIZE))
         self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, self.rockimage, self.wall_image, self.floor_image, self.vertdoor, self.hordoor, self.enterimage, self.exitimage, self.playerimage) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
+        self.playerx = 0
+        self.playery = 0
+        self.new_level_x = 0
+        self.new_level_y = 0
         print("Done")
 
     def handle_events(self):
@@ -120,16 +124,100 @@ class Generator():
                 self.draw_map()
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.new_level()
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP8:
+                self.move_player("n")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP2:
+                self.move_player("s")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP6:
+                self.move_player("e")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP4:
+                self.move_player("w")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP7:
+                self.move_player("nw")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP9:
+                self.move_player("ne")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP3:
+                self.move_player("se")
+            if event.type == pg.KEYDOWN and event.key == pg.K_KP1:
+                self.move_player("sw")
+
+    def check_level(self, x, y):
+        if x == self.new_level_x and y == self.new_level_y:
+            self.new_level()
+
+    def move_player(self, direction):
+        """Move the player in a direction"""
+        if direction is "n":
+            if not self.map[self.playerx][self.playery-1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx][self.playery-1].player = True
+                self.map[self.playerx][self.playery-1].draw_tile(self.screen)
+                self.playery -= 1
+        if direction is "nw":
+            if not self.map[self.playerx-1][self.playery-1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx-1][self.playery-1].player = True
+                self.map[self.playerx-1][self.playery-1].draw_tile(self.screen)
+                self.playery -= 1
+                self.playerx -= 1
+        if direction is "ne":
+            if not self.map[self.playerx+1][self.playery-1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx+1][self.playery-1].player = True
+                self.map[self.playerx+1][self.playery-1].draw_tile(self.screen)
+                self.playery -= 1
+                self.playerx += 1
+        if direction is "s":
+            if not self.map[self.playerx][self.playery+1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx][self.playery+1].player = True
+                self.map[self.playerx][self.playery+1].draw_tile(self.screen)
+                self.playery += 1
+        if direction is "sw":
+            if not self.map[self.playerx-1][self.playery+1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx-1][self.playery+1].player = True
+                self.map[self.playerx-1][self.playery+1].draw_tile(self.screen)
+                self.playery += 1
+                self.playerx -= 1
+        if direction is "se":
+            if not self.map[self.playerx+1][self.playery+1].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx+1][self.playery+1].player = True
+                self.map[self.playerx+1][self.playery+1].draw_tile(self.screen)
+                self.playery += 1
+                self.playerx += 1
+        if direction is "w":
+            if not self.map[self.playerx-1][self.playery].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx-1][self.playery].player = True
+                self.map[self.playerx-1][self.playery].draw_tile(self.screen)
+                self.playerx -= 1
+        if direction is "e":
+            if not self.map[self.playerx+1][self.playery].is_wall:
+                self.map[self.playerx][self.playery].player = False
+                self.map[self.playerx][self.playery].draw_tile(self.screen)
+                self.map[self.playerx+1][self.playery].player = True
+                self.map[self.playerx+1][self.playery].draw_tile(self.screen)
+                self.playerx += 1
+        self.check_level(self.playerx, self.playery)
 
     def new_level(self):
         self.spacelist.clear()
         self.roomlist.clear()
         self.corridorlist.clear()
+        self.reset_map()
         vert = False
         if (self.width_tiles > self.height_tiles):
             vert = True
         self.split_space(0, 0, self.width_tiles, self.height_tiles, vert, 0)
-        self.reset_map()
         self.spawn_rooms()
         self.enter_exit()
         self.draw_map()
@@ -306,7 +394,12 @@ class Generator():
         starttile = random.choice(startroom.tiles)
         starttile.enter = True
         starttile.player = True
-        random.choice(exitroom.tiles).exit = True
+        self.playerx = starttile.pos.x // TILESIZE
+        self.playery = starttile.pos.y // TILESIZE
+        endtile = random.choice(exitroom.tiles)
+        endtile.exit = True
+        self.new_level_x = endtile.pos.x // TILESIZE
+        self.new_level_y = endtile.pos.y // TILESIZE
 
     def candig_list(self, x, y):
         """Takes in tile coordinates and returns one list of its
