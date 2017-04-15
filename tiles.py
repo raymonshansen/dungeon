@@ -74,7 +74,7 @@ class Tile():
             screen.blit(self.wall_image, self.rect)
         if self.dug:
             screen.blit(self.floor_image, self.rect)
-            # pg.draw.rect(screen, colors[self.id % len(colors)], self.rect, 1)
+            pg.draw.rect(screen, colors[self.id % len(colors)], self.rect, 1)
         if self.is_door:
             screen.blit(self.door_image, self.rect)
             # pg.draw.rect(screen, pg.color.THECOLORS["white"], self.rect, 1)

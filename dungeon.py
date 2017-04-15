@@ -125,12 +125,20 @@ class Generator():
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.new_level()
             if event.type == pg.KEYDOWN and event.key == pg.K_KP8:
+                self.move_player("n")                 
+            if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.move_player("n")
             if event.type == pg.KEYDOWN and event.key == pg.K_KP2:
                 self.move_player("s")
+            if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
+                self.move_player("s")
             if event.type == pg.KEYDOWN and event.key == pg.K_KP6:
                 self.move_player("e")
+            if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
+                self.move_player("e")
             if event.type == pg.KEYDOWN and event.key == pg.K_KP4:
+                self.move_player("w")
+            if event.type == pg.KEYDOWN and event.key == pg.K_LEFT:
                 self.move_player("w")
             if event.type == pg.KEYDOWN and event.key == pg.K_KP7:
                 self.move_player("nw")
