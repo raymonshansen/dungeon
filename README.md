@@ -19,14 +19,7 @@ pygame for linux and python3
 ## Built With
 
 * [pygame](http://www.pygame.org) - For quic and easy graphics
-* [python3](http://maven.python.org/) - For quick and easy code
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for subm
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [python3](https://www.python.org/download/releases/3.0/) - For quick and easy code
 
 ## Authors
 
