@@ -18,8 +18,16 @@ Example:
 python3 dungeon.py 1300 700 4
 ```
 
-## Screenshot using example
+### Screenshot using above example
 ![alt tag](dungeon.png)
+
+## Testing
+To play:
+"L" resets all lists and spawns a new level
+Keypad numbers 1-9 moves the blue "@" around
+![alt tag](alfa.png)
+Upon reaching the green arrow going down, a new level is spawned.
+![alt tag](exit.png)
 
 ## Built With
 
