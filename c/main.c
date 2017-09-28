@@ -36,7 +36,14 @@ int main(int argc, char** argv){
     
     // Map, hud and minimap sizes.
     int MAP_WIDTH = WINDOW_WIDTH_TILES * 0.7;
+    if(MAP_WIDTH % 2 == 0)
+        MAP_WIDTH++;
     int MAP_HEIGHT = WINDOW_HEIGHT_TILES * 0.8;
+    if(MAP_HEIGHT % 2 == 0)
+        MAP_HEIGHT++;
+    // Hero position
+    int herox = MAP_WIDTH/2;
+    int heroy = MAP_HEIGHT/2;
     int HUD_WIDTH = WINDOW_WIDTH_TILES;
     int HUD_HEIGHT = WINDOW_HEIGHT_TILES - MAP_HEIGHT;
     int MINIMAP_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
@@ -78,17 +85,20 @@ int main(int argc, char** argv){
     SDL_Texture *white_wall = image_loader("wall_white.bmp", renderer);
     SDL_Texture *red_wall = image_loader("wall_red.bmp", renderer);
     SDL_Texture *blue_wall = image_loader("wall_blue.bmp", renderer);
-
+    SDL_Texture *green_wall = image_loader("wall_green.bmp", renderer);
+    
     // Game loop
     int done = 0;
     SDL_Event event;
     while(!done){
         while(SDL_PollEvent(&event)){
-            if((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q) || 
-                event.type == SDL_QUIT){
+            if((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q) || event.type == SDL_QUIT){
                 printf("Got QUIT.\n");
                 done = 1;
                 break;
+            }
+            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m){
+                printf("MAP_WIDTH: %d\nMAP_HEIGHT: %d\n", MAP_WIDTH, MAP_HEIGHT);
             }
             get_input(event);
         }
@@ -101,7 +111,11 @@ int main(int argc, char** argv){
         // Draw everything
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
-                renderTextureatXY(white_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                if(x == herox && y == heroy){
+                    renderTextureatXY(green_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                }else{
+                    renderTextureatXY(white_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                }
             }
         }
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
