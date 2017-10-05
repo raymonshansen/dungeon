@@ -22,6 +22,20 @@ typedef struct map map_t;
     the dungeon module can use to construct
     a random dungeon.
 */
-    map_t *map_create(int with, int height, int wpad, int hpad);
+map_t *map_create(int with, int height);
+
+/*  map_width
+    param:
+    map_t* - pointer to an existing map
+    Returns: the width of the map
+*/
+int map_width(map_t *map);
+
+/*  map_height
+    param:
+    map_t* - pointer to an existing map
+    Returns: the height of the map
+*/
+int map_height(map_t *map);
 
 #endif /* MAP_H_ */
