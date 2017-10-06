@@ -8,13 +8,11 @@
     
     Set up as an array of tiles.
 
-
     It will have a lot of support functions enabling
     the interaction with the map done in the game engine.
 
     Map interface:
 */
-struct map;
 typedef struct map map_t;
 
 /*  map_create()

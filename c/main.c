@@ -82,10 +82,17 @@ int main(int argc, char** argv){
     }
 
     // Load some images
-    SDL_Texture *white_wall = image_loader("wall_white.bmp", renderer);
-    SDL_Texture *red_wall = image_loader("wall_red.bmp", renderer);
-    SDL_Texture *blue_wall = image_loader("wall_blue.bmp", renderer);
-    SDL_Texture *green_wall = image_loader("wall_green.bmp", renderer);
+    SDL_Texture *textures[] = {image_loader("wall_white.bmp", renderer), 
+                               image_loader("wall_red.bmp", renderer),
+                               image_loader("wall_blue.bmp", renderer),
+                               image_loader("wall_green.bmp", renderer)};
+
+    typedef enum {
+        WHITE = 0,
+        RED,
+        BLUE,
+        GREEN
+    } tiletype_t;
     
     // Game loop
     int done = 0;
@@ -112,21 +119,21 @@ int main(int argc, char** argv){
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
                 if(x == herox && y == heroy){
-                    renderTextureatXY(green_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                    renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }else{
-                    renderTextureatXY(white_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                    renderTextureatXY(textures[WHITE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }
             }
         }
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(red_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[RED], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
         // Blit to minimap surface
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(blue_wall, renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
 
