@@ -3,6 +3,8 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+
 // Local includes
 #include "map.h"
 #include "tile.h"
@@ -51,7 +53,7 @@ int main(int argc, char** argv){
     int MINIMAP_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
     int MINIMAP_HEIGHT = MAP_HEIGHT; 
     
-    // Initialize SDL and setup
+    // Initialize SDL and sub-libraries
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
         log_SDL_error(stdout, "SDL_Init");
         exit(1);
@@ -60,6 +62,13 @@ int main(int argc, char** argv){
         printf("TTF_Error: %s\n", TTF_GetError());
         exit(1);
     }
+    // load support for the JPG and PNG image formats
+    if(IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG) < 0) {
+        printf("IMG_Init: Failed to init required jpg and png support!\n");
+        printf("IMG_Init: %s\n", IMG_GetError());
+        // handle error
+    }
+
     SDL_Window *window = SDL_CreateWindow("Dungeon", 
                                           SDL_WINDOWPOS_UNDEFINED, 
                                           SDL_WINDOWPOS_UNDEFINED, 
@@ -84,10 +93,11 @@ int main(int argc, char** argv){
     }
 
     // Load some images
-    SDL_Texture *textures[] = {image_loader("wall_white.bmp", renderer), 
-                               image_loader("wall_red.bmp", renderer),
-                               image_loader("wall_blue.bmp", renderer),
-                               image_loader("wall_green.bmp", renderer)};
+    SDL_Texture **textures = malloc(TILENUM * sizeof(SDL_Texture*));
+    int i;
+    for(i = 0; i < TILENUM; i++){
+        textures[i] = image_loader(imagefiles[i], renderer);
+    }
     
     // Game loop
     int done = 0;
@@ -114,7 +124,7 @@ int main(int argc, char** argv){
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
                 if(x == herox && y == heroy){
-                    renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                    renderTextureatXY(textures[ATT], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }else{
                     renderTextureatXY(textures[WHITE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }
@@ -122,13 +132,13 @@ int main(int argc, char** argv){
         }
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(textures[RED], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[DEFAULT], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
         // Blit to minimap surface
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[FLOOR], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
 
@@ -138,6 +148,7 @@ int main(int argc, char** argv){
     // Cleanup and close
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    IMG_Quit();
     TTF_Quit();
     SDL_Quit();
 }
@@ -150,8 +161,9 @@ int main(int argc, char** argv){
    a texture to be handed to the renderer.
 */
 SDL_Texture *image_loader(char *filename, SDL_Renderer *renderer){
+    printf("Loading %s\n", filename);
     SDL_Texture * texture = NULL;
-    SDL_Surface *image_surface = SDL_LoadBMP(filename);
+    SDL_Surface *image_surface = IMG_Load(filename);
     if(NULL != image_surface){
         // Attempt to create texture
         texture = SDL_CreateTextureFromSurface(renderer, image_surface);
@@ -160,7 +172,7 @@ SDL_Texture *image_loader(char *filename, SDL_Renderer *renderer){
 		}
 	}
 	else {
-		log_SDL_error(stdout, "LoadBMP");
+		printf("IMG_Error: %s\n", IMG_GetError());
 	}
 	return texture;
 }

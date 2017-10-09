@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 
-SDL2 = `pkg-config --libs --cflags sdl2 SDL2_ttf`
+SDL2 = `pkg-config --libs --cflags sdl2 SDL2_ttf SDL2_image`
 
 TARGET = dungeon
 OBJECTS = main.o map.o tile.o

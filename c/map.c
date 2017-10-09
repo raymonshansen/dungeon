@@ -22,7 +22,7 @@ map_t * map_create(int width, int height){
     
         tile_t **tile_array = malloc(newmap->width * newmap->height * sizeof(tile_t*));
         int i;
-        // Populate the map array.
+        // Populate the map array with tile pointers.
         for(i = 0; i < newmap->width * newmap->height; i++){
             tile_array[i] = tile_create();
             if(NULL == tile_array[i]){
