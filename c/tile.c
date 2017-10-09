@@ -15,7 +15,7 @@ tile_t *tile_create(void){
     tile_t *newtile = malloc(sizeof(tile_t));
     
     if(newtile){
-        newtile->texID = DEFAULT;
+        newtile->texID = WHITE;
     }
     return newtile;
 }

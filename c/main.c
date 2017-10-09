@@ -128,7 +128,7 @@ int main(int argc, char** argv){
                 if(x == herox && y == heroy){
                     renderTextureatXY(textures[map_get_tiletype(x, y, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }else{
-                    renderTextureatXY(textures[WHITE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                    renderTextureatXY(textures[map_get_tiletype(x, y, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }
             }
         }
