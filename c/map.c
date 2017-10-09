@@ -9,18 +9,18 @@ struct map {
     int height;
 
     tile_t* tilearray;
-}
+};
 /*  Creates a new map with given with and height
     populated with the default tile type.
 */
-map_t * map_create(int with, int height){
+map_t * map_create(int width, int height){
     map_t *newmap = malloc(sizeof(map_t));
     
     if (newmap){
         newmap->width = width;
         newmap->height = height;
     
-        tile_t *tile_array = malloc(newmap->width * newmap->height * sizeof(tile_t));
+        tile_t **tile_array = malloc(newmap->width * newmap->height * sizeof(tile_t*));
         int i;
         // Populate the map array.
         for(i = 0; i < newmap->width * newmap->height; i++){

@@ -5,6 +5,8 @@
 #include <SDL2/SDL_ttf.h>
 // Local includes
 #include "map.h"
+#include "tile.h"
+#include "tiletypes.h"
 
 // Function declarations 
 void log_SDL_error(FILE *output, char *message);
@@ -86,13 +88,6 @@ int main(int argc, char** argv){
                                image_loader("wall_red.bmp", renderer),
                                image_loader("wall_blue.bmp", renderer),
                                image_loader("wall_green.bmp", renderer)};
-
-    typedef enum {
-        WHITE = 0,
-        RED,
-        BLUE,
-        GREEN
-    } tiletype_t;
     
     // Game loop
     int done = 0;
