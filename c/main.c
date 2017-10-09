@@ -14,7 +14,7 @@
 void log_SDL_error(FILE *output, char *message);
 void handle_keypress(SDL_Event event);
 void get_input(SDL_Event event);
-SDL_Texture *image_loader(char *filename, SDL_Renderer* renderer);
+SDL_Texture *image_loader(const char *filename, SDL_Renderer* renderer);
 void renderTextureatXY(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y, int size);
 
 // Let the Dungeon begin!
@@ -83,6 +83,12 @@ int main(int argc, char** argv){
         log_SDL_error(stdout, "SDL_Renderer");        
         exit(1);        
     }
+    // Load some images
+    SDL_Texture **textures = malloc(TILENUM * sizeof(SDL_Texture*));
+    int i;
+    for(i = 0; i < TILENUM; i++){
+        textures[i] = image_loader(imagefiles[i], renderer);
+    }
 
     // 2D array of int 1s.
     // TODO: Make this independant module.
@@ -92,12 +98,8 @@ int main(int argc, char** argv){
         dungeon[y] = (int *)malloc(MAP_WIDTH * sizeof(int)); 
     }
 
-    // Load some images
-    SDL_Texture **textures = malloc(TILENUM * sizeof(SDL_Texture*));
-    int i;
-    for(i = 0; i < TILENUM; i++){
-        textures[i] = image_loader(imagefiles[i], renderer);
-    }
+    // NEW MAP MODULE!
+    map_t* newmap = map_create(MAP_WIDTH, MAP_HEIGHT);
     
     // Game loop
     int done = 0;
@@ -124,7 +126,7 @@ int main(int argc, char** argv){
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
                 if(x == herox && y == heroy){
-                    renderTextureatXY(textures[ATT], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                    renderTextureatXY(textures[map_get_tiletype(x, y, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }else{
                     renderTextureatXY(textures[WHITE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
                 }
@@ -160,7 +162,7 @@ int main(int argc, char** argv){
 /* image_loader takes a bmp and loads it onto 
    a texture to be handed to the renderer.
 */
-SDL_Texture *image_loader(char *filename, SDL_Renderer *renderer){
+SDL_Texture *image_loader(const char *filename, SDL_Renderer *renderer){
     printf("Loading %s\n", filename);
     SDL_Texture * texture = NULL;
     SDL_Surface *image_surface = IMG_Load(filename);

@@ -1,12 +1,7 @@
 #ifndef TILETYPES_H_
 #define TILETYPES_H_
 
-char *imagefiles[] = {
-    "default.png",
-    "wall_white.png",
-    "att.png",
-    "floor.png"
-    };
+extern const char * imagefiles[];
 /*  Indexes an array of SDL_Texture *
 */
 typedef enum {
