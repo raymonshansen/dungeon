@@ -7,6 +7,9 @@ extern const char * imagefiles[];
 typedef enum {
     DEFAULT = 0,
     WHITE,
+    RED,
+    GREEN,
+    BLUE,
     ATT,
     FLOOR,
     // Used as a dynamic tally on the number of types.

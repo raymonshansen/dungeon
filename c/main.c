@@ -99,7 +99,7 @@ int main(int argc, char** argv){
     }
 
     // NEW MAP MODULE!
-    map_t* newmap = map_create(MAP_WIDTH, MAP_HEIGHT);
+    map_t* newmap = map_create(15, 15);
     
     // Game loop
     int done = 0;
@@ -119,28 +119,25 @@ int main(int argc, char** argv){
         // Clear
         SDL_RenderClear(renderer);
 
-        // Update
+        // Update current_map_hud
+        tiletype_t *current_hud = map_get_hud(herox, heroy, MAP_WIDTH, MAP_HEIGHT, newmap);        
         
-
-        // Draw everything
+        // Draw map h
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
-                if(x == herox && y == heroy){
-                    renderTextureatXY(textures[map_get_tiletype(x, y, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
-                }else{
-                    renderTextureatXY(textures[map_get_tiletype(x, y, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
-                }
+                renderTextureatXY(textures[map_get_tiletype(x+herox, y+heroy, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
             }
         }
+        // Draw stat-hud
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(textures[DEFAULT], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
         // Blit to minimap surface
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(textures[FLOOR], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
 

@@ -15,6 +15,25 @@ struct map {
     populated with the default tile type.
 */
 map_t * map_create(int width, int height){
+
+    /*TEST-MAP 0f 15 by 15 tiles*/
+    tiletype_t testmap[] = {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE, 
+                            WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE, 
+                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,WHITE,WHITE,WHITE,WHITE,WHITE,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,WHITE,WHITE,WHITE,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,
+                            WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE};
+
+
     map_t *newmap = malloc(sizeof(map_t));
     
     if (newmap){
@@ -29,6 +48,8 @@ map_t * map_create(int width, int height){
             if(NULL == newmap->tilearray[i]){
                 printf("Error in allocating tile at coordinate (%d, %d).", i % newmap->width, i / newmap->width);
             }
+            // Use testmap
+            tile_set_type(newmap->tilearray[i], testmap[i]);
         }
     }
     return newmap;
@@ -69,4 +90,15 @@ tile_t* map_get_tile(int x, int y, map_t* map){
 */
 tiletype_t map_get_tiletype(int x, int y, map_t* map){
     return tile_get_type(map_get_tile(x, y, map));
+}
+
+tiletype_t* map_get_hud(int herox, int heroy, int MAP_WIDTH, int MAP_HEIGHT, map_t* map){
+    tiletype_t* map_hud = malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(tiletype_t));
+    int x, y;
+    for(y = 0; y < MAP_WIDTH; y++){
+        for(x = 0; x < MAP_HEIGHT; x++){
+            map_hud[x + (y*MAP_WIDTH)] = map_get_tiletype((herox-(MAP_WIDTH/2)), (heroy-(MAP_HEIGHT/2)), map);
+        }
+    }
+    return map_hud;
 }

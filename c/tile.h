@@ -10,7 +10,7 @@
     tiles in the map. Typically changing types
     quickly, getting lists of items on a tile etc.
 
-    Map interface:
+    Tile interface:
 */
 
 typedef struct tile tile_t;
@@ -20,6 +20,12 @@ typedef struct tile tile_t;
     It's considered "bedrock" or "void".
 */
 tile_t* tile_create(void);
+
+/*  tile_set_type
+    Sets the tiletype to the fiven type.
+    Returns 1 on success and 0 on fail.
+*/
+int tile_set_type(tile_t* tile, tiletype_t type);
 
 /*  tile_get_type
     Returns the tiletype of a given tile.

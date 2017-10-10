@@ -49,4 +49,6 @@ tile_t* map_get_tile(int x, int y, map_t* map);
 */
 tiletype_t map_get_tiletype(int x, int y, map_t* map);
 
+tiletype_t* map_get_hud(int herox, int heroy, int MAP_WIDTH, int MAP_HEIGHT, map_t* map);
+
 #endif /* MAP_H_ */
