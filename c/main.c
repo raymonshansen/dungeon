@@ -25,8 +25,8 @@ int main(int argc, char** argv){
 
     if(argc != 3){
         printf("Usage: ./dungeon <width> <height>\nUsing Width: 1600 Height: 800\n");
-        WINDOW_WIDTH = 1200;
-        WINDOW_HEIGHT = 608;
+        WINDOW_WIDTH = 208;
+        WINDOW_HEIGHT = 192;
     } else {
         // Window size in pixels
         WINDOW_WIDTH = atoi(argv[1]) - (atoi(argv[1]) % TILE_SIZE);
@@ -114,18 +114,29 @@ int main(int argc, char** argv){
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m){
                 printf("MAP_WIDTH: %d\nMAP_HEIGHT: %d\n", MAP_WIDTH, MAP_HEIGHT);
             }
+            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_8){
+                heroy -= 1;
+            }            
+            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_2){
+                heroy += 1;
+            }            
+            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_4){
+                herox -= 1;
+            }            
+            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_6){
+                herox += 1;
+            }
             get_input(event);
         }
         // Clear
         SDL_RenderClear(renderer);
 
-        // Update current_map_hud
-        tiletype_t *current_hud = map_get_hud(herox, heroy, MAP_WIDTH, MAP_HEIGHT, newmap);        
+        // Update current_map_hud    
         
-        // Draw map h
+        // Draw map hud
         for(y = 0; y < MAP_HEIGHT; y++){
             for(x = 0; x < MAP_WIDTH; x++){
-                renderTextureatXY(textures[map_get_tiletype(x+herox, y+heroy, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                renderTextureatXY(textures[map_get_tiletype(x+herox-1, y+heroy-1, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
             }
         }
         // Draw stat-hud
@@ -134,7 +145,7 @@ int main(int argc, char** argv){
                 renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
             }
         }
-        // Blit to minimap surface
+        // Draw message hud
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
                 renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
@@ -196,7 +207,8 @@ void renderTextureatXY(SDL_Texture *texture, SDL_Renderer *renderer, int x, int 
 */
 void handle_keypress(SDL_Event event){
     if(event.type == SDL_KEYDOWN){
-        printf("%d - %s\n", event.key.keysym.sym, SDL_GetKeyName(event.key.keysym.sym));
+        return;
+        //printf("%d - %s\n", event.key.keysym.sym, SDL_GetKeyName(event.key.keysym.sym));
     }
 }
 

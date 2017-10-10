@@ -25,7 +25,11 @@ tile_t *tile_create(void){
 /*  Gets the tiletype for a given tile.
 */
 tiletype_t tile_get_type(tile_t* tile){
-    return tile->texID;
+    if(!tile){
+        return DEFAULT;
+    } else {
+        return tile->texID;
+    }
 }
 
 /*  tile_set_type

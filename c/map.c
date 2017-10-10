@@ -89,16 +89,10 @@ tile_t* map_get_tile(int x, int y, map_t* map){
     at the given coordinates of the given map.
 */
 tiletype_t map_get_tiletype(int x, int y, map_t* map){
-    return tile_get_type(map_get_tile(x, y, map));
-}
-
-tiletype_t* map_get_hud(int herox, int heroy, int MAP_WIDTH, int MAP_HEIGHT, map_t* map){
-    tiletype_t* map_hud = malloc(MAP_WIDTH * MAP_HEIGHT * sizeof(tiletype_t));
-    int x, y;
-    for(y = 0; y < MAP_WIDTH; y++){
-        for(x = 0; x < MAP_HEIGHT; x++){
-            map_hud[x + (y*MAP_WIDTH)] = map_get_tiletype((herox-(MAP_WIDTH/2)), (heroy-(MAP_HEIGHT/2)), map);
-        }
+    tile_t* tile = map_get_tile(x, y, map);
+    if(!tile){
+        return DEFAULT;
+    } else {
+        return tile_get_type(tile);
     }
-    return map_hud;
 }
