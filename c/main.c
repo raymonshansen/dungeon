@@ -16,6 +16,7 @@ void handle_keypress(SDL_Event event);
 void get_input(SDL_Event event);
 SDL_Texture *image_loader(const char *filename, SDL_Renderer* renderer);
 void renderTextureatXY(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y, int size);
+void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int heroy, map_t *newmap, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE);
 
 // Let the Dungeon begin!
 int main(int argc, char** argv){
@@ -116,15 +117,19 @@ int main(int argc, char** argv){
             }
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_8){
                 heroy -= 1;
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
             }            
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_2){
                 heroy += 1;
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
             }            
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_4){
                 herox -= 1;
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
             }            
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_6){
                 herox += 1;
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
             }
             get_input(event);
         }
@@ -134,11 +139,7 @@ int main(int argc, char** argv){
         // Update current_map_hud    
         
         // Draw map hud
-        for(y = 0; y < MAP_HEIGHT; y++){
-            for(x = 0; x < MAP_WIDTH; x++){
-                renderTextureatXY(textures[map_get_tiletype(x+herox-1, y+heroy-1, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
-            }
-        }
+        draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
         // Draw stat-hud
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
@@ -166,6 +167,36 @@ int main(int argc, char** argv){
 // --------------------------------------------------
 //                  FUNCTIONS
 // --------------------------------------------------
+
+void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int heroy, map_t *newmap, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE){
+    int x = 0;
+    int y = 0;
+    int mapx;
+    int mapy;
+    for(y = 0; y < MAP_HEIGHT; y++){
+        for(x = 0; x < MAP_WIDTH; x++){
+            // Keeping hud within x-boundaries
+            if(herox <= (MAP_WIDTH / 2)){
+                mapx = x;
+            } else if(herox >= map_width(newmap) - (MAP_WIDTH/2)){
+                mapx = map_width(newmap) - MAP_WIDTH + x;
+            } else {
+                mapx = herox - (MAP_WIDTH / 2) + x;
+            }
+            // Keeping hud within y-boundaries
+            if(heroy <= (MAP_WIDTH / 2)){
+                mapy = y;
+            } else if(heroy >= map_height(newmap) - (MAP_HEIGHT / 2)){
+                mapy = map_height(newmap) - MAP_HEIGHT + y;
+            } else {
+                mapy = heroy - (MAP_HEIGHT / 2) + y;
+            }
+            // Render current (x,y) of the hud.
+            renderTextureatXY(textures[map_get_tiletype(mapx, mapy, newmap)], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+        }
+    }
+}
+
 
 /* image_loader takes a bmp and loads it onto 
    a texture to be handed to the renderer.

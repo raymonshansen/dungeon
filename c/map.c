@@ -19,17 +19,17 @@ map_t * map_create(int width, int height){
     /*TEST-MAP 0f 15 by 15 tiles*/
     tiletype_t testmap[] = {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE, 
                             WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE, 
-                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,WHITE,WHITE,WHITE,WHITE,WHITE,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,WHITE,WHITE,WHITE,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,RED,RED,RED,RED,RED,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,RED,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,WHITE,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,RED,FLOOR,FLOOR,WHITE,WHITE,WHITE,WHITE,WHITE,FLOOR,WHITE,WHITE,
                             WHITE,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,WHITE,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
-                            WHITE,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,RED,FLOOR,FLOOR,RED,WHITE,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,WHITE,FLOOR,RED,FLOOR,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,RED,FLOOR,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
+                            WHITE,WHITE,FLOOR,FLOOR,RED,FLOOR,FLOOR,RED,FLOOR,FLOOR,FLOOR,FLOOR,FLOOR,WHITE,WHITE,
                             WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,
                             WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE};
 
@@ -48,8 +48,10 @@ map_t * map_create(int width, int height){
             if(NULL == newmap->tilearray[i]){
                 printf("Error in allocating tile at coordinate (%d, %d).", i % newmap->width, i / newmap->width);
             }
-            // Use testmap
+            // Use hard coded testmap and dimensions!
             tile_set_type(newmap->tilearray[i], testmap[i]);
+            newmap->width = 15;
+            newmap->height = 15;
         }
     }
     return newmap;
@@ -72,16 +74,7 @@ int map_height(map_t *map){
 */
 tile_t* map_get_tile(int x, int y, map_t* map){
     tile_t* tile = NULL;
-    if(x > map->width){
-        return tile;
-    }
-    if(y > map->height){
-        return tile;
-    }
     tile = map->tilearray[x + (y * map->width)];
-    if(NULL == tile){
-        printf("Map ERROR! No such tile!");
-    }
     return tile;
 }
 
