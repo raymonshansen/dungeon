@@ -60,21 +60,21 @@ class Generator():
         self.spacelist = []
         self.roomlist = []
         self.corridorlist = []
-        self.wall_image = pg.image.load("wall2.png").convert_alpha()
+        self.wall_image = pg.image.load("images/wall2.png").convert_alpha()
         self.wall_image = pg.transform.scale(self.wall_image, (TILESIZE, TILESIZE))
-        self.floor_image = pg.image.load("floor2.png").convert_alpha()
+        self.floor_image = pg.image.load("images/floor2.png").convert_alpha()
         self.floor_image = pg.transform.scale(self.floor_image, (TILESIZE, TILESIZE))
-        self.hordoor = pg.image.load("hor_door.png").convert_alpha()
+        self.hordoor = pg.image.load("images/hor_door.png").convert_alpha()
         self.hordoor = pg.transform.scale(self.hordoor, (TILESIZE, TILESIZE))
-        self.vertdoor = pg.image.load("vert_door.png").convert_alpha()
+        self.vertdoor = pg.image.load("images/vert_door.png").convert_alpha()
         self.vertdoor = pg.transform.scale(self.vertdoor, (TILESIZE, TILESIZE))
-        self.rockimage = pg.image.load("rock.png").convert_alpha()
+        self.rockimage = pg.image.load("images/rock.png").convert_alpha()
         self.rockimage = pg.transform.scale(self.rockimage, (TILESIZE, TILESIZE))
-        self.enterimage = pg.image.load("enter.png").convert_alpha()
+        self.enterimage = pg.image.load("images/enter.png").convert_alpha()
         self.enterimage = pg.transform.scale(self.enterimage, (TILESIZE, TILESIZE))
-        self.exitimage = pg.image.load("exit.png").convert_alpha()
+        self.exitimage = pg.image.load("images/exit.png").convert_alpha()
         self.exitimage = pg.transform.scale(self.exitimage, (TILESIZE, TILESIZE))
-        self.playerimage = pg.image.load("alfa.png").convert_alpha()
+        self.playerimage = pg.image.load("images/alfa.png").convert_alpha()
         self.playerimage = pg.transform.scale(self.playerimage, (TILESIZE, TILESIZE))
         self.map = [[Tile(w*TILESIZE, h*TILESIZE, 0, self.rockimage, self.wall_image, self.floor_image, self.vertdoor, self.hordoor, self.enterimage, self.exitimage, self.playerimage) for h in range(self.height_tiles)] for w in range(self.width_tiles)]
         self.playerx = 0
@@ -125,7 +125,7 @@ class Generator():
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.new_level()
             if event.type == pg.KEYDOWN and event.key == pg.K_KP8:
-                self.move_player("n")                 
+                self.move_player("n")
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.move_player("n")
             if event.type == pg.KEYDOWN and event.key == pg.K_KP2:
