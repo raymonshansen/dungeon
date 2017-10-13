@@ -161,3 +161,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# File manager
+.directory
