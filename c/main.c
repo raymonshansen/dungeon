@@ -114,24 +114,33 @@ int main(int argc, char** argv){
             }
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m){
                 printf("MAP_WIDTH: %d\nMAP_HEIGHT: %d\n", MAP_WIDTH, MAP_HEIGHT);
+                continue;
             }
-            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_8 || event.key.keysym.sym == SDLK_UP)){
-                heroy -= 1;
+            if(event.type == SDL_KEYDOWN){
+                switch(event.key.keysym.sym)
+                {
+                case SDLK_KP_8:
+                case SDLK_UP:
+                    heroy -= 1;
+                    break;
+                case SDLK_KP_2:
+                case SDLK_DOWN:
+                    heroy += 1;
+                    break;
+                case SDLK_KP_4:
+                case SDLK_LEFT:
+                    herox -= 1;
+                    break;
+                case SDLK_KP_6:
+                case SDLK_RIGHT:
+                    herox += 1;
+                    break;
+                default:
+                    continue;
+                }
                 printf("herox: %d\nheroy: %d\n\n", herox, heroy);
             }
-            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_2 || event.key.keysym.sym == SDLK_DOWN)){
-                heroy += 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
-            }
-            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_4 || event.key.keysym.sym == SDLK_LEFT)){
-                herox -= 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
-            }
-            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_6 || event.key.keysym.sym == SDLK_RIGHT)){
-                herox += 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
-            }
-            get_input(event);
+            // get_input(event);
         }
         // Clear
         SDL_RenderClear(renderer);
