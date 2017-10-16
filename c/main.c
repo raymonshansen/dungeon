@@ -10,7 +10,7 @@
 #include "tile.h"
 #include "tiletypes.h"
 
-// Function declarations 
+// Function declarations
 void log_SDL_error(FILE *output, char *message);
 void handle_keypress(SDL_Event event);
 void get_input(SDL_Event event);
@@ -34,11 +34,11 @@ int main(int argc, char** argv){
         WINDOW_HEIGHT = atoi(argv[2]) - (atoi(argv[2]) % TILE_SIZE);
         printf("Width: %d\nHeight: %d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
     }
-    
+
     // Window size in tiles
     int WINDOW_WIDTH_TILES = WINDOW_WIDTH/TILE_SIZE;
     int WINDOW_HEIGHT_TILES = WINDOW_HEIGHT/TILE_SIZE;
-    
+
     // Map, hud and minimap sizes.
     int MAP_WIDTH = WINDOW_WIDTH_TILES * 0.7;
     if(MAP_WIDTH % 2 == 0)
@@ -52,8 +52,8 @@ int main(int argc, char** argv){
     int HUD_WIDTH = WINDOW_WIDTH_TILES;
     int HUD_HEIGHT = WINDOW_HEIGHT_TILES - MAP_HEIGHT;
     int MINIMAP_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
-    int MINIMAP_HEIGHT = MAP_HEIGHT; 
-    
+    int MINIMAP_HEIGHT = MAP_HEIGHT;
+
     // Initialize SDL and sub-libraries
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
         log_SDL_error(stdout, "SDL_Init");
@@ -70,19 +70,19 @@ int main(int argc, char** argv){
         // handle error
     }
 
-    SDL_Window *window = SDL_CreateWindow("Dungeon", 
-                                          SDL_WINDOWPOS_UNDEFINED, 
-                                          SDL_WINDOWPOS_UNDEFINED, 
-                                          WINDOW_WIDTH, WINDOW_HEIGHT, 
+    SDL_Window *window = SDL_CreateWindow("Dungeon",
+                                          SDL_WINDOWPOS_UNDEFINED,
+                                          SDL_WINDOWPOS_UNDEFINED,
+                                          WINDOW_WIDTH, WINDOW_HEIGHT,
                                           SDL_WINDOW_OPENGL);
     if(NULL == window){
         log_SDL_error(stdout, "SDL_Window");
-        exit(1);        
+        exit(1);
     }
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(NULL == renderer){
-        log_SDL_error(stdout, "SDL_Renderer");        
-        exit(1);        
+        log_SDL_error(stdout, "SDL_Renderer");
+        exit(1);
     }
     // Load some images
     SDL_Texture **textures = malloc(TILENUM * sizeof(SDL_Texture*));
@@ -96,12 +96,12 @@ int main(int argc, char** argv){
     int x, y;
     int **dungeon = (int **)malloc(MAP_HEIGHT * sizeof(int *));
     for(y = 0; y < MAP_HEIGHT; y++){
-        dungeon[y] = (int *)malloc(MAP_WIDTH * sizeof(int)); 
+        dungeon[y] = (int *)malloc(MAP_WIDTH * sizeof(int));
     }
 
     // NEW MAP MODULE!
     map_t* newmap = map_create(15, 15);
-    
+
     // Game loop
     int done = 0;
     SDL_Event event;
@@ -115,41 +115,41 @@ int main(int argc, char** argv){
             if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m){
                 printf("MAP_WIDTH: %d\nMAP_HEIGHT: %d\n", MAP_WIDTH, MAP_HEIGHT);
             }
-            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_8){
+            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_8 || event.key.keysym.sym == SDLK_UP)){
                 heroy -= 1;
                 printf("herox: %d\nheroy: %d\n\n", herox, heroy);
-            }            
-            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_2){
+            }
+            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_2 || event.key.keysym.sym == SDLK_DOWN)){
                 heroy += 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
-            }            
-            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_4){
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
+            }
+            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_4 || event.key.keysym.sym == SDLK_LEFT)){
                 herox -= 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
-            }            
-            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_6){
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
+            }
+            if(event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_6 || event.key.keysym.sym == SDLK_RIGHT)){
                 herox += 1;
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);                
+                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
             }
             get_input(event);
         }
         // Clear
         SDL_RenderClear(renderer);
 
-        // Update current_map_hud    
-        
+        // Update current_map_hud
+
         // Draw map hud
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
         // Draw stat-hud
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
             }
         }
         // Draw message hud
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);                
+                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
             }
         }
 
@@ -198,7 +198,7 @@ void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int
 }
 
 
-/* image_loader takes a bmp and loads it onto 
+/* image_loader takes a bmp and loads it onto
    a texture to be handed to the renderer.
 */
 SDL_Texture *image_loader(const char *filename, SDL_Renderer *renderer){
@@ -218,8 +218,8 @@ SDL_Texture *image_loader(const char *filename, SDL_Renderer *renderer){
 	return texture;
 }
 
-/* Renders a given texture to the renderer at 
-   position x and y. 
+/* Renders a given texture to the renderer at
+   position x and y.
 */
 void renderTextureatXY(SDL_Texture *texture, SDL_Renderer *renderer, int x, int y, int size){
     //Setup the destination rectangle to be at the position we want
@@ -248,7 +248,7 @@ void get_input(SDL_Event event){
 }
 
 /*
-    Generic function that checks the current error 
+    Generic function that checks the current error
     from SDL and sends it to the FILE-pointer given.
     Usually stdotu.
 */
