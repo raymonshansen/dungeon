@@ -49,4 +49,15 @@ tile_t* map_get_tile(int x, int y, map_t* map);
 */
 tiletype_t map_get_tiletype(int x, int y, map_t* map);
 
+/*  Take a pointer to tiltype_t and fill with the types 
+    that fits within the map-hud size given @s coordinates.
+    From the engine/drawing side of things, this pointer will 
+    be the same each time, this function just updates the tiletypes
+    in it. 
+    It might also have options of how those tiletypes are gotten.
+    It might or might not stick to edges depending on what looks
+    or feels best.
+*/
+void map_get_hud(int herox, int heroy, int hud_width, int hud_height, tiletype_t* tiletypes, map_t *map);
+
 #endif /* MAP_H_ */

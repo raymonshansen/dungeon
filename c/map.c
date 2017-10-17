@@ -119,8 +119,8 @@ int map_height(map_t *map){
     return map->height;
 }
 
-/*  Returns the tile pointer at e given 
-    coordinate of the given map.
+/*  Returns the tile pointer at a given 
+    coordinate of the given map. 
 */
 tile_t* map_get_tile(int x, int y, map_t* map){
     tile_t* tile = NULL;
@@ -138,4 +138,22 @@ tiletype_t map_get_tiletype(int x, int y, map_t* map){
     } else {
         return tile_get_type(tile);
     }
+}
+
+/*  Takes a pointer to an array which should be 
+    updated with the tiletypes_t that fit in the hud with the 
+    given width and height. The @ should always be in the middle.
+    Cap to corners for now...
+*/
+void map_get_hud(int herox, int heroy, int hud_width, int hud_height, tiletype_t* tiletypes, map_t *map){
+    int hud_start_x = herox - (hud_width/2);
+    int hud_start_y = heroy - (hud_height/2);
+
+    int x, y;
+    for(x = hud_start_x; x < hud_width; x++){
+        for(y = hud_start_y; y < hud_width; y++){
+            
+        }
+    }
+
 }
