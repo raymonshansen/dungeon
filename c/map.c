@@ -146,14 +146,33 @@ tiletype_t map_get_tiletype(int x, int y, map_t* map){
     Cap to corners for now...
 */
 void map_get_hud(int herox, int heroy, int hud_width, int hud_height, tiletype_t* tiletypes, map_t *map){
+    // Calculate the map coordinates corresponding to the
+    // upper left of the hud.
     int hud_start_x = herox - (hud_width/2);
     int hud_start_y = heroy - (hud_height/2);
 
     int x, y;
-    for(x = hud_start_x; x < hud_width; x++){
-        for(y = hud_start_y; y < hud_width; y++){
-            
+    int i = 0;
+    /* Going along x-axis first, then y
+       means the tiletypes gets inserted into the array 
+       in the order they'll be read. */
+    for(y = hud_start_y; y < hud_height; y++){
+        for(x = hud_start_x; x < hud_width; x++){
+            // If we're requesting tiles that would be outside the map
+            // fill with DEFAULT blank tiletypes.
+            if(x < 0){
+                printf("x-off");
+                tiletypes[i] = DEFAULT;
+            }
+            if(y < 0){
+                printf("y-off");                
+                tiletypes[i] = DEFAULT;                
+            } else {
+                tiletypes[i] = map_get_tiletype(x, y, map);
+            }
+            i++;
         }
     }
-
+    // Hardcode the hero into the middle for now...
+    tiletypes[(hud_width * hud_height) / 2] = ATT;
 }

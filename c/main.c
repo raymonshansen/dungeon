@@ -160,17 +160,17 @@ int main(int argc, char** argv){
         // Update current_map_hud
 
         // Draw map hud
-        draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE);
+        draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
         // Draw stat-hud
         for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
             for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(textures[GREEN], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                renderTextureatXY(textures[GREEN], renderer, x, y, TILE_SIZE);
             }
         }
         // Draw message hud
         for(y = 0; y < MINIMAP_HEIGHT; y++){
             for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(textures[BLUE], renderer, x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE);
+                renderTextureatXY(textures[BLUE], renderer, x, y, TILE_SIZE);
             }
         }
 
@@ -197,14 +197,15 @@ void draw_map_hud(SDL_Texture **textures,
                   int TILE_SIZE, 
                   tiletype_t* map_hud_tiles){
     int x, y;
+    int index = 0;
     // update the tiles in the map hud.
-    map_get_hud(herox, heroy, map_hud_tiles, newmap);
+    map_get_hud(herox, heroy, MAP_WIDTH, MAP_HEIGHT, map_hud_tiles, newmap);
 
-    for(x = 0; x < MAP_WIDTH; x++){
-        for(y = 0; y < MAP_HEIGHT; y++){
-            int index = x + (y * MAP_WIDTH);
+    for(y = 0; y < MAP_HEIGHT; y++){
+        for(x = 0; x < MAP_WIDTH; x++){
             tiletype_t type = map_hud_tiles[index];
             renderTextureatXY(textures[type], renderer, x, y, TILE_SIZE);
+            index++;
         }
     }
 }    
