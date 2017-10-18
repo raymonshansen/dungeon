@@ -87,8 +87,8 @@ map_t * map_create(int width, int height){
     map_t *newmap = malloc(sizeof(map_t));
     
     if (newmap){
-        newmap->width = width;
-        newmap->height = height;
+        //newmap->width = width;
+        //newmap->height = height;
         newmap->width = 50;
         newmap->height = 50;
     
@@ -153,20 +153,11 @@ void map_get_hud(int herox, int heroy, int hud_width, int hud_height, tiletype_t
 
     int x, y;
     int i = 0;
-    /* Going along x-axis first, then y
-       means the tiletypes gets inserted into the array 
-       in the order they'll be read. */
-    for(y = hud_start_y; y < hud_height; y++){
-        for(x = hud_start_x; x < hud_width; x++){
-            // If we're requesting tiles that would be outside the map
-            // fill with DEFAULT blank tiletypes.
-            if(x < 0){
-                printf("x-off");
+    for(y = hud_start_y; y < hud_start_y + hud_height; y++){
+        for(x = hud_start_x; x < hud_start_x + hud_width; x++){
+            // Set to empty tile if hud moves off the edge of the map
+            if(x < 0 || x >= map_width(map) || y < 0 || y >= map_height(map)){
                 tiletypes[i] = DEFAULT;
-            }
-            if(y < 0){
-                printf("y-off");                
-                tiletypes[i] = DEFAULT;                
             } else {
                 tiletypes[i] = map_get_tiletype(x, y, map);
             }

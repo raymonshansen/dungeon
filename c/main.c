@@ -150,7 +150,6 @@ int main(int argc, char** argv){
                 default:
                     continue;
                 }
-                printf("herox: %d\nheroy: %d\n\n", herox, heroy);
             }
             // get_input(event);
         }
