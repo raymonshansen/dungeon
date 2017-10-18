@@ -188,13 +188,7 @@ int main(int argc, char** argv){
 //                  FUNCTIONS
 // --------------------------------------------------
 
-void draw_map_hud(SDL_Texture **textures, 
-                  SDL_Renderer *renderer, 
-                  int herox, int heroy, 
-                  map_t *newmap, 
-                  int MAP_WIDTH, int MAP_HEIGHT, 
-                  int TILE_SIZE, 
-                  tiletype_t* map_hud_tiles){
+void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int heroy, map_t *newmap, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE, tiletype_t* map_hud_tiles){
     int x, y;
     int index = 0;
     // update the tiles in the map hud.
@@ -208,37 +202,6 @@ void draw_map_hud(SDL_Texture **textures,
         }
     }
 }    
-/*
-void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int heroy, map_t *newmap, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE){
-    int x = 0;
-    int y = 0;
-    int mapx;
-    int mapy;
-    for(y = 0; y < MAP_HEIGHT; y++){
-        for(x = 0; x < MAP_WIDTH; x++){
-            // Keeping hud within x-boundaries
-            if(herox <= (MAP_WIDTH / 2)){
-                mapx = x;
-            } else if(herox >= map_width(newmap) - (MAP_WIDTH/2)){
-                mapx = map_width(newmap) - MAP_WIDTH + x;
-            } else {
-                mapx = herox - (MAP_WIDTH / 2) + x;
-            }
-            // Keeping hud within y-boundaries
-            if(heroy <= (MAP_WIDTH / 2)){
-                mapy = y;
-            } else if(heroy >= map_height(newmap) - (MAP_HEIGHT / 2)){
-                mapy = map_height(newmap) - MAP_HEIGHT + y;
-            } else {
-                mapy = heroy - (MAP_HEIGHT / 2) + y;
-            }
-            // Render current (x,y) of the hud.
-            renderTextureatXY(textures[map_get_tiletype(mapx, mapy, newmap)], renderer, x, y, TILE_SIZE);
-        }
-    }
-}
-*/
-
 
 /* image_loader takes a bmp and loads it onto
    a texture to be handed to the renderer.
