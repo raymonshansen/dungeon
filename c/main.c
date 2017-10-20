@@ -23,7 +23,12 @@ void draw_map_hud(SDL_Texture **textures,
     int MAP_WIDTH, int MAP_HEIGHT, 
     int TILE_SIZE, 
     tiletype_t* map_hud_tiles);
-//void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int heroy, map_t *newmap, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE);
+void draw_message_hud(SDL_Texture **textures, 
+    SDL_Renderer *renderer, 
+    int startx, int starty,  
+    int MESSAGE_WIDTH, int MESSAGE_HEIGHT, 
+    int TILE_SIZE);
+int is_fullscreen(SDL_Window *window);
 
 // Let the Dungeon begin!
 int main(int argc, char** argv){
@@ -33,8 +38,8 @@ int main(int argc, char** argv){
 
     if(argc != 3){
         printf("Usage: ./dungeon <width> <height>\nUsing Width: 1600 Height: 800\n");
-        WINDOW_WIDTH = 208;
-        WINDOW_HEIGHT = 192;
+        WINDOW_WIDTH = 1600;
+        WINDOW_HEIGHT = 800;
     } else {
         // Window size in pixels
         WINDOW_WIDTH = atoi(argv[1]) - (atoi(argv[1]) % TILE_SIZE);
@@ -58,8 +63,8 @@ int main(int argc, char** argv){
     int heroy = MAP_HEIGHT/2;
     int HUD_WIDTH = WINDOW_WIDTH_TILES;
     int HUD_HEIGHT = WINDOW_HEIGHT_TILES - MAP_HEIGHT;
-    int MINIMAP_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
-    int MINIMAP_HEIGHT = MAP_HEIGHT;
+    int MESSAGE_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
+    int MESSAGE_HEIGHT = MAP_HEIGHT;
 
     // Initialize SDL and sub-libraries
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -98,16 +103,9 @@ int main(int argc, char** argv){
         textures[i] = image_loader(imagefiles[i], renderer);
     }
 
-    // 2D array of int 1s.
-    // TODO: Make this independant module.
-    int x, y;
-    int **dungeon = (int **)malloc(MAP_HEIGHT * sizeof(int *));
-    for(y = 0; y < MAP_HEIGHT; y++){
-        dungeon[y] = (int *)malloc(MAP_WIDTH * sizeof(int));
-    }
 
     // NEW MAP MODULE!
-    map_t* newmap = map_create(15, 15);
+    map_t* newmap = map_create(50, 50);
     // Make an array to hold the tiletypes that gets printed in the map hud.
     tiletype_t *map_hud_tiles = malloc(MAP_HEIGHT * MAP_WIDTH * sizeof(tiletype_t));
     for(i = 0; i < MAP_HEIGHT * MAP_WIDTH; i++){
@@ -131,13 +129,25 @@ int main(int argc, char** argv){
             if(event.type == SDL_KEYDOWN){
                 switch(event.key.keysym.sym)
                 {
+                case SDLK_KP_7:
+                    heroy -= 1;
+                    herox -= 1;
+                    break;
                 case SDLK_KP_8:
                 case SDLK_UP:
                     heroy -= 1;
                     break;
+                case SDLK_KP_9:
+                    heroy -= 1;
+                    herox += 1;
+                    break;
                 case SDLK_KP_2:
                 case SDLK_DOWN:
                     heroy += 1;
+                    break;
+                case SDLK_KP_1:
+                    heroy += 1;
+                    herox -= 1;
                     break;
                 case SDLK_KP_4:
                 case SDLK_LEFT:
@@ -145,6 +155,10 @@ int main(int argc, char** argv){
                     break;
                 case SDLK_KP_6:
                 case SDLK_RIGHT:
+                    herox += 1;
+                    break;
+                case SDLK_KP_3:
+                    heroy += 1;
                     herox += 1;
                     break;
                 default:
@@ -158,20 +172,10 @@ int main(int argc, char** argv){
 
         // Update current_map_hud
 
-        // Draw map hud
+        // Draw map-hud
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
-        // Draw stat-hud
-        for(y = MAP_HEIGHT; y < MAP_HEIGHT+HUD_HEIGHT; y++){
-            for(x = 0; x < HUD_WIDTH; x++){
-                renderTextureatXY(textures[GREEN], renderer, x, y, TILE_SIZE);
-            }
-        }
-        // Draw message hud
-        for(y = 0; y < MINIMAP_HEIGHT; y++){
-            for(x = MAP_WIDTH; x < MAP_WIDTH+MINIMAP_WIDTH; x++){
-                renderTextureatXY(textures[BLUE], renderer, x, y, TILE_SIZE);
-            }
-        }
+        // Draw message-hud
+        draw_message_hud(textures, renderer, MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, TILE_SIZE);
 
         // Present
         SDL_RenderPresent(renderer);
@@ -201,13 +205,31 @@ void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int
             index++;
         }
     }
-}    
+}
 
+void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, int startx, int starty, int MESSAGE_WIDTH, int MESSAGE_HEIGHT, int TILE_SIZE){
+    // Draw corners
+    renderTextureatXY(textures[B_TOPLEFT], renderer, startx, starty, TILE_SIZE);
+    renderTextureatXY(textures[B_TOPRIGHT], renderer, startx + MESSAGE_WIDTH-1, starty, TILE_SIZE);
+    renderTextureatXY(textures[B_BOTTOMLEFT], renderer, startx, starty + MESSAGE_HEIGHT-1, TILE_SIZE);
+    renderTextureatXY(textures[B_BOTTOMRIGHT], renderer, startx + MESSAGE_WIDTH-1, starty + MESSAGE_HEIGHT-1, TILE_SIZE);
+    int x;
+    int y;
+    // Draw horizontals    
+    for(y = starty+1; y < MESSAGE_HEIGHT - 1; y++){
+        renderTextureatXY(textures[B_VERTICAL], renderer, startx, y, TILE_SIZE);
+        renderTextureatXY(textures[B_VERTICAL], renderer, startx+MESSAGE_WIDTH-1, y, TILE_SIZE);        
+    }
+
+    for(x = startx+1; x < startx + MESSAGE_WIDTH - 1; x++){
+        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty, TILE_SIZE);
+        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty + MESSAGE_HEIGHT-1, TILE_SIZE);        
+    }
+}
 /* image_loader takes a bmp and loads it onto
    a texture to be handed to the renderer.
 */
 SDL_Texture *image_loader(const char *filename, SDL_Renderer *renderer){
-    printf("Loading %s\n", filename);
     SDL_Texture * texture = NULL;
     SDL_Surface *image_surface = IMG_Load(filename);
     if(NULL != image_surface){

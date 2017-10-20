@@ -87,10 +87,8 @@ map_t * map_create(int width, int height){
     map_t *newmap = malloc(sizeof(map_t));
     
     if (newmap){
-        //newmap->width = width;
-        //newmap->height = height;
-        newmap->width = 50;
-        newmap->height = 50;
+        newmap->width = width;
+        newmap->height = height;
     
         newmap->tilearray = malloc(newmap->width * newmap->height * sizeof(tile_t*));
         int i;

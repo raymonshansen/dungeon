@@ -12,6 +12,12 @@ typedef enum {
     BLUE,
     ATT,
     FLOOR,
+    B_TOPLEFT,
+    B_TOPRIGHT,
+    B_BOTTOMLEFT,
+    B_BOTTOMRIGHT,
+    B_HORIZONTAL,
+    B_VERTICAL,
     // Used as a dynamic tally on the number of types.
     TILENUM 
 } tiletype_t;
