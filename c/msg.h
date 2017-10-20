@@ -1,6 +1,8 @@
 #ifndef MSG_H_
 #define MSG_H_
 
+#include "list.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
@@ -19,6 +21,6 @@ typedef struct msg msg_t;
 /*  msg_create returns a pointer to
     an empty message module ready to use.
 */
-msg_t * msg_create();
+msg_t * msg_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer);
 
 #endif /* MSG_H_ */
