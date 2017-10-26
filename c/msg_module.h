@@ -1,5 +1,5 @@
-#ifndef MSG_H_
-#define MSG_H_
+#ifndef MSG_MODULE_H_
+#define MSG_MODULE_H_
 
 #include "list.h"
 
@@ -13,14 +13,19 @@
     
     Set up as a linked list of messages for dynamic use of memory.
 
-    Messages interface:
+    Messages module interface:
 */
 
-typedef struct msg msg_t;
+typedef struct msg_module msg_module_t;
 
 /*  msg_create returns a pointer to
     an empty message module ready to use.
 */
-msg_t * msg_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer);
+msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer);
+
+/*  msg interface:
+*/
+
+typedef struct msg msg_t;
 
 #endif /* MSG_H_ */

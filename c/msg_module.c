@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "msg.h"
+#include "msg_module.h"
 #include "list.h"
 
-struct msg{
+/* STRUCT FOR THE MESSAGE MODULE */
+struct msg_module{
     int max_messages;
     
     list_t *msg_list;
@@ -15,11 +16,19 @@ struct msg{
     SDL_Renderer *renderer;
 };
 
-/*  msg_create returns a pointer to
-    an empty message module ready to use.
+/* STRUCT FOR A MESSAGE*/
+struct msg{
+    char* text;
+}
+
+/*  msg_create returns a pointer to an empty message module ready to use.
+    It is able to manage several different types of message-list.
+    e.g. DEBUG, BATTLE-LOG, GAMEPLAY, ERROR, NPC-TALK etc...
+    Each message is held in its own msg struct containing the actual 
+    string of the message along with its font, color, size etc.
 */
-msg_t *msg_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer){
-    msg_t * msg_module = malloc(sizeof(msg_t));
+msg_module_t *msg_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer){
+    msg_module_t * msg_module = malloc(sizeof(msg_module_t));
     if(!msg_module){
         printf("Error in msg_create()");
         return NULL;
