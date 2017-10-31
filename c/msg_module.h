@@ -23,9 +23,18 @@ typedef struct msg_module msg_module_t;
 */
 msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer);
 
+/*  msg_module_draw draws the last x messages in its list of
+    messages in its given place in the screen, using the given renderer.
+*/
+void msg_module_draw(msg_module_t *msg_module);
+
+/*  Returns true if the module has received new messages since last draw.
+*/
+int msg_module_updated(msg_module_t *msg_module);
+
+
 /*  msg interface:
 */
-
 typedef struct msg msg_t;
 
 #endif /* MSG_H_ */

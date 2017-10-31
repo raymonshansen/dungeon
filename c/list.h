@@ -1,5 +1,5 @@
-#ifndef list_H_
-#define list_H_
+#ifndef LIST_H_
+#define LIST_H_
 
 /*  A classic doubly linked list.
 
@@ -50,4 +50,4 @@ int list_hasnext(list_iter_t *iter);
  */
 void *list_next(list_iter_t *iter);
 
-#endif list_H_
+#endif // LIST_H_

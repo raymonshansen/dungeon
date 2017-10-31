@@ -9,6 +9,7 @@
 #include "map.h"
 #include "tile.h"
 #include "tiletypes.h"
+#include "msg_module.h"
 
 // Function declarations
 void log_SDL_error(FILE *output, char *message);
@@ -23,12 +24,13 @@ void draw_map_hud(SDL_Texture **textures,
     int MAP_WIDTH, int MAP_HEIGHT, 
     int TILE_SIZE, 
     tiletype_t* map_hud_tiles);
-void draw_message_hud(SDL_Texture **textures, 
+void draw_message_hud_border(SDL_Texture **textures, 
     SDL_Renderer *renderer, 
-    int startx, int starty,  
+    int startx, int starty, 
     int MESSAGE_WIDTH, int MESSAGE_HEIGHT, 
     int TILE_SIZE);
-int is_fullscreen(SDL_Window *window);
+void draw_messages(msg_module_t * message_module);
+
 
 // Let the Dungeon begin!
 int main(int argc, char** argv){
@@ -61,8 +63,8 @@ int main(int argc, char** argv){
     // Hero position
     int herox = MAP_WIDTH/2;
     int heroy = MAP_HEIGHT/2;
-    int HUD_WIDTH = WINDOW_WIDTH_TILES;
-    int HUD_HEIGHT = WINDOW_HEIGHT_TILES - MAP_HEIGHT;
+    //int HUD_WIDTH = WINDOW_WIDTH_TILES;
+    //int HUD_HEIGHT = WINDOW_HEIGHT_TILES - MAP_HEIGHT;
     int MESSAGE_WIDTH = WINDOW_WIDTH_TILES - MAP_WIDTH;
     int MESSAGE_HEIGHT = MAP_HEIGHT;
 
@@ -111,6 +113,8 @@ int main(int argc, char** argv){
     for(i = 0; i < MAP_HEIGHT * MAP_WIDTH; i++){
         map_hud_tiles[i] = DEFAULT;
     }
+    // NEW MESSAGE MODULE
+    msg_module_t* message_module = msg_module_create(MAP_WIDTH*TILE_SIZE+TILE_SIZE, TILE_SIZE, MESSAGE_WIDTH-(TILE_SIZE*2), MESSAGE_HEIGHT-(TILE_SIZE*2), 5, renderer);
 
     // Game loop
     int done = 0;
@@ -174,9 +178,12 @@ int main(int argc, char** argv){
 
         // Draw map-hud
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
-        // Draw message-hud
-        draw_message_hud(textures, renderer, MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, TILE_SIZE);
-
+        // Draw message-hud-border
+        draw_message_hud_border(textures, renderer, MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, TILE_SIZE);
+        // If we have new messages, display them.
+        if(msg_module_updated(message_module)){
+            draw_messages(message_module);
+        }
         // Present
         SDL_RenderPresent(renderer);
     }
@@ -207,7 +214,8 @@ void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int
     }
 }
 
-void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, int startx, int starty, int MESSAGE_WIDTH, int MESSAGE_HEIGHT, int TILE_SIZE){
+
+void draw_message_hud_border(SDL_Texture **textures, SDL_Renderer *renderer, int startx, int starty, int MESSAGE_WIDTH, int MESSAGE_HEIGHT, int TILE_SIZE){
     // Draw corners
     renderTextureatXY(textures[B_TOPLEFT], renderer, startx, starty, TILE_SIZE);
     renderTextureatXY(textures[B_TOPRIGHT], renderer, startx + MESSAGE_WIDTH-1, starty, TILE_SIZE);
@@ -225,6 +233,11 @@ void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, int startx
         renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty, TILE_SIZE);
         renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty + MESSAGE_HEIGHT-1, TILE_SIZE);        
     }
+    // Call the message module to draw the actual messages.
+
+}
+void draw_messages(msg_module_t *message_module){
+
 }
 /* image_loader takes a bmp and loads it onto
    a texture to be handed to the renderer.

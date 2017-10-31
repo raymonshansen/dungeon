@@ -4,8 +4,8 @@ CFLAGS = -Wall -Wextra -g
 SDL2 = `pkg-config --libs --cflags sdl2 SDL2_ttf SDL2_image`
 
 TARGET = dungeon
-OBJECTS = main.o map.o tile.o images.o
-HEADERS = map.h tile.h tiletypes.h
+OBJECTS = main.o map.o tile.o images.o list.o msg_module.o
+HEADERS = map.h tile.h tiletypes.h list.h msg_module.h
 
 .PHONY: all clean
 all: $(TARGET)
