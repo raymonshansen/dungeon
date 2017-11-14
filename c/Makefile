@@ -1,7 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS := -Wall -Wextra -g
+CFLAGS += $(shell pkg-config sdl2 SDL2_ttf SDL2_image --cflags)
 
-SDL2 = `pkg-config --libs --cflags sdl2 SDL2_ttf SDL2_image`
+LFLAGS = $(shell pkg-config sdl2 SDL2_ttf SDL2_image --libs)
 
 TARGET = dungeon
 OBJECTS = main.o map.o tile.o images.o list.o msg_module.o
@@ -11,7 +12,7 @@ HEADERS = map.h tile.h tiletypes.h list.h msg_module.h
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(SDL2) $^ -o $@
+	$(CC) $^ -o $@ $(LFLAGS)
 
 %.o: %.c $(HEADERS) 
 	$(CC) $(CFLAGS) $< -c
