@@ -55,7 +55,7 @@ Level is a hardcoded for display-testing purposes. No mechanics implemented. But
 
 ## Built With
 * [SDL2](https://www.libsdl.org/download-2.0.php) - Simple Direct Media Layer
-* [pygame](http://www.pygame.org) - For quic and easy graphics
+* [pygame](http://www.pygame.org) - For quick and easy graphics
 * [python3](https://www.python.org/download/releases/3.0/) - For quick and easy code
 * [C](https://en.wikipedia.org/wiki/C_(programming_language)) - For more learning and control
 
@@ -63,10 +63,9 @@ Level is a hardcoded for display-testing purposes. No mechanics implemented. But
 * **Raymon Skjørten Hansen** - *Initial work* - [Raymon on Github](https://github.com/raymonshansen)
 
 ## Contributors
-* **Isak Sunde Singh** - *Tips and help* - [Isak in Github](https://github.com/IsakSundeSingh)
+* **Isak Sunde Singh** - *Tips and help* - [Isak on Github](https://github.com/IsakSundeSingh)
 * **Mads Johansen** - *Tips and help* - [Mads on Github](https://github.com/MaxJohansen)
 
 ## Acknowledgments
 * Thomas Biskups [Ancient Domains of Mystery](wwww.adom.de)
 * Jamis Bucks Growing Tree Algorithm [Jamis Bucks Blog](http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm)
-* 
