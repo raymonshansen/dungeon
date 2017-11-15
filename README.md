@@ -8,12 +8,12 @@ The project is thus far split in two. The python part is a random dungeon genera
 This is a general list of the things that I'm currently working on, should you have any tips or wanted to contribute.
 * An easy way to display/handle how in-game messages. This is important as most things will be conveyed via messages. My initial thought was to have a message module which could handle all messages displayed(up to a max number), this way, displaying them could be done by querying the module for the last 5 messages and display them. One thing I cannot decide is if the module should handle its own drawing, or if it only stores the messages like the map does. I'm leaning towards the latter.
 * General clean-up. The code base, though relatively tidy so far is becoming messy, which I don't like. If this project is to handle scaling, it needs to be tidy. So, the main loop should perhaps have its own header file as the number of functions grow.
-# Next up
+## Next up
 When all the above are fixed, what then?
 * Start looking at a module which will generate the actuall dungeons and handle them. It will move monsters, players, handle items, etc. Or, should it be wider than that even? Should it perhaps be the main engine itself which will handle AI, movement, VOF(Field of View), generating levels, npcs, time-management etc? I don't know. 
 * Start looking at actual mechanics and physics.
 
-## Getting Started
+# Getting Started
 Copy the project folder or clone it.
 
 ### Prerequisites
@@ -28,7 +28,7 @@ python3 dungeon.py <width in pixels> <height in pixels> <recursive depth>
 Example:
 ```python3 dungeon.py 1300 700 4```
 ### Screenshot using above example
-![alt tag](python/images/dungeon.png)
+![alt tag](docs/dungeon-python.png)
 To play/test:
 "L" resets all lists and spawns a new level
 Keypad numbers 1-9 moves the blue "@" around
@@ -48,7 +48,7 @@ make run
 Example:
 ```./dungeon 1000 500```
 ### Screenshot using above example
-![alt tag](dungeon.png)
+![alt tag](docs/dungeon-c.png)
 To play/test:
 Keypads or arrows to move around
 Level is a hardcoded for display-testing purposes. No mechanics implemented. But a hardcoded alpha in the middle of the map-view. 
