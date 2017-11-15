@@ -2,6 +2,7 @@
 #define MSG_MODULE_H_
 
 #include "list.h"
+#include "tiletypes.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -21,7 +22,7 @@ typedef struct msg_module msg_module_t;
 /*  msg_create returns a pointer to
     an empty message module ready to use.
 */
-msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer);
+msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer, SDL_Texture** textures);
 
 /*  msg_module_draw draws the last x messages in its list of
     messages in its given place in the screen, using the given renderer.

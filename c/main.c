@@ -24,12 +24,12 @@ void draw_map_hud(SDL_Texture **textures,
     int MAP_WIDTH, int MAP_HEIGHT, 
     int TILE_SIZE, 
     tiletype_t* map_hud_tiles);
+void draw_message_hud(SDL_Texture **textures, msg_module_t *message_module, int TILE_SIZE);
 void draw_message_hud_border(SDL_Texture **textures, 
     SDL_Renderer *renderer, 
     int startx, int starty, 
     int MESSAGE_WIDTH, int MESSAGE_HEIGHT, 
     int TILE_SIZE);
-void draw_messages(msg_module_t * message_module);
 
 
 // Let the Dungeon begin!
@@ -114,7 +114,7 @@ int main(int argc, char** argv){
         map_hud_tiles[i] = DEFAULT;
     }
     // NEW MESSAGE MODULE
-    msg_module_t* message_module = msg_module_create(MAP_WIDTH*TILE_SIZE+TILE_SIZE, TILE_SIZE, MESSAGE_WIDTH-(TILE_SIZE*2), MESSAGE_HEIGHT-(TILE_SIZE*2), 5, renderer);
+    msg_module_t* message_module = msg_module_create(MAP_WIDTH*TILE_SIZE+TILE_SIZE, TILE_SIZE, MESSAGE_WIDTH-(TILE_SIZE*2), MESSAGE_HEIGHT-(TILE_SIZE*2), 5, renderer, textures);
 
     // Game loop
     int done = 0;
@@ -178,14 +178,25 @@ int main(int argc, char** argv){
 
         // Draw map-hud
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
-        // Draw message-hud-border
-        draw_message_hud_border(textures, renderer, MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, TILE_SIZE);
-        // If we have new messages, display them.
-        if(msg_module_updated(message_module)){
-            draw_messages(message_module);
-        }
+        // Draw message-hud
+        //msg_module_draw(message_module);
+
+        SDL_Color textColor = {255, 255, 255, 0};
+        TTF_Font* font = TTF_OpenFont("arial.ttf", TILE_SIZE);
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Message", textColor);
+        
+        SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+        SDL_FreeSurface(surfaceMessage);
+        SDL_Rect message_rect;
+        int texW = 0;
+        int texH = 0;
+        SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
+        SDL_Rect dstrect = { MAP_WIDTH*TILE_SIZE, 0, texW, texH };
+        SDL_RenderCopy(renderer, message, NULL, &dstrect);
+        SDL_DestroyTexture(message);
         // Present
         SDL_RenderPresent(renderer);
+        TTF_CloseFont(font);
     }
     // Cleanup and close
     SDL_DestroyRenderer(renderer);
@@ -214,31 +225,6 @@ void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int
     }
 }
 
-
-void draw_message_hud_border(SDL_Texture **textures, SDL_Renderer *renderer, int startx, int starty, int MESSAGE_WIDTH, int MESSAGE_HEIGHT, int TILE_SIZE){
-    // Draw corners
-    renderTextureatXY(textures[B_TOPLEFT], renderer, startx, starty, TILE_SIZE);
-    renderTextureatXY(textures[B_TOPRIGHT], renderer, startx + MESSAGE_WIDTH-1, starty, TILE_SIZE);
-    renderTextureatXY(textures[B_BOTTOMLEFT], renderer, startx, starty + MESSAGE_HEIGHT-1, TILE_SIZE);
-    renderTextureatXY(textures[B_BOTTOMRIGHT], renderer, startx + MESSAGE_WIDTH-1, starty + MESSAGE_HEIGHT-1, TILE_SIZE);
-    int x;
-    int y;
-    // Draw horizontals    
-    for(y = starty+1; y < MESSAGE_HEIGHT - 1; y++){
-        renderTextureatXY(textures[B_VERTICAL], renderer, startx, y, TILE_SIZE);
-        renderTextureatXY(textures[B_VERTICAL], renderer, startx+MESSAGE_WIDTH-1, y, TILE_SIZE);        
-    }
-
-    for(x = startx+1; x < startx + MESSAGE_WIDTH - 1; x++){
-        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty, TILE_SIZE);
-        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty + MESSAGE_HEIGHT-1, TILE_SIZE);        
-    }
-    // Call the message module to draw the actual messages.
-
-}
-void draw_messages(msg_module_t *message_module){
-
-}
 /* image_loader takes a bmp and loads it onto
    a texture to be handed to the renderer.
 */
