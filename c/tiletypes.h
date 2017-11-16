@@ -1,7 +1,8 @@
 #ifndef TILETYPES_H_
 #define TILETYPES_H_
 
-extern const char * imagefiles[];
+extern const char * imagefiles16[];
+extern const char * imagefiles32[];
 /*  Indexes an array of SDL_Texture *
 */
 typedef enum {

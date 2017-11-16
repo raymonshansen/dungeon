@@ -22,12 +22,23 @@ typedef struct msg_module msg_module_t;
 /*  msg_create returns a pointer to
     an empty message module ready to use.
 */
-msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer, SDL_Texture** textures);
+msg_module_t * msg_module_create(int x, int y, int width, int height, int max_messages);
 
-/*  msg_module_draw draws the last x messages in its list of
-    messages in its given place in the screen, using the given renderer.
+/*  Return the startx of the module
 */
-void msg_module_draw(msg_module_t *msg_module);
+int msg_module_get_startx(msg_module_t * msg_module);
+
+/*  Return the starty of the module
+*/
+int msg_module_get_starty(msg_module_t * msg_module);
+
+/*  Return the width of the module
+*/
+int msg_module_get_width(msg_module_t * msg_module);
+
+/*  Return the height of the module
+*/
+int msg_module_get_height(msg_module_t * msg_module);
 
 /*  Returns true if the module has received new messages since last draw.
 */

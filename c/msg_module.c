@@ -14,8 +14,6 @@ struct msg_module{
     int y;
     int width;
     int height;
-    SDL_Renderer *renderer;
-    SDL_Texture **textures;
     TTF_Font* font;
 };
 
@@ -30,7 +28,7 @@ struct msg{
     Each message is held in its own msg struct containing the actual 
     string of the message along with its font, color, size etc.
 */
-msg_module_t *msg_module_create(int x, int y, int width, int height, int max_messages, SDL_Renderer *renderer, SDL_Texture **textures){
+msg_module_t *msg_module_create(int x, int y, int width, int height, int max_messages){
     msg_module_t * msg_module = malloc(sizeof(msg_module_t));
     if(!msg_module){
         printf("Error in msg_module_create()");
@@ -53,29 +51,31 @@ msg_module_t *msg_module_create(int x, int y, int width, int height, int max_mes
     msg_module->y = y;
     msg_module->width = width;
     msg_module->height = height;
-    msg_module->renderer = renderer;
-    msg_module->textures = textures;
     return msg_module;
 }
 
-/*  msg_module_draw draws the last x messages of the message list in the given
-    area of the screen, with the given renderer. Could perhaps be extended to accomodate
-    several types of lists so the player can swap between different message logs.
+/*  Return the startx of the module
 */
-void msg_module_draw(msg_module_t *msg_module){
-    SDL_Color textColor = {255, 255, 255, 0};
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(msg_module->font, "put your text here", textColor);
-    
-    SDL_Texture* message = SDL_CreateTextureFromSurface(msg_module->renderer, surfaceMessage);
-    SDL_FreeSurface(surfaceMessage);
-    SDL_Rect message_rect;
-    message_rect.x = msg_module->x; 
-    message_rect.y = msg_module->y;
-    message_rect.w = msg_module->width;
-    message_rect.h = msg_module->height;
-    
-    SDL_RenderCopy(msg_module->renderer, message, NULL, &message_rect);
-    
+int msg_module_get_startx(msg_module_t * msg_module){
+    return msg_module->x;
+}
+
+/*  Return the starty of the module
+*/
+int msg_module_get_starty(msg_module_t * msg_module){
+    return msg_module->y;
+}
+
+/*  Return the width of the module
+*/
+int msg_module_get_width(msg_module_t * msg_module){
+    return msg_module->width;
+}
+
+/*  Return the height of the module
+*/
+int msg_module_get_height(msg_module_t * msg_module){
+    return msg_module->height;
 }
 
 /*  Return the current state of the module. 1 if there are un-drawn messages.

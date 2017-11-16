@@ -24,19 +24,14 @@ void draw_map_hud(SDL_Texture **textures,
     int MAP_WIDTH, int MAP_HEIGHT, 
     int TILE_SIZE, 
     tiletype_t* map_hud_tiles);
-void draw_message_hud(SDL_Texture **textures, msg_module_t *message_module, int TILE_SIZE);
-void draw_message_hud_border(SDL_Texture **textures, 
-    SDL_Renderer *renderer, 
-    int startx, int starty, 
-    int MESSAGE_WIDTH, int MESSAGE_HEIGHT, 
-    int TILE_SIZE);
+void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, msg_module_t * msg_module, int TILE_SIZE);
 
 
 // Let the Dungeon begin!
 int main(int argc, char** argv){
     int WINDOW_WIDTH;
     int WINDOW_HEIGHT;
-    int TILE_SIZE = 16;
+    int TILE_SIZE = 32;
 
     if(argc != 3){
         printf("Usage: ./dungeon <width> <height>\nUsing Width: 1600 Height: 800\n");
@@ -101,8 +96,16 @@ int main(int argc, char** argv){
     // Load some images
     SDL_Texture **textures = malloc(TILENUM * sizeof(SDL_Texture*));
     int i;
+    const char **tmp_ptr;
+    // Point to correct filename-array.
+    if(TILE_SIZE == 16){
+        tmp_ptr = imagefiles16;
+    } else if(TILE_SIZE == 32){
+        tmp_ptr = imagefiles32;
+    }
+    // Load all of them as textures
     for(i = 0; i < TILENUM; i++){
-        textures[i] = image_loader(imagefiles[i], renderer);
+        textures[i] = image_loader(tmp_ptr[i], renderer);
     }
 
 
@@ -114,7 +117,7 @@ int main(int argc, char** argv){
         map_hud_tiles[i] = DEFAULT;
     }
     // NEW MESSAGE MODULE
-    msg_module_t* message_module = msg_module_create(MAP_WIDTH*TILE_SIZE+TILE_SIZE, TILE_SIZE, MESSAGE_WIDTH-(TILE_SIZE*2), MESSAGE_HEIGHT-(TILE_SIZE*2), 5, renderer, textures);
+    msg_module_t* message_module = msg_module_create(MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, 5);
 
     // Game loop
     int done = 0;
@@ -179,8 +182,8 @@ int main(int argc, char** argv){
         // Draw map-hud
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
         // Draw message-hud
-        //msg_module_draw(message_module);
-
+        draw_message_hud(textures, renderer, message_module, TILE_SIZE);
+        /*
         SDL_Color textColor = {255, 255, 255, 0};
         TTF_Font* font = TTF_OpenFont("arial.ttf", TILE_SIZE);
         SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Message", textColor);
@@ -194,9 +197,11 @@ int main(int argc, char** argv){
         SDL_Rect dstrect = { MAP_WIDTH*TILE_SIZE, 0, texW, texH };
         SDL_RenderCopy(renderer, message, NULL, &dstrect);
         SDL_DestroyTexture(message);
+        */
+
         // Present
         SDL_RenderPresent(renderer);
-        TTF_CloseFont(font);
+        //TTF_CloseFont(font);
     }
     // Cleanup and close
     SDL_DestroyRenderer(renderer);
@@ -223,6 +228,36 @@ void draw_map_hud(SDL_Texture **textures, SDL_Renderer *renderer, int herox, int
             index++;
         }
     }
+}
+
+void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, msg_module_t * msg_module, int TILE_SIZE){
+    // Get some constants
+    int startx = msg_module_get_startx(msg_module);
+    int starty = msg_module_get_starty(msg_module);
+    int width = msg_module_get_width(msg_module);
+    int height = msg_module_get_height(msg_module);
+    
+    // Render frame corners
+    renderTextureatXY(textures[B_TOPLEFT], renderer, startx, starty, TILE_SIZE);
+    renderTextureatXY(textures[B_TOPRIGHT], renderer, startx+width-1, starty, TILE_SIZE);
+    renderTextureatXY(textures[B_BOTTOMLEFT], renderer, startx, starty+height-1, TILE_SIZE);
+    renderTextureatXY(textures[B_BOTTOMRIGHT], renderer, startx+width-1, starty+height-1, TILE_SIZE);
+    // Render rest of frame
+    int x;
+    int y;
+    // Horizontals
+    for(x = startx+1; x < startx+width-1; x++){
+        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty, TILE_SIZE);
+        renderTextureatXY(textures[B_HORIZONTAL], renderer, x, starty+height-1, TILE_SIZE);
+    }
+    for(y = starty+1; y < starty+height-1; y++){
+        renderTextureatXY(textures[B_VERTICAL], renderer, startx, y, TILE_SIZE);
+        renderTextureatXY(textures[B_VERTICAL], renderer, startx+width-1, y, TILE_SIZE);
+    }
+
+    // Then get the messages from the module and draw them inside the frame...
+    // Module never actually does any drawing, it just shuffles messages....
+
 }
 
 /* image_loader takes a bmp and loads it onto
