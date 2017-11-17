@@ -102,6 +102,15 @@ void list_addlast(list_t *list, void *elem){
     }
     list->size++;
 }
+/*  Return the first item in the list
+*/
+void *list_getfirst(list_t *list){
+    if(list && list->head){
+        return list->head->elem;    
+    }
+    return NULL;
+}
+
 
 /*  Create an iterator on the given list.
 */

@@ -19,7 +19,8 @@ struct msg_module{
 
 /* STRUCT FOR A MESSAGE*/
 struct msg{
-    char* text;
+    const char* text;
+    SDL_Color color;
 };
 
 /*  msg_create returns a pointer to an empty message module ready to use.
@@ -39,7 +40,7 @@ msg_module_t *msg_module_create(int x, int y, int width, int height, int max_mes
         printf("Error in msg_module_create()");
         return NULL;
     }
-    msg_module->font = TTF_OpenFont("arial.ttf", 24);
+    msg_module->font = TTF_OpenFont("arial.ttf", 20);
     if(!msg_module->font){
         printf("Error in msg_module_create()");
         return NULL;
@@ -52,6 +53,43 @@ msg_module_t *msg_module_create(int x, int y, int width, int height, int max_mes
     msg_module->width = width;
     msg_module->height = height;
     return msg_module;
+}
+
+/*  Adds the given message to the module
+*/
+int msg_module_add(const char *message, SDL_Color color, msg_module_t * msg_module){
+    msg_t * new_message = msg_create(message, color);
+    if(!new_message){
+        printf("Error in adding message: %s", message);
+        return 1;
+    }
+    list_addfirst(msg_module->msg_list, new_message);
+    return 0;
+}
+
+/* Returns the first message from the module.
+*/
+const char * msg_module_getfirst(msg_module_t * msg_module){
+    msg_t * msg = (msg_t*)list_getfirst(msg_module->msg_list);
+    if(!msg){
+        return NULL;
+    }
+    return msg->text;
+}
+
+/*  Fills the given array with the first N messages
+*/
+void msg_module_get_N(msg_module_t * msg_module, char ** stringarray, int n){
+    if(n > list_size(msg_module->msg_list)){
+        n = list_size(msg_module->msg_list);
+    }
+    list_iter_t *iter = list_createiter(msg_module->msg_list);
+    
+    int i;
+    for(i = 0; i < n; i++){
+        msg_t *msg = (msg_t *)list_next(iter);
+        stringarray[i] = msg->text;
+    }
 }
 
 /*  Return the startx of the module
@@ -78,9 +116,32 @@ int msg_module_get_height(msg_module_t * msg_module){
     return msg_module->height;
 }
 
+/*  Return the font
+*/
+TTF_Font *msg_module_get_font(msg_module_t * msg_module){
+    return msg_module->font;
+}
+
+
 /*  Return the current state of the module. 1 if there are un-drawn messages.
     0 if they have all been drawn.
 */
 int msg_module_updated(msg_module_t *msg_module){
     return msg_module->updated;
 }
+
+/*  ---------- msg_t functions ------------------*/
+
+/*  Create a new message with the given text
+*/
+msg_t * msg_create(const char *message, SDL_Color color){
+    msg_t * msg = malloc(sizeof(msg_t));
+    if(!msg){
+        printf("Error in msg_module_create()");
+        return NULL;
+    }
+    msg->text = message;
+    msg->color = color;
+    return msg;
+}
+

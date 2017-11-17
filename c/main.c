@@ -72,6 +72,7 @@ int main(int argc, char** argv){
         printf("TTF_Error: %s\n", TTF_GetError());
         exit(1);
     }
+    
     // load support for the JPG and PNG image formats
     if(IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG) < 0) {
         printf("IMG_Init: Failed to init required jpg and png support!\n");
@@ -183,21 +184,7 @@ int main(int argc, char** argv){
         draw_map_hud(textures, renderer, herox, heroy, newmap, MAP_WIDTH, MAP_HEIGHT, TILE_SIZE, map_hud_tiles);
         // Draw message-hud
         draw_message_hud(textures, renderer, message_module, TILE_SIZE);
-        /*
-        SDL_Color textColor = {255, 255, 255, 0};
-        TTF_Font* font = TTF_OpenFont("arial.ttf", TILE_SIZE);
-        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Message", textColor);
-        
-        SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-        SDL_FreeSurface(surfaceMessage);
-        SDL_Rect message_rect;
-        int texW = 0;
-        int texH = 0;
-        SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
-        SDL_Rect dstrect = { MAP_WIDTH*TILE_SIZE, 0, texW, texH };
-        SDL_RenderCopy(renderer, message, NULL, &dstrect);
-        SDL_DestroyTexture(message);
-        */
+
 
         // Present
         SDL_RenderPresent(renderer);
@@ -257,6 +244,41 @@ void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, msg_module
 
     // Then get the messages from the module and draw them inside the frame...
     // Module never actually does any drawing, it just shuffles messages....
+    const char * test = "Test message!";
+    const char * test2 = "Next message";
+    SDL_Color color = {255, 255, 255, 255};
+    
+    msg_module_add(test, color, msg_module);
+    msg_module_add(test2, color, msg_module);
+    
+    const char ** stringarray;
+    //msg_module_get_N(msg_module, stringarray, 2);
+    int i;
+    /*
+    for(i = 0; i < 2; i++){
+        printf("%s", stringarray[i]);
+    }
+    */
+    //printf("%s", stringarray[0]);
+
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(msg_module_get_font(msg_module), msg_module_getfirst(msg_module), color);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    SDL_FreeSurface(surfaceMessage);
+
+    // Where to put...
+    int texW = 0;
+    int texH = 0;
+
+    SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
+    SDL_Rect dstrect = {(startx*TILE_SIZE+TILE_SIZE), starty+TILE_SIZE, texW, texH };
+    SDL_RenderCopy(renderer, message, NULL, &dstrect);
+    SDL_DestroyTexture(message);
+
+
+    //printf("%s", msg_module_getfirst(msg_module));
+    
+
+    
 
 }
 

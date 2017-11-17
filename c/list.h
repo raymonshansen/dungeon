@@ -30,6 +30,10 @@ void list_addfirst(list_t *list, void *elem);
 */
 void list_addlast(list_t *list, void *elem);
 
+/*  Return pointer to first item in list.
+*/
+void *list_getfirst(list_t *list);
+
 /*  Interface for iterator
 */
 /*  Creates a new list iterator for iterating over the given list.
