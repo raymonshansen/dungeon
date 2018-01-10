@@ -119,24 +119,18 @@ int main(int argc, char** argv){
     }
     // NEW MESSAGE MODULE
     msg_module_t* message_module = msg_module_create(MAP_WIDTH, 0, MESSAGE_WIDTH, MESSAGE_HEIGHT, 5);
-
+    SDL_Color color = {255, 255, 255, 255};
     // Game loop
     int done = 0;
     SDL_Event event;
     while(!done){
         while(SDL_PollEvent(&event)){
             if((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q) || event.type == SDL_QUIT){
-                printf("Got QUIT.\n");
                 done = 1;
                 break;
             }
-            if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m){
-                printf("MAP_WIDTH: %d\nMAP_HEIGHT: %d\n", MAP_WIDTH, MAP_HEIGHT);
-                continue;
-            }
             if(event.type == SDL_KEYDOWN){
-                switch(event.key.keysym.sym)
-                {
+                switch(event.key.keysym.sym){
                 case SDLK_KP_7:
                     heroy -= 1;
                     herox -= 1;
@@ -170,10 +164,10 @@ int main(int argc, char** argv){
                     herox += 1;
                     break;
                 default:
-                    continue;
+                continue;
                 }
+            msg_module_add(map_get_tile_desc(herox, heroy, newmap), color, message_module);            
             }
-            // get_input(event);
         }
         // Clear
         SDL_RenderClear(renderer);
@@ -185,6 +179,7 @@ int main(int argc, char** argv){
         // Draw message-hud
         draw_message_hud(textures, renderer, message_module, TILE_SIZE);
 
+        // Draw stat-hud
 
         // Present
         SDL_RenderPresent(renderer);
@@ -244,42 +239,26 @@ void draw_message_hud(SDL_Texture **textures, SDL_Renderer *renderer, msg_module
 
     // Then get the messages from the module and draw them inside the frame...
     // Module never actually does any drawing, it just shuffles messages....
-    const char * test = "Test message!";
-    const char * test2 = "Next message";
+
     SDL_Color color = {255, 255, 255, 255};
     
-    msg_module_add(test, color, msg_module);
-    msg_module_add(test2, color, msg_module);
-    
-    const char ** stringarray;
-    //msg_module_get_N(msg_module, stringarray, 2);
+    char *stringarray[2];
+    msg_module_get_N(msg_module, stringarray, 2);
     int i;
-    /*
+    TTF_Font* font = msg_module_get_font(msg_module);
+    
     for(i = 0; i < 2; i++){
-        printf("%s", stringarray[i]);
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, stringarray[i], color);
+        SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+        SDL_FreeSurface(surfaceMessage);
+        int texW = 0;
+        int texH = 0;
+        SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
+        SDL_Rect dstrect = {(startx*TILE_SIZE+TILE_SIZE), starty+TILE_SIZE+(TILE_SIZE*i), texW, texH };
+        SDL_RenderCopy(renderer, message, NULL, &dstrect);
+        SDL_DestroyTexture(message);
     }
-    */
-    //printf("%s", stringarray[0]);
-
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(msg_module_get_font(msg_module), msg_module_getfirst(msg_module), color);
-    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-    SDL_FreeSurface(surfaceMessage);
-
-    // Where to put...
-    int texW = 0;
-    int texH = 0;
-
-    SDL_QueryTexture(message, NULL, NULL, &texW, &texH);
-    SDL_Rect dstrect = {(startx*TILE_SIZE+TILE_SIZE), starty+TILE_SIZE, texW, texH };
-    SDL_RenderCopy(renderer, message, NULL, &dstrect);
-    SDL_DestroyTexture(message);
-
-
-    //printf("%s", msg_module_getfirst(msg_module));
     
-
-    
-
 }
 
 /* image_loader takes a bmp and loads it onto

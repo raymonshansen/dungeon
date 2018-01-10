@@ -32,4 +32,15 @@ int tile_set_type(tile_t* tile, tiletype_t type);
 */
 tiletype_t tile_get_type(tile_t* tile);
 
+/*  tile_set_description
+    Sets the description for the given tile.
+    Returns 1 on success and 0 on fail.
+*/
+int tile_set_description(tile_t* tile, const char* desc);
+
+/*  tile_get_description
+    Returns the string description of a given tile.
+*/
+const char* tile_get_description(tile_t* tile);
+
 #endif /* TILE_H_ */

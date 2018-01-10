@@ -3,6 +3,7 @@
 
 extern const char * imagefiles16[];
 extern const char * imagefiles32[];
+extern const char * tiledesc[];
 /*  Indexes an array of SDL_Texture *
 */
 typedef enum {

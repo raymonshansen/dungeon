@@ -31,3 +31,20 @@ const char * imagefiles32[] = {
     "tile_images/32/border_horizontal.png",
     "tile_images/32/border_vertical.png"    
     };
+
+//  Corresponding description array
+const char * tiledesc[] = {
+    "Black",
+    "Wall",
+    "Lava",
+    "Grass",
+    "Water",
+    "Yourself",
+    "Floor",
+    "Topleft",
+    "Topright",
+    "Bottomleft",
+    "Bottomright",
+    "Horizontal",
+    "Vertical",
+};

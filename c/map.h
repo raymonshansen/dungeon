@@ -49,6 +49,11 @@ tile_t* map_get_tile(int x, int y, map_t* map);
 */
 tiletype_t map_get_tiletype(int x, int y, map_t* map);
 
+/*  map_get_tile_desc
+    Returns the tile description of a given coordinate
+*/
+const char* map_get_tile_desc(int x, int y, map_t* map);
+
 /*  Take a pointer to tiltype_t and fill with the types 
     that fits within the map-hud size given @s coordinates.
     From the engine/drawing side of things, this pointer will 
