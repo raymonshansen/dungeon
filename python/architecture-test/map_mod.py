@@ -40,14 +40,15 @@ class Map():
     def load_map(self, filename, bank):
         """Load a map from a .txt file."""
         with open(filename, 'rt') as file:
-            lines = file.read().split()
             # Get the width and heigth of the map.
-            self.width, self.height = int(lines[0]), int(lines[1])
-            # Load the rest into a list.
             maplist = list()
+            lines = file.readlines()
+            self.width, self.height = [int(x) for x in lines[0].split()]
+            # Load the rest into a list.
             for line in lines[1:]:
-                for x in line:
+                for x in line.strip():
                     maplist.append(int(x))
+
             # Setup the tiles
             self.tiles = self.setup_tiles(self.width, self.height, bank)
             # Finally set all tile-types from the maplist
@@ -192,10 +193,9 @@ class Map():
         Return Shadow that corresponds to the projected
         silhouette of the tile at row_num, col_num.
         """
-        print(f"tile: {row_num}, {col_num}")
         topleft = col_num / (row_num + 2)
         bottomright = (col_num + 1) / (row_num + 1)
-        print(f"topleft: {topleft}, bottomright: {bottomright}")
+
         return Shadow(topleft, bottomright)
 
     def draw(self, screen, playerx, playery):
@@ -305,5 +305,5 @@ class ShadowLine():
         length = len(self.shadows)
         start = self.shadows[0].start
         end = self.shadows[0].end
-        print(f"length: {length} - start: {start} - end: {end}")
+        # print(f"length: {length} - start: {start} - end: {end}")
         return length == 1 and start == 0 and end == 1
