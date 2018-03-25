@@ -130,7 +130,8 @@ class Map():
         # Paint it black before we start.
         for tile in self.tiles:
             tile.set_light(255)
-            tile.debugmark = False
+        # Assume the player isn't blind.
+        self.get_tile(x, y).set_light(0)
 
         for octant_num in range(8):
             self.refresh_octant(x, y, octant_num, radius)
@@ -139,12 +140,12 @@ class Map():
         """Refresh which octant we're in."""
         line = ShadowLine()
         fullshadow = False
-        for row_num in range(1, radius):
+        for row_num in range(radius):
             oct_x, oct_y = self.transform_oct(row_num, 0, oct_num)
-            px = x + oct_x
-            py = y + oct_y
+            ppx = x + oct_x
+            ppy = y + oct_y
             # Bail if we go off the map!
-            if not self.get_tile(px, py):
+            if not self.get_tile(ppx, ppy):
                 break
             for col_num in range(row_num+1):
                 oct_x, oct_y = self.transform_oct(row_num, col_num, oct_num)
@@ -158,7 +159,7 @@ class Map():
                 tile = self.get_tile(px, py)
 
                 if fullshadow:
-                    tile.set_light(150)
+                    tile.set_light(200)
                 else:
                     projection = self.project_tile(row_num, col_num)
 
@@ -169,7 +170,6 @@ class Map():
 
                     # Add any opaque tiles to the shadow map.
                     if vis and tile.is_wall():
-                        tile.debugmark = True
                         tile.set_light(0)
                         line.add(projection)
                         fullshadow = line.is_full_shadow()
@@ -201,7 +201,7 @@ class Map():
     def draw(self, screen, playerx, playery):
         """Blit all tiles visible in the map view."""
         if self.dirty:
-            self.refresh_visibility(playerx, playery, 5)
+            self.refresh_visibility(playerx, playery, 10)
             self.map_view.fill(pygame.color.Color("antiquewhite"))
 
             # Blit tiles in the current view

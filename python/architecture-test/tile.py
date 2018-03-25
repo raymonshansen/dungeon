@@ -29,6 +29,7 @@ class Tile():
         self.status = TileStatus.UNEXPLORED
         self.set_light(255)
         self.debugmark = False
+        self.debugcol = None
 
     def __repr__(self):
         """Official string representation of a tile."""
@@ -41,6 +42,10 @@ class Tile():
     def set_status(self, status):
         """Set status of tile."""
         self.status = status
+
+    def set_debug(self, col):
+        self.debugmark = True
+        self.debugcol = col
 
     def set_light(self, luminosity):
         """Set the tiles lighting based on a given value."""
@@ -95,4 +100,4 @@ class Tile():
         surface.blit(self.types.get_type(self.type), coor)
         surface.blit(self.light, coor)
         if self.debugmark:
-            pygame.draw.circle(surface, (50, 255, 0), mid_coor, 4)
+            pygame.draw.circle(surface, self.debugcol, mid_coor, 4)
