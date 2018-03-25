@@ -61,7 +61,7 @@ class Map():
         """
         if (0 <= x < self.width) and (0 <= y < self.height):
             # print(f"{x}, {y} - {(y*self.height)+x}")
-            return self.tiles[(y*self.height)+x]
+            return self.tiles[(y * self.height) + x]
         else:
             return 0
 
@@ -74,7 +74,7 @@ class Map():
         res = list()
         for key in cons.DIRECTIONS:
             tup = cons.DIRECTIONS.get(key)
-            res.append(self.get_tile(x+tup[0], y+tup[1]))
+            res.append(self.get_tile(x + tup[0], y + tup[1]))
         return res
 
     def get_tiles_along_line(self, x1, y1, x2, y2):
@@ -120,11 +120,6 @@ class Map():
                     mask += 2**i
             tile.set_type(translate_dict.get(mask, 0))
 
-    def get_distance(self, x1, y1, x2, y2):
-        """Return the distance between two tiles."""
-        distance = sqrt((x1 - x2)**2 + (y1 - y2)**2)
-        return distance
-
     def refresh_visibility(self, x, y, radius):
         """Refresh the visibility given a certain point."""
         # Paint it black before we start.
@@ -147,7 +142,7 @@ class Map():
             # Bail if we go off the map!
             if not self.get_tile(ppx, ppy):
                 break
-            for col_num in range(row_num+1):
+            for col_num in range(row_num + 1):
                 oct_x, oct_y = self.transform_oct(row_num, col_num, oct_num)
                 px = x + oct_x
                 py = y + oct_y
@@ -164,13 +159,18 @@ class Map():
                     projection = self.project_tile(row_num, col_num)
 
                     # Set the visibility of this tile.
-                    vis = not line.is_in_shadow(projection)
+                    dark = line.is_in_shadow(projection)
                     # Set tile to visible.
-                    tile.set_light(0)
+                    visibility = 150 if dark else 0
+                    tile.set_light(visibility)
 
                     # Add any opaque tiles to the shadow map.
+<<<<<<< HEAD
                     if vis and tile.is_wall():
                         tile.set_light(0)
+=======
+                    if not dark and tile.is_wall():
+>>>>>>> 6b07c8119df7b7f617250dda1e1ccf1138da413e
                         line.add(projection)
                         fullshadow = line.is_full_shadow()
 
@@ -205,14 +205,14 @@ class Map():
             self.map_view.fill(pygame.color.Color("antiquewhite"))
 
             # Blit tiles in the current view
-            leftx = playerx - (self.view_width-1)//2
-            lefty = playery - (self.view_height-1)//2
-            for x in range(leftx, leftx+self.view_width):
-                for y in range(lefty, lefty+self.view_height):
+            leftx = playerx - (self.view_width - 1) // 2
+            lefty = playery - (self.view_height - 1) // 2
+            for x in range(leftx, leftx + self.view_width):
+                for y in range(lefty, lefty + self.view_height):
                     tile = self.get_tile(x, y)
                     # tile == 0 if its off the map
                     if tile:
-                        tile.draw(self.map_view, x-leftx, y-lefty)
+                        tile.draw(self.map_view, x - leftx, y - lefty)
 
             red = pygame.color.Color("red")
             screen.blit(self.map_view, self.topleft)
@@ -230,8 +230,8 @@ class Shadow():
 
     def __init__(self, start, end):
         """Shadow covers tiles from start to end."""
-        self.start = min(start, end)
-        self.end = max(start, end)
+        self.start = start
+        self.end = end
 
     def __repr__(self):
         return f"Shadow({self.start}, {self.end})"
