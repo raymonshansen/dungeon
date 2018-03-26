@@ -49,16 +49,12 @@ class Tile():
 
     def set_light(self, luminosity):
         """Set the tiles lighting based on a given value."""
-        """
-        if self.status == TileStatus.UNEXPLORED:
-            self.light.set_alpha(255)
-            return
-        if self.status == TileStatus.EXPLORED:
+
+        # Make sure already explored tiles never go completely dark again.
+        if self.status == TileStatus.EXPLORED and luminosity == 255:
             self.light.set_alpha(150)
             return
-        if self.status == TileStatus.VISIBLE:
-            self.light.set_alpha(luminosity)
-        """
+
         self.light.set_alpha(luminosity)
 
     def get_type(self):

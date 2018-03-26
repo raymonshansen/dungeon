@@ -46,8 +46,8 @@ class Game():
         self.logview = Log(logsurface, cons.LOG_POS)
 
         # Test player
-        self.px = 16
-        self.py = 16
+        self.px = 25
+        self.py = 25
 
     def handle_events(self):
         events = pygame.event.get()

@@ -126,6 +126,7 @@ class Map():
         for tile in self.tiles:
             tile.set_light(255)
         # Assume the player isn't blind.
+        self.get_tile(x, y).status = TileStatus.EXPLORED
         self.get_tile(x, y).set_light(0)
 
         for octant_num in range(8):
@@ -154,23 +155,26 @@ class Map():
                 tile = self.get_tile(px, py)
 
                 if fullshadow:
-                    tile.set_light(200)
+                    tile.set_light(255)
                 else:
                     projection = self.project_tile(row_num, col_num)
 
                     # Set the visibility of this tile.
+                    vis = not line.is_in_shadow(projection)
                     dark = line.is_in_shadow(projection)
                     # Set tile to visible.
-                    visibility = 150 if dark else 0
+                    if dark:
+                        visibility = 255
+                    else:
+                        visibility = 0
+                        tile.status = TileStatus.EXPLORED
                     tile.set_light(visibility)
 
                     # Add any opaque tiles to the shadow map.
-<<<<<<< HEAD
                     if vis and tile.is_wall():
                         tile.set_light(0)
-=======
+
                     if not dark and tile.is_wall():
->>>>>>> 6b07c8119df7b7f617250dda1e1ccf1138da413e
                         line.add(projection)
                         fullshadow = line.is_full_shadow()
 
