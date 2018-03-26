@@ -33,7 +33,8 @@ class Game():
         pygame.init()
         self.window_w = cons.TILE_D*cons.SCREEN_TW
         self.window_h = cons.TILE_D*cons.SCREEN_TH
-        self.screen = pygame.display.set_mode((self.window_w, self.window_h))
+        screenargs = [(self.window_w, self.window_h), pygame.FULLSCREEN]
+        self.screen = pygame.display.set_mode(*screenargs)
         self.running = True
         self.setup()
 
