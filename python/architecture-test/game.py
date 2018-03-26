@@ -33,8 +33,8 @@ class Game():
         pygame.init()
         self.window_w = cons.TILE_D*cons.SCREEN_TW
         self.window_h = cons.TILE_D*cons.SCREEN_TH
-        screenargs = [(self.window_w, self.window_h), pygame.FULLSCREEN]
-        self.screen = pygame.display.set_mode(*screenargs)
+        self.screensize = (self.window_w, self.window_h)
+        self.screen = pygame.display.set_mode(self.screensize)
         self.running = True
         self.setup()
 
@@ -59,6 +59,12 @@ class Game():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
                 break
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_f:
+                if self.screen.get_flags() & pygame.FULLSCREEN:
+                    pygame.display.set_mode(self.screensize)
+                else:
+                    pygame.display.set_mode(self.screensize, pygame.FULLSCREEN)
+            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.py -= 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
