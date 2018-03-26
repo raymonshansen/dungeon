@@ -53,18 +53,21 @@ class Game():
     def handle_events(self):
         events = pygame.event.get()
         for event in events:
+            # Quit the game.
             if event.type == pygame.QUIT:
                 self.running = False
                 break
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
                 break
+            # Toggle fullscreen.
             if event.type == pygame.KEYDOWN and event.key == pygame.K_f:
                 if self.screen.get_flags() & pygame.FULLSCREEN:
                     pygame.display.set_mode(self.screensize)
                 else:
                     pygame.display.set_mode(self.screensize, pygame.FULLSCREEN)
             
+            # Move the player.
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.py -= 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
