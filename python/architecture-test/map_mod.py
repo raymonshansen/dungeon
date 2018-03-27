@@ -166,7 +166,7 @@ class Map():
                     if dark:
                         visibility = 255
                     else:
-                        visibility = 0
+                        visibility = 30 * row_num
                         tile.status = TileStatus.EXPLORED
                     tile.set_light(visibility)
 
@@ -205,8 +205,8 @@ class Map():
     def draw(self, screen, playerx, playery):
         """Blit all tiles visible in the map view."""
         if self.dirty:
-            self.refresh_visibility(playerx, playery, 10)
-            self.map_view.fill(pygame.color.Color("antiquewhite"))
+            self.refresh_visibility(playerx, playery, 5)
+            self.map_view.fill(pygame.color.Color("black"))
 
             # Blit tiles in the current view
             leftx = playerx - (self.view_width - 1) // 2
