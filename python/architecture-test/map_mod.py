@@ -162,7 +162,7 @@ class Map():
                     # Set the visibility of this tile.
                     vis = not line.is_in_shadow(projection)
                     dark = line.is_in_shadow(projection)
-                    # Set tile to visible.
+
                     if dark:
                         visibility = 255
                     else:

@@ -3,9 +3,9 @@ import pygame
 TILE_D = 32
 
 # 1600px
-SCREEN_TW = 50
+SCREEN_TW = 40
 # 960px
-SCREEN_TH = 30
+SCREEN_TH = 20
 
 # 1280px
 MAP_VIEW_TW = int(SCREEN_TW * 0.8)
