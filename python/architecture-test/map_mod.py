@@ -166,7 +166,7 @@ class Map():
                     if dark:
                         visibility = 255
                     else:
-                        visibility = 30 * row_num
+                        visibility = (230/radius) * row_num
                         tile.status = TileStatus.EXPLORED
                     tile.set_light(visibility)
 
