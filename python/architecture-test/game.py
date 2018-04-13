@@ -2,6 +2,7 @@ import pygame
 
 import constants as cons
 from dungeon import Dungeon
+from logview import LogView, MsgType
 
 
 class StatView():
@@ -12,19 +13,7 @@ class StatView():
 
     def draw(self, screen):
         if self.dirty:
-            self.surface.fill(pygame.color.Color("moccasin"))
-            screen.blit(self.surface, self.topleft)
-
-
-class Log():
-    def __init__(self, surface, pos_rect):
-        self.surface = surface
-        self.topleft = pos_rect
-        self.dirty = True
-
-    def draw(self, screen):
-        if self.dirty:
-            self.surface.fill(pygame.color.Color("navajowhite"))
+            self.surface.fill(pygame.color.Color("black"))
             screen.blit(self.surface, self.topleft)
 
 
@@ -44,7 +33,7 @@ class Game():
         statsurface = pygame.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
         logsurface = pygame.Surface(cons.LOG_DIM)
-        self.logview = Log(logsurface, cons.LOG_POS)
+        self.logview = LogView(logsurface, cons.LOG_POS)
 
         # Test player
         self.px = 25
@@ -76,6 +65,13 @@ class Game():
                 self.px -= 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.px += 1
+            
+            # Test log
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
+                self.logview.post("Testing log.", MsgType.BATTLE)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                string = "Testing log with way too much text so that it will need to wrap many, many times to fit into the text-view."
+                self.logview.post(string, MsgType.INFO)
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)
