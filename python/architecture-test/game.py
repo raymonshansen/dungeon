@@ -72,6 +72,8 @@ class Game():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
                 string = "Testing log with way too much text so that it will need to wrap many, many times to fit into the text-view."
                 self.logview.post(string, MsgType.INFO)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+                self.logview.post("DEBUG TEXT.", MsgType.DEBUG)
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)

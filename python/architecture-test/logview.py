@@ -17,18 +17,28 @@ class MsgType(Enum):
 class LogView():
     """Log class which filters all incoming messages and prints the ones
     we currently want to see based on various toggles."""
-    def __init__(self, surface, pos_rect):
+    def __init__(self, surface, rect):
         """Construct a log."""
         self.surface = surface
-        self.topleft = pos_rect
+        self.rect = rect
         self.dirty = True
         self.message_list = list()
 
     def post(self, message, logtype):
         """Post a message to the log with a corresponding message type."""
-        print(message)
         self.message_list.append(Message(message, logtype))
         self.dirty = True
+
+    def draw_messages(self):
+        """Calculates how many of the messages in the list that fit on the 
+        log-view, and blit them."""
+        current_y = self.rect.height
+        for message in reversed(self.message_list):
+            current_y -= message.get_height()
+            if current_y < 0:
+                break
+            message.rect.y = current_y
+            message.draw(self.surface)
 
     def draw(self, screen):
         """Blit what we want to see on the main screen."""
@@ -36,21 +46,16 @@ class LogView():
             # Fill with black first
             self.surface.fill(pygame.color.Color("black"))
             # Blit messages first
-            for message in self.message_list:
-                message.draw(self.surface)
+            self.draw_messages()
             # Blit to main screen last
-            screen.blit(self.surface, self.topleft)
+            screen.blit(self.surface, self.rect)
             self.dirty = False
 
 
 class Message():
     """A message which fits the Log-view."""
     def __init__(self, text, logtype):
-        self.x = cons.LOG_POS.x
-        self.y = cons.LOG_POS.y
-        self.width = cons.LOG_POS.width
-        self.height = cons.LOG_POS.height
-        print(cons.LOG_POS)
+        self.rect = pygame.Rect(0, 0, cons.LOG_DIM[0], cons.LOG_DIM[1])
         self.text = text
         self.type = logtype
         path = os.path.join('Avara.otf')
@@ -58,14 +63,18 @@ class Message():
         self.color = self.set_color()
         self.textsurf = self.generate_surface(text)
 
+    def get_height(self):
+        """Return the hight of the textsurf in pixels."""
+        return self.textsurf.get_height()
+
     def set_color(self):
         """Set the color based on what type it is."""
         if self.type == MsgType.INFO:
-            return pygame.color.Color('white')
+            return pygame.color.Color('antiquewhite')
         if self.type == MsgType.DEBUG:
             return pygame.color.Color('lightblue')
         if self.type == MsgType.BATTLE:
-            return pygame.color.Color('red')
+            return pygame.color.Color('firebrick')
 
     def generate_surface(self, text):
         """Return a surface which can hold the text."""
@@ -89,7 +98,7 @@ class Message():
             while start + 1 < len(line):
                 # Get the next potential splitting point
                 next = line.index(' ', start + 1)
-                if self.font.size(line[:next])[0] <= self.width:
+                if self.font.size(line[:next])[0] <= self.rect.width:
                     start = next
                 else:
                     wrapped_lines.append(line[:start])
@@ -103,7 +112,7 @@ class Message():
     def render_text_list(self, lines):
         """Draw multiline text to a single surface with a transparent background.
         Draw multiple lines of text in the given font onto a single surface
-        with no background colour, and return the result.
+        with no background color, and return the result.
         """
         rendered = [self.font.render(line, True, self.color).convert_alpha()
                     for line in lines]
@@ -112,9 +121,9 @@ class Message():
         width = max(line.get_width() for line in rendered)
         tops = [int(round(i * line_height)) for i in range(len(rendered))]
         height = tops[-1] + self.font.get_height()
+        self.rect.height = height
 
         surface = pygame.Surface((width, height)).convert_alpha()
-        surface.fill((0, 0, 0, 0))
         for y, line in zip(tops, rendered):
             surface.blit(line, (0, y))
 
@@ -122,5 +131,4 @@ class Message():
 
     def draw(self, surface):
         """Draw the text."""
-        print(self.color)
-        surface.blit(self.textsurf, (0, 0))
+        surface.blit(self.textsurf, (0, self.rect.y))
