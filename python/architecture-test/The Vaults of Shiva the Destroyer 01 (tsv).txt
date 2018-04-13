@@ -1,0 +1,35 @@
+0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	1	1	1	F	F	F	F	F	F	F	F		F	F	F	F	F	F	F	F	F					0	F	F	F	0
+					F										F		F	F	F	F	F	F	F	F	F						F		F	
+	F	F	F		F		F	F	F	F	F	F	F	F	F		F	F	F	F	F	F	F	F	F	F	F	F	F	F	F		F	
+	F	F	F				F	F	F	F	F	F	F	F	F		F	F	F	F	F	F	F	F	F								F	
+	F	F	F	F	F		F	F	F	F	F	F	F	F	F		F	F	F	F	F	F	F	F	F		F	F	F	F	F		F	
+	F	F	F	F	F		F	F	F	F	F	F	F	F	F				F	F	F	F	F				F				F		F	
+	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F				F	F	F	F	F		F	F	F				F	F	F	
+	F	F	F	F	F		F	F	F	F	F	F	F	F	F										F								F	
+	F	F	F	F	F		F	F	F	F	F	F	F	F	F	F	F				F	F	F	F	F		F	F	F	F	F		F	
+			F	F	F								F	F	F		F				F						F	F	F	F	F		F	
+			F	F	F		F	F	F	F	F		F	F	F		F				F		F	F	F	F	F	F	F	F	F		F	
+							F		F		F						F				F		F	F	F	F	F	F	F	F	F		F	
+			F	F	F		F		F		F		F	F	F		F				F		F	F	F	F	F	F	F	F	F		F	
+			F				F		F				F		F		F				F		F	F	F	F	F	F	F	F	F		F	
+			F		F	F	F		F	F	F	F	F		F		F				F		F	F	F	F	F	F	F	F	F		F	
+			F		F	F	F								F		F				F		F	F	F		F	F	F	F	F		F	
+	F	F	F	F	F	F	F								F		F				F		F	F	F		F	F	F	F	F		F	
+	F	F	F	F	F	F	F								F		F				F								F	F	F		F	
+	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F		F				F		F	F	F	F	F	F	F	F	F		F	
+	F	F	F	F	F	F	F								F		F				F		F	F	F	F	F						F	
+	F	F	F	F	F	F	F		F	F	F	F	F	F	F		F	F	F	F	F		F	F	F	F	F	F	F	F	F		F	
+	F	F	F	F	F	F	F		F	F	F	F	F	F	F								F	F	F		F	F	F	F	F		F	
+	F	F	F	F	F	F	F		F	F	F	F	F	F	F		F	F	F	F	F	F	F	F	F		F	F	F	F	F		F	
+			F						F	F	F	F	F	F	F		F	F	F	F	F						F	F	F	F	F		F	
+	F	F	F		F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F						F	F	F	F	F		F	
+	F				F	F	F	F	F	F	F	F	F	F	F		F	F	F	F	F												F	
+	F				F	F	F	F	F	F	F	F	F	F	F		F	F	F	F	F												F	
+	F				F	F	F	F	F	F	F	F	F				F	F	F	F	F												F	
+	F				F	F	F	F	F	F	F	F	F		F	F	F	F	F	F	F												F	
+	F						F								F	F	F	F	F		F												F	
+	F						F	F	F	F	F	F	F		F	F	F	F	F		F				F	F	F	F	F				F	
+	F												F				F				F				F				F				F	
+	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F				F	F	F	F	F				F	F	F	F	F	
+																																		
