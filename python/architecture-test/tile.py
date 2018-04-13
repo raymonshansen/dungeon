@@ -93,11 +93,7 @@ class Tile():
         coor = (x * cons.TILE_D, y * cons.TILE_D)
         mid_coor = (x * cons.TILE_D + 16, y * cons.TILE_D + 16)
 
-        if not self.is_wall:
-            surface.blit(self.types.get_type(self.type), coor)
-        else:
-            wall = pygame.image.load('tiles2/wall.png').convert()
-            surface.blit(wall, coor)
+        surface.blit(self.types.get_type(self.type), coor)
 
         surface.blit(self.light, coor)
         if self.debugmark:

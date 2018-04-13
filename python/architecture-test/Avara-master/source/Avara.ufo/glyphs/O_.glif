@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="O" format="1">
+  <advance width="880"/>
+  <unicode hex="004F"/>
+  <outline>
+    <contour>
+      <point x="720" y="80" type="line"/>
+      <point x="560" y="0" type="line"/>
+      <point x="320" y="0" type="line"/>
+      <point x="160" y="80" type="line"/>
+      <point x="80" y="200" type="line"/>
+      <point x="40" y="400" type="line"/>
+      <point x="80" y="600" type="line"/>
+      <point x="160" y="720" type="line"/>
+      <point x="320" y="800" type="line"/>
+      <point x="560" y="800" type="line"/>
+      <point x="720" y="720" type="line"/>
+      <point x="800" y="600" type="line"/>
+      <point x="840" y="400" type="line"/>
+      <point x="800" y="200" type="line"/>
+    </contour>
+    <contour>
+      <point x="680" y="560" type="line"/>
+      <point x="600" y="680" type="line"/>
+      <point x="480" y="760" type="line"/>
+      <point x="400" y="760" type="line"/>
+      <point x="280" y="680" type="line"/>
+      <point x="200" y="560" type="line"/>
+      <point x="200" y="240" type="line"/>
+      <point x="280" y="120" type="line"/>
+      <point x="400" y="40" type="line"/>
+      <point x="480" y="40" type="line"/>
+      <point x="600" y="120" type="line"/>
+      <point x="680" y="240" type="line"/>
+    </contour>
+  </outline>
+</glyph>

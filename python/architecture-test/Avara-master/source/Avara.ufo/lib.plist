@@ -1,0 +1,1168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>org.robofab.glyphOrder</key>
+	<array>
+		<string>.notdef</string>
+		<string>space</string>
+		<string>exclam</string>
+		<string>quotedbl</string>
+		<string>numbersign</string>
+		<string>dollar</string>
+		<string>percent</string>
+		<string>ampersand</string>
+		<string>quotesingle</string>
+		<string>parenleft</string>
+		<string>parenright</string>
+		<string>asterisk</string>
+		<string>plus</string>
+		<string>comma</string>
+		<string>hyphen</string>
+		<string>period</string>
+		<string>slash</string>
+		<string>zero</string>
+		<string>one</string>
+		<string>two</string>
+		<string>three</string>
+		<string>four</string>
+		<string>five</string>
+		<string>six</string>
+		<string>seven</string>
+		<string>eight</string>
+		<string>nine</string>
+		<string>colon</string>
+		<string>semicolon</string>
+		<string>less</string>
+		<string>equal</string>
+		<string>greater</string>
+		<string>question</string>
+		<string>at</string>
+		<string>A</string>
+		<string>B</string>
+		<string>C</string>
+		<string>D</string>
+		<string>E</string>
+		<string>F</string>
+		<string>G</string>
+		<string>H</string>
+		<string>I</string>
+		<string>J</string>
+		<string>K</string>
+		<string>L</string>
+		<string>M</string>
+		<string>N</string>
+		<string>O</string>
+		<string>P</string>
+		<string>Q</string>
+		<string>R</string>
+		<string>S</string>
+		<string>T</string>
+		<string>U</string>
+		<string>V</string>
+		<string>W</string>
+		<string>X</string>
+		<string>Y</string>
+		<string>Z</string>
+		<string>bracketleft</string>
+		<string>backslash</string>
+		<string>bracketright</string>
+		<string>asciicircum</string>
+		<string>underscore</string>
+		<string>grave</string>
+		<string>a</string>
+		<string>b</string>
+		<string>c</string>
+		<string>d</string>
+		<string>e</string>
+		<string>f</string>
+		<string>g</string>
+		<string>h</string>
+		<string>i</string>
+		<string>j</string>
+		<string>k</string>
+		<string>l</string>
+		<string>m</string>
+		<string>n</string>
+		<string>o</string>
+		<string>p</string>
+		<string>q</string>
+		<string>r</string>
+		<string>s</string>
+		<string>t</string>
+		<string>u</string>
+		<string>v</string>
+		<string>w</string>
+		<string>x</string>
+		<string>y</string>
+		<string>z</string>
+		<string>braceleft</string>
+		<string>bar</string>
+		<string>braceright</string>
+		<string>asciitilde</string>
+		<string>exclamdown</string>
+		<string>cent</string>
+		<string>sterling</string>
+		<string>yen</string>
+		<string>brokenbar</string>
+		<string>section</string>
+		<string>dieresis</string>
+		<string>copyright</string>
+		<string>guillemotleft</string>
+		<string>registered</string>
+		<string>degree</string>
+		<string>plusminus</string>
+		<string>acute</string>
+		<string>paragraph</string>
+		<string>cedilla</string>
+		<string>guillemotright</string>
+		<string>onequarter</string>
+		<string>onehalf</string>
+		<string>threequarters</string>
+		<string>questiondown</string>
+		<string>Agrave</string>
+		<string>Aacute</string>
+		<string>Acircumflex</string>
+		<string>Atilde</string>
+		<string>Adieresis</string>
+		<string>Aring</string>
+		<string>AE</string>
+		<string>Ccedilla</string>
+		<string>Egrave</string>
+		<string>Eacute</string>
+		<string>Ecircumflex</string>
+		<string>Edieresis</string>
+		<string>Igrave</string>
+		<string>Iacute</string>
+		<string>Icircumflex</string>
+		<string>Idieresis</string>
+		<string>Ntilde</string>
+		<string>Ograve</string>
+		<string>Oacute</string>
+		<string>Ocircumflex</string>
+		<string>Otilde</string>
+		<string>Odieresis</string>
+		<string>multiply</string>
+		<string>Oslash</string>
+		<string>Ugrave</string>
+		<string>Uacute</string>
+		<string>Ucircumflex</string>
+		<string>Udieresis</string>
+		<string>Yacute</string>
+		<string>agrave</string>
+		<string>aacute</string>
+		<string>acircumflex</string>
+		<string>atilde</string>
+		<string>adieresis</string>
+		<string>aring</string>
+		<string>ae</string>
+		<string>ccedilla</string>
+		<string>egrave</string>
+		<string>eacute</string>
+		<string>ecircumflex</string>
+		<string>edieresis</string>
+		<string>igrave</string>
+		<string>iacute</string>
+		<string>icircumflex</string>
+		<string>idieresis</string>
+		<string>ntilde</string>
+		<string>ograve</string>
+		<string>oacute</string>
+		<string>ocircumflex</string>
+		<string>otilde</string>
+		<string>odieresis</string>
+		<string>divide</string>
+		<string>oslash</string>
+		<string>ugrave</string>
+		<string>uacute</string>
+		<string>ucircumflex</string>
+		<string>udieresis</string>
+		<string>yacute</string>
+		<string>ydieresis</string>
+		<string>ring</string>
+		<string>endash</string>
+		<string>emdash</string>
+		<string>quoteright</string>
+		<string>quoteleft</string>
+		<string>quotedblleft</string>
+		<string>quotedblright</string>
+		<string>tilde</string>
+		<string>approxequal</string>
+		<string>notequal</string>
+		<string>Euro</string>
+		<string>dotlessi</string>
+		<string>circumflex</string>
+		<string>caron</string>
+		<string>breve</string>
+		<string>dotaccent</string>
+		<string>scaron</string>
+		<string>perthousand</string>
+		<string>Scaron</string>
+		<string>Ydieresis</string>
+		<string>Zcaron</string>
+		<string>zcaron</string>
+		<string>quotesinglbase</string>
+		<string>quotedblbase</string>
+		<string>minus</string>
+		<string>fraction</string>
+		<string>ellipsis</string>
+		<string>bullet</string>
+		<string>dagger</string>
+		<string>daggerdbl</string>
+		<string>greaterequal</string>
+		<string>lessequal</string>
+		<string>lozenge</string>
+		<string>OE</string>
+		<string>oe</string>
+		<string>fi</string>
+		<string>fl</string>
+		<string>f_f</string>
+		<string>f_f_i</string>
+		<string>f_f_l</string>
+		<string>uni2116</string>
+		<string>BITCOIN</string>
+		<string>afii61352</string>
+		<string>f_k.dlig</string>
+		<string>T_h.dlig</string>
+		<string>f_b.dlig</string>
+		<string>f_h.dlig</string>
+		<string>f_j.dlig</string>
+		<string>q_j.dlig</string>
+		<string>VTF</string>
+	</array>
+	<key>org.robofab.opentype.featureorder</key>
+	<array>
+		<string>dlig</string>
+		<string>liga</string>
+		<string>kern</string>
+	</array>
+	<key>org.robofab.opentype.features</key>
+	<dict>
+		<key>dlig</key>
+		<string>feature dlig {
+  sub T h by T_h.dlig ;
+  sub f k by f_k.dlig ;
+  sub f b by f_b.dlig ;
+  sub f h by f_h.dlig ;
+  sub f j by f_j.dlig ;
+  sub q j by q_j.dlig ;
+  
+} dlig;
+</string>
+		<key>kern</key>
+		<string>feature kern {
+   pos R O -37;
+   pos R T 33;
+   pos R U -71;
+   pos R V -37;
+   pos R W -37;
+   pos R question 33;
+   pos R C -37;
+   pos R G -77;
+   pos R Q -37;
+   pos R Y -37;
+   pos R e -19;
+   pos R o -19;
+   pos R slash 49;
+   pos B A -65;
+   pos B Y -69;
+   pos B comma -49;
+   pos B period -21;
+   pos B exclam -17;
+   pos B U -71;
+   pos B V -69;
+   pos B W -69;
+   pos B y -19;
+   pos B r -71;
+   pos B slash -25;
+   pos a b 33;
+   pos a g -25;
+   pos a t -11;
+   pos a v -23;
+   pos a w -23;
+   pos a y 21;
+   pos a semicolon 41;
+   pos a exclam 33;
+   pos a question -55;
+   pos a slash 43;
+   pos g g 11;
+   pos g i 23;
+   pos g r 33;
+   pos g y 53;
+   pos g period 15;
+   pos g semicolon 43;
+   pos g exclam 25;
+   pos g question 17;
+   pos g f 11;
+   pos g slash 43;
+   pos t semicolon 29;
+   pos t exclam 23;
+   pos t question -21;
+   pos t quoteright -79;
+   pos t quotedblright -79;
+   pos t slash 35;
+   pos p y -17;
+   pos p comma -33;
+   pos p colon 19;
+   pos p exclam -15;
+   pos p question -57;
+   pos p w -31;
+   pos p slash -19;
+   pos o v -31;
+   pos o w -31;
+   pos o y -17;
+   pos o comma -33;
+   pos o colon 19;
+   pos o exclam -15;
+   pos o question -63;
+   pos o slash -19;
+   pos r comma -99;
+   pos r period -87;
+   pos r a -31;
+   pos r c -17;
+   pos r d -17;
+   pos r e -17;
+   pos r i 13;
+   pos r k -31;
+   pos r l -19;
+   pos r m 13;
+   pos r n 13;
+   pos r o -17;
+   pos r p 33;
+   pos r q -57;
+   pos r r 23;
+   pos r v 51;
+   pos r w 51;
+   pos r y 51;
+   pos r semicolon 21;
+   pos r hyphen -63;
+   pos r x 51;
+   pos r slash -39;
+   pos s period 35;
+   pos s colon 39;
+   pos s question -33;
+   pos u comma 41;
+   pos u period 73;
+   pos u semicolon 41;
+   pos u colon 73;
+   pos u exclam 33;
+   pos u question -21;
+   pos u slash 43;
+   pos e b -17;
+   pos e g 13;
+   pos e v -11;
+   pos e w -11;
+   pos e period 37;
+   pos e x 21;
+   pos e semicolon 21;
+   pos e colon 53;
+   pos e question -45;
+   pos e slash 15;
+   pos i v -31;
+   pos i semicolon -13;
+   pos i colon 19;
+   pos i exclam -19;
+   pos i question -33;
+   pos i quoteright -69;
+   pos i quotedblright -69;
+   pos i slash 17;
+   pos h comma 27;
+   pos h period 23;
+   pos h colon 39;
+   pos h question -87;
+   pos h quoteright -205;
+   pos h quotedblright -205;
+   pos h slash 37;
+   pos h o -49;
+   pos l f 33;
+   pos l A 53;
+   pos l quoteleft -43;
+   pos l quotedblleft -43;
+   pos l comma 27;
+   pos l period 23;
+   pos l colon 39;
+   pos l quoteright -41;
+   pos l quotedblright -41;
+   pos l slash 37;
+   pos l o -35;
+   pos m u -21;
+   pos m y 19;
+   pos m comma 47;
+   pos m period 43;
+   pos m semicolon 27;
+   pos m colon 59;
+   pos m exclam 21;
+   pos m question -67;
+   pos m slash 57;
+   pos n u -21;
+   pos n v -23;
+   pos n y 19;
+   pos n comma 47;
+   pos n period 43;
+   pos n semicolon 27;
+   pos n colon 59;
+   pos n exclam 21;
+   pos n question -67;
+   pos n slash 57;
+   pos n o -27;
+   pos q comma 11;
+   pos q period 11;
+   pos q semicolon 11;
+   pos q colon 39;
+   pos q question -21;
+   pos q slash 11;
+   pos d y 21;
+   pos d period 73;
+   pos d comma 41;
+   pos d semicolon 41;
+   pos d colon 73;
+   pos d exclam 33;
+   pos d quotedblright -39;
+   pos d quoteright -39;
+   pos d slash 43;
+   pos b b -53;
+   pos b l -35;
+   pos b u -29;
+   pos b v -31;
+   pos b y -17;
+   pos b comma -33;
+   pos b colon 19;
+   pos b exclam -15;
+   pos b question -63;
+   pos b quotedblright -161;
+   pos b quoteright -161;
+   pos b w -31;
+   pos b slash -19;
+   pos j comma -21;
+   pos j semicolon -21;
+   pos j exclam -47;
+   pos j question -37;
+   pos j slash -13;
+   pos j o -47;
+   pos c k -11;
+   pos c period 57;
+   pos c comma 29;
+   pos c semicolon 29;
+   pos c colon 59;
+   pos c exclam 23;
+   pos c question -33;
+   pos c slash 35;
+   pos period one -23;
+   pos period four -215;
+   pos period six -49;
+   pos period seven -73;
+   pos period eight -53;
+   pos period nine -39;
+   pos period two -21;
+   pos period zero -81;
+   pos A V -177;
+   pos A v -105;
+   pos A w -105;
+   pos A W -153;
+   pos A Q -97;
+   pos A zero -40;
+   pos A O -97;
+   pos A C -97;
+   pos A y 19;
+   pos A G -137;
+   pos A T -87;
+   pos A U -117;
+   pos A Y -87;
+   pos A u -39;
+   pos A quotedblright -155;
+   pos A quoteright -155;
+   pos A question -67;
+   pos A exclam 21;
+   pos A b -11;
+   pos A c -47;
+   pos A d -31;
+   pos A e -47;
+   pos A o -47;
+   pos A q -101;
+   pos A t -45;
+   pos A slash 57;
+   pos C A -53;
+   pos C comma -41;
+   pos C period -11;
+   pos C question 33;
+   pos C r -69;
+   pos C u -31;
+   pos C y -19;
+   pos C z -31;
+   pos C slash -19;
+   pos D A -95;
+   pos D V -97;
+   pos D W -89;
+   pos D period -43;
+   pos D X -57;
+   pos D comma -73;
+   pos D exclam -15;
+   pos D Y -83;
+   pos D a -27;
+   pos D e -11;
+   pos D h -39;
+   pos D i -17;
+   pos D o -11;
+   pos D u 15;
+   pos D slash -49;
+   pos E period 17;
+   pos E exclam -17;
+   pos E V -17;
+   pos E W -17;
+   pos E Y -17;
+   pos E b -23;
+   pos E g -41;
+   pos E i -29;
+   pos E j -11;
+   pos E m -29;
+   pos E n -29;
+   pos E p -25;
+   pos E q -47;
+   pos E r -35;
+   pos E t -25;
+   pos E x 11;
+   pos E z -27;
+   pos F A -173;
+   pos F a -145;
+   pos F e -101;
+   pos F i -49;
+   pos F o -101;
+   pos F r -91;
+   pos F comma -247;
+   pos F period -237;
+   pos F question 33;
+   pos F one 33;
+   pos F u -61;
+   pos F y -63;
+   pos F slash -85;
+   pos G comma -61;
+   pos G period -29;
+   pos G exclam -15;
+   pos G question -29;
+   pos G a -49;
+   pos G h -37;
+   pos G i -49;
+   pos G n -61;
+   pos G r -73;
+   pos G u -31;
+   pos G y -17;
+   pos G slash -49;
+   pos H a -29;
+   pos H e -49;
+   pos H o -49;
+   pos H slash 17;
+   pos I a -29;
+   pos I b -37;
+   pos I c -49;
+   pos I d -49;
+   pos I e -49;
+   pos I f 13;
+   pos I g -49;
+   pos I l 13;
+   pos I k 13;
+   pos I o -49;
+   pos I p -29;
+   pos I r -29;
+   pos I s -41;
+   pos I t -29;
+   pos J A -93;
+   pos J a -49;
+   pos J e -69;
+   pos J o -69;
+   pos J u -29;
+   pos J comma -73;
+   pos J period -45;
+   pos J question -25;
+   pos J i -49;
+   pos J y -31;
+   pos J slash -67;
+   pos K w 29;
+   pos K v 29;
+   pos K e 15;
+   pos K o 15;
+   pos K y 39;
+   pos K question 25;
+   pos K G -39;
+   pos K u 31;
+   pos K slash 79;
+   pos L T -119;
+   pos L V -161;
+   pos L W -141;
+   pos L Y -123;
+   pos L y -19;
+   pos L quotedblright -225;
+   pos L quoteright -225;
+   pos L exclam -17;
+   pos L question -83;
+   pos L C -33;
+   pos L G -73;
+   pos L O -33;
+   pos L Q -33;
+   pos L U -71;
+   pos L j -11;
+   pos L u -31;
+   pos L w -79;
+   pos f a -21;
+   pos f e -13;
+   pos f i 41;
+   pos f o -13;
+   pos f one 83;
+   pos f quotedblright 73;
+   pos f quoteright 73;
+   pos f period -13;
+   pos f exclam 73;
+   pos f question 93;
+   pos f j 57;
+   pos f parenright 113;
+   pos f bracketright 113;
+   pos f braceright 113;
+   pos f quoteleft 73;
+   pos f quotedblleft 73;
+   pos f l 93;
+   pos f f 29;
+   pos M question -25;
+   pos M a -49;
+   pos M c -69;
+   pos M d -69;
+   pos M e -69;
+   pos M o -69;
+   pos M u -29;
+   pos M y -21;
+   pos M slash 17;
+   pos N A -45;
+   pos N comma -61;
+   pos N period -29;
+   pos N question -17;
+   pos N a -49;
+   pos N e -69;
+   pos N i -49;
+   pos N o -69;
+   pos N u -23;
+   pos N y -25;
+   pos N slash -51;
+   pos O A -95;
+   pos O X -57;
+   pos O V -91;
+   pos O W -89;
+   pos O Y -83;
+   pos O comma -73;
+   pos O period -43;
+   pos O exclam -15;
+   pos O a -27;
+   pos O b -59;
+   pos O c -11;
+   pos O d -11;
+   pos O e -11;
+   pos O f -29;
+   pos O h -39;
+   pos O i -17;
+   pos O k -51;
+   pos O l -39;
+   pos O m -17;
+   pos O n -17;
+   pos O o -11;
+   pos O q -51;
+   pos O s -17;
+   pos O u 15;
+   pos O z -43;
+   pos O slash -49;
+   pos P A -143;
+   pos P a -61;
+   pos P e -59;
+   pos P o -59;
+   pos P comma -253;
+   pos P period -243;
+   pos P exclam 17;
+   pos P question 59;
+   pos P E -45;
+   pos P H -23;
+   pos P I -23;
+   pos P h -17;
+   pos P i -17;
+   pos P one 59;
+   pos P n -17;
+   pos P s -47;
+   pos P t 15;
+   pos P u 35;
+   pos P y 33;
+   pos P slash -59;
+   pos Q U -53;
+   pos Q comma 113;
+   pos Q parenright 113;
+   pos Q bracketright 113;
+   pos Q braceright 113;
+   pos Q bar 11;
+   pos Q question 19;
+   pos Q T 19;
+   pos Q V -63;
+   pos Q W -63;
+   pos Q Y -63;
+   pos Q a -11;
+   pos Q u 31;
+   pos S comma -21;
+   pos S period 11;
+   pos S Y -19;
+   pos S exclam -17;
+   pos S h -35;
+   pos S i -49;
+   pos S k -37;
+   pos S l -35;
+   pos S m -51;
+   pos S n -51;
+   pos S p -41;
+   pos S r -53;
+   pos S t -43;
+   pos S u -23;
+   pos S v -25;
+   pos S w -25;
+   pos S y -19;
+   pos S slash -17;
+   pos T a -109;
+   pos T z -103;
+   pos T e -91;
+   pos T r -55;
+   pos T y -19;
+   pos T u -17;
+   pos T o -91;
+   pos T p -100;
+   pos T q -120;
+   pos T s -91;
+   pos T d -110;
+   pos T f -40;
+   pos T g -110;
+   pos T h 35;
+   pos T j -30;
+   pos T k -20;
+   pos T l -20;
+   pos T m -65;
+   pos T w -19;
+   pos T x -100;
+   pos T c -110;
+   pos T v -110;
+   pos T b -20;
+   pos T n -100;
+   pos T A -85;
+   pos T colon -33;
+   pos T semicolon -61;
+   pos T hyphen -101;
+   pos T comma -111;
+   pos T period -113;
+   pos T question 73;
+   pos T G -39;
+   pos T T 73;
+   pos T Y 47;
+   pos T quoteright 33;
+   pos T quotedblright 33;
+   pos T slash -45;
+   pos U A -109;
+   pos U comma -103;
+   pos U period -75;
+   pos U a -69;
+   pos U c -69;
+   pos U d -69;
+   pos U f -81;
+   pos U g -69;
+   pos U i -49;
+   pos U m -69;
+   pos U n -69;
+   pos U p -49;
+   pos U r -59;
+   pos U s -79;
+   pos U t -49;
+   pos U v -31;
+   pos U x -31;
+   pos U y -31;
+   pos U z -97;
+   pos U slash -89;
+   pos V A -185;
+   pos V o -135;
+   pos V a -147;
+   pos V e -135;
+   pos V z -100;
+   pos V r -93;
+   pos V y -53;
+   pos V u -51;
+   pos V p -100;
+   pos V q -150;
+   pos V s -100;
+   pos V d -100;
+   pos V f -100;
+   pos V g -100;
+   pos V m -100;
+   pos V w -50;
+   pos V x -50;
+   pos V c -100;
+   pos V v -50;
+   pos V n -100;
+   pos V C -91;
+   pos V O -91;
+   pos V Q -79;
+   pos V G -131;
+   pos V dotlessi -103;
+   pos V colon -65;
+   pos V semicolon -95;
+   pos V hyphen -147;
+   pos V comma -203;
+   pos V period -173;
+   pos V question 15;
+   pos V quoteright 19;
+   pos V quotedblright 19;
+   pos V slash -103;
+   pos W O -91;
+   pos W Q -79;
+   pos W C -91;
+   pos W A -167;
+   pos W a -133;
+   pos W e -121;
+   pos W h 23;
+   pos W dotlessi -89;
+   pos W o -121;
+   pos W u -41;
+   pos W y -43;
+   pos W colon -57;
+   pos W semicolon -85;
+   pos W hyphen -129;
+   pos W comma -179;
+   pos W period -147;
+   pos W question 15;
+   pos W G -131;
+   pos W T 47;
+   pos W d -121;
+   pos W m -89;
+   pos W r -79;
+   pos W t -61;
+   pos W slash -103;
+   pos W n -50;
+   pos X a -80;
+   pos X e -55;
+   pos X r -50;
+   pos X t -50;
+   pos X y -17;
+   pos X u -15;
+   pos X i -30;
+   pos X o -60;
+   pos X p -110;
+   pos X q -100;
+   pos X s -60;
+   pos X d -70;
+   pos X f -30;
+   pos X g -70;
+   pos X h -40;
+   pos X j -50;
+   pos X k -30;
+   pos X l -30;
+   pos X m -30;
+   pos X w -110;
+   pos X x -10;
+   pos X c -70;
+   pos X v -100;
+   pos X b -30;
+   pos X n -30;
+   pos X O -55;
+   pos X Q -55;
+   pos X C -55;
+   pos X question -15;
+   pos X G -95;
+   pos X quoteright -21;
+   pos X quotedblright -21;
+   pos X slash 17;
+   pos Y a -117;
+   pos Y z -100;
+   pos Y e -97;
+   pos Y r -100;
+   pos Y t -47;
+   pos Y y -100;
+   pos Y u -27;
+   pos Y o -97;
+   pos Y p -110;
+   pos Y q -137;
+   pos Y s -100;
+   pos Y d -97;
+   pos Y f -60;
+   pos Y g -100;
+   pos Y h -20;
+   pos Y j -90;
+   pos Y k -20;
+   pos Y l 23;
+   pos Y m -110;
+   pos Y w -110;
+   pos Y x -100;
+   pos Y c -97;
+   pos Y v -29;
+   pos Y b -20;
+   pos Y n -110;
+   pos Y A -85;
+   pos Y O -83;
+   pos Y S -17;
+   pos Y dotlessi -75;
+   pos Y colon -41;
+   pos Y semicolon -71;
+   pos Y comma -111;
+   pos Y period -113;
+   pos Y exclam 31;
+   pos Y question 15;
+   pos Y C -83;
+   pos Y G -123;
+   pos Y Q -79;
+   pos Y T 47;
+   pos Y V 71;
+   pos Y W 71;
+   pos Y Y 71;
+   pos Y slash -101;
+   pos Z comma -39;
+   pos Z period -15;
+   pos Z question -25;
+   pos Z A -23;
+   pos Z O -63;
+   pos Z C -63;
+   pos Z G -103;
+   pos Z Q -63;
+   pos Z a -27;
+   pos Z e -37;
+   pos Z i -49;
+   pos Z o -37;
+   pos Z u -61;
+   pos Z w -69;
+   pos Z y -49;
+   pos Z slash -27;
+   pos k e -27;
+   pos k o -27;
+   pos k y 59;
+   pos k semicolon 47;
+   pos k quoteright -147;
+   pos k quotedblright -147;
+   pos k slash 79;
+   pos v a -41;
+   pos v comma -131;
+   pos v period -103;
+   pos v e -31;
+   pos v o -31;
+   pos v semicolon 31;
+   pos v exclam 27;
+   pos v question -15;
+   pos v slash -33;
+   pos w a -41;
+   pos w comma -131;
+   pos w period -103;
+   pos w e -31;
+   pos w o -31;
+   pos w semicolon 31;
+   pos w exclam 27;
+   pos w question -15;
+   pos w c -31;
+   pos w d -31;
+   pos w slash -33;
+   pos x semicolon 31;
+   pos x exclam 27;
+   pos x question -15;
+   pos x q -39;
+   pos x slash 57;
+   pos y comma -159;
+   pos y period -129;
+   pos y a -41;
+   pos y e -31;
+   pos y o -31;
+   pos y semicolon 31;
+   pos y exclam 27;
+   pos y question -15;
+   pos y c -31;
+   pos y d -31;
+   pos y q -71;
+   pos y slash -33;
+   pos z comma -13;
+   pos z period 19;
+   pos z e -23;
+   pos z colon 19;
+   pos z exclam -13;
+   pos z question -31;
+   pos z c -23;
+   pos z d -23;
+   pos two period 17;
+   pos two two -27;
+   pos two seven -23;
+   pos two nine -17;
+   pos two zero -31;
+   pos three comma -41;
+   pos three period -11;
+   pos three two -79;
+   pos three four 33;
+   pos three seven -53;
+   pos three nine -65;
+   pos three zero -19;
+   pos four seven -61;
+   pos four nine -53;
+   pos four zero -33;
+   pos five comma -41;
+   pos five period -11;
+   pos five two -101;
+   pos five four 33;
+   pos five seven -37;
+   pos five nine -65;
+   pos five zero -17;
+   pos six comma -57;
+   pos six period -27;
+   pos six two -89;
+   pos six three -31;
+   pos six four 33;
+   pos six five -31;
+   pos six seven -37;
+   pos six eight -17;
+   pos seven comma -153;
+   pos seven period -121;
+   pos seven two -49;
+   pos seven three -47;
+   pos seven four -71;
+   pos seven five -49;
+   pos seven six -71;
+   pos seven seven 33;
+   pos seven eight -39;
+   pos seven nine -49;
+   pos seven zero -63;
+   pos seven slash -71;
+   pos eight comma -49;
+   pos eight period -21;
+   pos eight two -69;
+   pos eight three -21;
+   pos eight four 19;
+   pos eight five -21;
+   pos eight seven -37;
+   pos eight nine -63;
+   pos eight zero -33;
+   pos eight slash -25;
+   pos nine comma -83;
+   pos nine period -55;
+   pos nine two -39;
+   pos nine three -39;
+   pos nine five -39;
+   pos nine seven -25;
+   pos nine eight -39;
+   pos nine slash -47;
+   pos zero comma -73;
+   pos zero period -43;
+   pos zero two -69;
+   pos zero four 15;
+   pos zero five -37;
+   pos zero seven -45;
+   pos zero eight -31;
+   pos zero slash -49;
+   pos comma one -13;
+   pos comma four -205;
+   pos comma six -49;
+   pos comma seven -73;
+   pos comma eight -53;
+   pos comma nine -39;
+   pos comma zero -81;
+   pos slash one 13;
+   pos slash two -67;
+   pos slash three -59;
+   pos slash four -53;
+   pos slash five -89;
+   pos slash six -65;
+   pos slash eight -51;
+   pos slash nine -49;
+   pos slash zero -67;
+   pos slash a -93;
+   pos slash c -81;
+   pos slash d -81;
+   pos slash e -81;
+   pos slash f -61;
+   pos slash g -73;
+   pos slash h 11;
+   pos slash i -45;
+   pos slash j -29;
+   pos slash k 11;
+   pos slash l 11;
+   pos slash m -57;
+   pos slash n -57;
+   pos slash o -81;
+   pos slash p -37;
+   pos slash q -121;
+   pos slash r -47;
+   pos slash s -83;
+   pos slash t -29;
+   pos slash v -13;
+   pos slash w -13;
+   pos slash x -13;
+   pos slash y -13;
+   pos slash z -97;
+   pos slash A -97;
+   pos slash B -41;
+   pos slash C -67;
+   pos slash D -41;
+   pos slash G -107;
+   pos slash H -41;
+   pos slash I -41;
+   pos slash J -105;
+   pos slash K -41;
+   pos slash L -41;
+   pos slash M -41;
+   pos slash N -41;
+   pos slash O -67;
+   pos slash P -41;
+   pos slash Q -67;
+   pos slash R -41;
+   pos slash S -27;
+   pos slash U -41;
+   pos slash X -41;
+   pos slash Z -57;
+   pos ampersand l 53;
+   pos quoteright d -231;
+   pos quoteright l 13;
+   pos quoteright t -109;
+   pos quoteleft A -171;
+   pos quoteleft T 33;
+   pos quoteleft X -57;
+   pos quoteleft d -179;
+   pos quoteleft f -51;
+   pos quoteleft t -63;
+   pos quotedblleft A -171;
+   pos quotedblleft d -179;
+   pos quotedblleft f -51;
+   pos quotedblleft t -63;
+   pos dollar two -37;
+   pos dollar four 15;
+   pos dollar seven -49;
+   pos dollar eight -15;
+   pos dollar nine -53;
+   pos dollar zero -37;
+   pos sterling one 33;
+   pos sterling two -27;
+   pos sterling four 17;
+   pos sterling seven -21;
+   pos sterling nine -45;
+   pos sterling zero -33;
+   pos yen two -61;
+   pos yen three -49;
+   pos yen four -21;
+   pos yen five -49;
+   pos yen six -61;
+   pos yen seven 33;
+   pos yen eight -49;
+   pos yen nine -63;
+   pos yen zero -73;
+   pos cent four 19;
+   pos cent seven -61;
+   pos guillemotright a -49;
+   pos guillemotright i -49;
+   pos guillemotright l -37;
+   pos guillemotright quotedblright -187;
+   pos guillemotright quoteright -187;
+   pos guillemotright comma -147;
+   pos guillemotright period -119;
+} kern;
+</string>
+		<key>liga</key>
+		<string>feature liga {
+  sub f l by fl;
+  sub f i by fi;
+  sub f f by f_f;
+  sub f f i by f_f_i;
+  sub f f l by f_f_l;
+} liga;
+</string>
+	</dict>
+	<key>org.robofab.postScriptHintData</key>
+	<dict>
+	</dict>
+</dict>
+</plist>

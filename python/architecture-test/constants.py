@@ -26,6 +26,11 @@ MAP_POS = pygame.Rect(0, 0, 0, 0)
 STAT_POS = pygame.Rect(0, TILE_D*MAP_VIEW_TH, 0, 0)
 LOG_POS = pygame.Rect(TILE_D*MAP_VIEW_TW, 0, 0, 0)
 
-DIRECTIONS = {'NW': (-1, -1), 'N': (0, -1), 'NE': (1, -1),
-              'W': (-1, 0), 'E': (1, 0),
-              'SW': (-1, 1), 'S': (0, 1), 'SE': (1, 1)}
+DIRECTIONS = {'NW': (-1, -1),
+              'N': (0, -1),
+              'NE': (1, -1),
+              'W': (-1, 0),
+              'E': (1, 0),
+              'SW': (-1, 1),
+              'S': (0, 1),
+              'SE': (1, 1)}

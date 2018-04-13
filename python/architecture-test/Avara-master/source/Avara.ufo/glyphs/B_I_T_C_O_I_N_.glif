@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="BITCOIN" format="1">
+  <advance width="760"/>
+  <unicode hex="0243"/>
+  <outline>
+    <component base="B"/>
+    <component base="endash" xOffset="-60" yOffset="-80"/>
+  </outline>
+</glyph>

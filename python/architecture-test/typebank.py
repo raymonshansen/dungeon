@@ -17,5 +17,5 @@ class TypeBank():
             img = pygame.image.load(path).convert_alpha()
             self.images.append(img)
 
-    def get_type(self, idx):
-        return self.images[idx]
+    def get_type(self, tiletype):
+        return self.images[tiletype]

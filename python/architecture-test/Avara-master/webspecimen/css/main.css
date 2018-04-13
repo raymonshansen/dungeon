@@ -1,0 +1,200 @@
+@font-face {
+    font-family: 'avarabold';
+    src: url('font/avara.eot');
+    src: url('font/avara.eot?#iefix') format('embedded-opentype'),
+         url('font/avara.woff2') format('woff2'),
+         url('font/avara.woff') format('woff'),
+         url('font/avara.ttf') format('truetype'),
+         url('font/avara.svg#avarabold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+h1{
+	font-size: 20pt;
+	line-height: 40pt;
+	display: inline-block;
+}
+html,body{
+	font:20px/1.1em arial, sans-serif;
+	width: 100%;
+	height: 100%;
+	background-color: black; }
+
+::selection {background: rgb(110, 50, 255);}
+::-moz-selection {background:rgb(110, 50, 255); }
+span.editable:hover{background: rgb(110, 50, 255);}
+
+.print{display: none;}
+.print-button {
+	width: auto;
+	height: auto;
+	font-family: 'avarabold';
+	font-size: 35px;
+	line-height: 45px;
+	color:#ffffff;
+	background-color: transparent;
+	border:none;
+	cursor:pointer; }
+.print-button:hover{color:rgb(110, 50, 255);}
+#comandes{
+	width:100%;
+	height: auto;
+	position: absolute;
+	font-size: 33px;
+	line-height: 43px;
+	color: #ffffff;
+	font-family: 'avarabold';
+	text-align: center;
+	padding-left: 25%;
+	padding-right: 25%;
+	bottom:3%;
+	z-index: 10;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+#head{
+	width: 100%;
+	height: auto;
+	position:absolute;
+	font-size: 55px;
+	line-height: 65px;
+	color: #ffffff;
+	font-family: 'avarabold';
+	text-align: center;
+	padding-left: 15%;
+	padding-right: 15%;
+	top:20%;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box; }
+
+svg {
+     position: absolute;
+     margin: auto;
+     top:0;right:0;bottom:0;left:0;
+     width: 100%;
+     height: 100%;
+}
+path {
+ fill: #FFF;
+ stroke: #000;
+ fill-rule: nonzero;
+ mix-blend-mode: difference;
+}
+
+a{text-decoration:none; }
+
+@media print {
+@page {size:210mm 297mm;}
+html,body{margin:0;padding:0;}
+
+ #credits{
+ 	width: 8cm;
+ 	height: 10cm;
+ 	bottom:1cm;
+ 	right: 12cm;
+	color: rgb(110, 50, 255);
+	font-family: 'avarabold';
+	font-size: 12pt;
+	line-height: 25pt;
+	position: absolute;
+	display: block;
+	-webkit-transform: rotate(-90deg);
+ 	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform: rotate(-90deg);
+ 	-moz-transform-origin: 50% 50%;
+}
+#point-handle {
+    stroke-width:0;
+    fill:none;
+    fill-opacity:0;
+}
+path {
+ fill-opacity:0;
+ stroke: #000;
+  mix-blend-mode: normal;
+}
+#avara{
+	margin-right: 0.5cm;
+	-webkit-transform: rotate(-90deg);
+ 	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform: rotate(-90deg);
+ 	-moz-transform-origin: 50% 50%;
+}
+#web{
+ 	width: 10cm;
+ 	height: 10cm;
+ 	bottom:20cm;
+ 	right: 11cm;
+	color: rgb(110, 50, 255);
+	font-family: 'avarabold';
+	font-size: 12pt;
+	line-height: 25pt;
+	position: absolute;
+	display: block;
+	-webkit-transform: rotate(-90deg);
+ 	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform: rotate(-90deg);
+ 	-moz-transform-origin: 50% 50%;
+}
+#specimenleft {
+ 	position: absolute;
+	width: 8cm;
+	height: 10cm;
+	font-family: 'avarabold';
+	color: rgb(110, 50, 255);
+	text-align: center;
+	font-size: 20pt;
+	line-height: 30pt;
+	right: -3cm;
+	bottom:19cm;
+	background-color: transparent;
+	z-index: 1;
+	word-break: break-all;
+	-moz-font-feature-settings:"dlig=1";
+	-moz-font-feature-settings:"dlig";
+	-ms-font-feature-settings:"dlig";
+	-o-font-feature-settings:"dlig";
+	-webkit-font-feature-settings: "dlig";
+	font-feature-settings:"dlig";
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    -webkit-transform: rotate(-90deg);
+ 	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform: rotate(-90deg);
+ 	-moz-transform-origin: 50% 50%;
+}
+#specimenright {
+ 	position: absolute;
+	width: 8cm;
+	height: 10cm;
+	font-family: 'avarabold';
+	font-size: 20pt;
+	color: rgb(110, 50, 255);
+	text-align: center;
+	line-height: 30pt;
+	background-color: transparent;
+	z-index: 1;
+	right: -3cm;
+	bottom:1cm;
+	word-break: break-all;
+	-moz-font-feature-settings:"dlig=1";
+	-moz-font-feature-settings:"dlig";
+	-ms-font-feature-settings:"dlig";
+	-o-font-feature-settings:"dlig";
+	-webkit-font-feature-settings: "dlig";
+	font-feature-settings:"dlig";
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+	-webkit-transform: rotate(-90deg);
+ 	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform: rotate(-90deg);
+ 	-moz-transform-origin: 50% 50%;
+}
+.screen{display: none}
+}

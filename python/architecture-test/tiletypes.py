@@ -1,6 +1,6 @@
 """Contains functions to mangae tiletypes."""
 
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 def get_filenames():
@@ -76,7 +76,7 @@ class TileStatus(Enum):
     VISIBLE = 3
 
 
-class TileTypes(Enum):
+class TileTypes(IntEnum):
     """Tile-type enumeration."""
 
     NONE = 0
