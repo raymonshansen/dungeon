@@ -1,12 +1,11 @@
 """Map-module."""
 
 import pygame
-from math import sqrt
 
 import constants as cons
 from tile import Tile
-from tiletypes import translate_dict, TileStatus
-from utils import plot_line, plot_circle
+from tiletypes import TileStatus, TileTypes
+from utils import plot_line
 
 
 class Map():
@@ -83,16 +82,8 @@ class Map():
         ret = [self.get_tile(cor[0], cor[1]) for cor in coordinates]
         return ret
 
-    def get_tiles_around_circle(self, x, y, radius):
-        """Return all tiles along circumference of a circle with radius."""
-        coordinates = plot_circle(x, y, radius)
-        ret = [self.get_tile(cor[0], cor[1]) for cor in coordinates]
-        return ret
-
     def get_wall_list(self):
         """Return a list of all the tiles that should be walls.
-
-        (all tiles that have an adjacent floor-tile)
         """
         wall_to_be = list()
         for tile in self.tiles:
@@ -108,17 +99,9 @@ class Map():
         return wall_to_be
 
     def set_walltypes(self):
-        """Set the wall-type surrounding a floor-tile."""
-        walltiles = self.get_wall_list()
-        for tile in walltiles:
-            neighbours = self.get_tile_neighbours(tile.x, tile.y)
-            mask = 0
-            for i, n_tile in enumerate(neighbours):
-                if n_tile == 0:
-                    pass
-                elif n_tile.get_type() == 1:
-                    mask += 2**i
-            tile.set_type(translate_dict.get(mask, 0))
+        """Sets the walltypes based on the loaded map-file."""
+        for tile in self.get_wall_list():
+            tile.set_type(TileTypes.WALL)
 
     def refresh_visibility(self, x, y, radius):
         """Refresh the visibility given a certain point."""
@@ -171,10 +154,10 @@ class Map():
                     tile.set_light(visibility)
 
                     # Add any opaque tiles to the shadow map.
-                    if vis and tile.is_wall():
+                    if vis and tile.is_wall:
                         tile.set_light(0)
 
-                    if not dark and tile.is_wall():
+                    if not dark and tile.is_wall:
                         line.add(projection)
                         fullshadow = line.is_full_shadow()
 
@@ -309,5 +292,4 @@ class ShadowLine():
         length = len(self.shadows)
         start = self.shadows[0].start
         end = self.shadows[0].end
-        # print(f"length: {length} - start: {start} - end: {end}")
         return length == 1 and start == 0 and end == 1

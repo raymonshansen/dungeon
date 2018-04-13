@@ -66,7 +66,7 @@ class Game():
                     pygame.display.set_mode(self.screensize)
                 else:
                     pygame.display.set_mode(self.screensize, pygame.FULLSCREEN)
-            
+
             # Move the player.
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.py -= 1

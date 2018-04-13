@@ -7,58 +7,12 @@ def get_filenames():
     """Tile-filename dictionary."""
     filenames = {0: "none.png",
                  1: "floor.png",
-                 2: "wall1.png",
-                 3: "wall2.png",
-                 4: "wall3.png",
-                 5: "wall4.png",
-                 6: "wall5.png",
-                 7: "wall6.png",
-                 8: "wall7.png",
-                 9: "wall8.png",
-                 10: "wall9.png",
-                 11: "wall10.png",
-                 12: "wall11.png",
-                 13: "wall12.png",
-                 14: "wall13.png",
-                 15: "wall14.png",
-                 16: "wall15.png",
-                 17: "wall16.png",
-                 18: "wall17.png",
-                 19: "wall18.png",
-                 20: "wall19.png",
-                 21: "wall20.png",
-                 22: "wall21.png",
-                 23: "wall22.png",
-                 24: "wall23.png",
-                 25: "wall24.png",
-                 26: "wall25.png",
-                 27: "wall26.png",
-                 28: "wall27.png",
-                 29: "wall28.png",
-                 30: "wall29.png",
-                 31: "wall30.png",
-                 32: "wall31.png",
-                 33: "wall32.png",
-                 34: "wall33.png",
-                 35: "wall34.png",
-                 36: "wall35.png",
-                 37: "wall36.png",
-                 38: "wall37.png",
-                 39: "wall38.png",
-                 40: "wall39.png",
-                 41: "wall40.png",
-                 42: "wall41.png",
-                 43: "wall42.png",
-                 44: "wall43.png",
-                 45: "wall44.png",
-                 46: "wall45.png",
-                 47: "wall46.png",
-                 48: "wall47.png",
-                 49: "wall48.png",
-                 50: "dark.png"}
+                 2: "wall.png",
+                 3: "dark.png"}
     return filenames
 
 
+"""
 translate_dict = {1: 47, 2: 44, 3: 44, 4: 46, 5: 45,
                   6: 44, 7: 44, 8: 38, 9: 38, 10: 36,
                   11: 36, 12: 37, 13: 37, 14: 36, 15: 36,
@@ -111,6 +65,7 @@ translate_dict = {1: 47, 2: 44, 3: 44, 4: 46, 5: 45,
                   246: 4, 247: 4, 248: 3, 249: 3, 250: 49,
                   251: 49, 252: 3, 253: 3, 254: 49, 255: 49
                   }
+"""
 
 
 class TileStatus(Enum):
@@ -119,3 +74,12 @@ class TileStatus(Enum):
     UNEXPLORED = 1
     EXPLORED = 2
     VISIBLE = 3
+
+
+class TileTypes(Enum):
+    """Tile-type enumeration."""
+
+    NONE = 0
+    FLOOR = 1
+    WALL = 2
+    DARK = 3

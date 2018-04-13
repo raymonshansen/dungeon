@@ -5,7 +5,7 @@ import os
 # from random import randint
 
 import constants as cons
-from tiletypes import TileStatus
+from tiletypes import TileStatus, TileTypes
 
 
 class Tile():
@@ -22,7 +22,7 @@ class Tile():
         self.y = y
         self.dim = cons.TILE_D
         self.types = bank
-        self.type = None
+        self.type = TileTypes.NONE
         self.set_type(0)
         darkpath = os.path.join('tiles', 'dark.png')
         self.light = pygame.image.load(darkpath).convert()
@@ -35,9 +35,17 @@ class Tile():
         """Official string representation of a tile."""
         return f"({self.x},{self.y} - {self.get_type()})"
 
+    def get_type(self):
+        """Return the tiles type."""
+        return self.type
+
     def set_type(self, index):
         """Set the tile type based on a given index in its tile-bank."""
         self.type = index
+
+    def get_status(self):
+        """Return the tiles status."""
+        return self.status
 
     def set_status(self, status):
         """Set status of tile."""
@@ -57,30 +65,22 @@ class Tile():
 
         self.light.set_alpha(luminosity)
 
-    def get_type(self):
-        """Return the tiles type."""
-        return self.type
-
     @property
     def is_see_through(self):
         """Return true if tile is see-through, else false."""
         return self.get_type() == 1
 
+    @property
     def is_wall(self):
         """Return true if tile is wall, else false."""
-        if 1 < self.get_type() <= 49:
+        if self.get_type() == TileTypes.WALL:
             return True
         return False
 
+    @property
     def is_floor(self):
         """Return true if tile is floor, else false."""
-        if self.get_type() == 1:
-            return True
-        return False
-
-    def is_none(self):
-        """Return true if tile is floor, else false."""
-        if self.get_type() == 0:
+        if self.get_type() == TileTypes.FLOOR:
             return True
         return False
 
@@ -93,12 +93,12 @@ class Tile():
         coor = (x * cons.TILE_D, y * cons.TILE_D)
         mid_coor = (x * cons.TILE_D + 16, y * cons.TILE_D + 16)
 
-        if not self.is_wall():
+        if not self.is_wall:
             surface.blit(self.types.get_type(self.type), coor)
         else:
-            wall = pygame.image.load('tiles2/wall49.png').convert()
+            wall = pygame.image.load('tiles2/wall.png').convert()
             surface.blit(wall, coor)
-        
+
         surface.blit(self.light, coor)
         if self.debugmark:
             pygame.draw.circle(surface, self.debugcol, mid_coor, 4)
