@@ -30,7 +30,7 @@ class LogView():
         self.dirty = True
 
     def draw_messages(self):
-        """Calculates how many of the messages in the list that fit on the 
+        """Calculates how many of the messages in the list that fit on the
         log-view, and blit them."""
         current_y = self.rect.height
         for message in reversed(self.message_list):
@@ -47,6 +47,11 @@ class LogView():
             self.surface.fill(pygame.color.Color("black"))
             # Blit messages first
             self.draw_messages()
+            # Draw border-line
+            linecol = pygame.color.Color('antiquewhite')
+            start_pos = (0, 0)
+            end_pos = (0, self.rect.height)
+            pygame.draw.line(self.surface, linecol, start_pos, end_pos, 1)
             # Blit to main screen last
             screen.blit(self.surface, self.rect)
             self.dirty = False
@@ -131,4 +136,4 @@ class Message():
 
     def draw(self, surface):
         """Draw the text."""
-        surface.blit(self.textsurf, (0, self.rect.y))
+        surface.blit(self.textsurf, (5, self.rect.y))

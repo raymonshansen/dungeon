@@ -28,12 +28,12 @@ class Game():
         self.setup()
 
     def setup(self):
-        dungeonsurface = pygame.Surface(cons.MAP_DIM)
-        self.dungeon = Dungeon(dungeonsurface, cons.MAP_POS, 50, 50)
-        statsurface = pygame.Surface(cons.STAT_DIM)
-        self.statview = StatView(statsurface, cons.STAT_POS)
         logsurface = pygame.Surface(cons.LOG_DIM)
         self.logview = LogView(logsurface, cons.LOG_POS)
+        dungeonsurf = pygame.Surface(cons.MAP_DIM)
+        self.dungeon = Dungeon(dungeonsurf, cons.MAP_POS, 50, 50, self.logview)
+        statsurface = pygame.Surface(cons.STAT_DIM)
+        self.statview = StatView(statsurface, cons.STAT_POS)
 
         # Test player
         self.px = 25
@@ -65,7 +65,6 @@ class Game():
                 self.px -= 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.px += 1
-            
             # Test log
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)

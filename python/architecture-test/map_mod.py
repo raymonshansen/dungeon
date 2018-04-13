@@ -201,15 +201,15 @@ class Map():
                     if tile:
                         tile.draw(self.map_view, x - leftx, y - lefty)
 
-            red = pygame.color.Color("red")
             screen.blit(self.map_view, self.topleft)
 
             self.dirty = True
 
             # Blit fake player pos
-            x = (playerx - leftx) * cons.TILE_D + 16
-            y = (playery - lefty) * cons.TILE_D + 16
-            pygame.draw.circle(screen, red, (x, y), 10, 2)
+            red = pygame.color.Color("red")
+            x = (playerx - leftx) * cons.TILE_D + (cons.TILE_D//2)
+            y = (playery - lefty) * cons.TILE_D + (cons.TILE_D//2)
+            pygame.draw.circle(screen, red, (x, y), (cons.TILE_D//4), 2)
 
 
 class Shadow():
