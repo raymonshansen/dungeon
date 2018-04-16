@@ -155,7 +155,7 @@ class Map():
 
                     # Add any opaque tiles to the shadow map.
                     if vis and tile.is_wall:
-                        tile.set_light(0)
+                        tile.set_light(visibility)
 
                     if not dark and tile.is_wall:
                         line.add(projection)

@@ -8,12 +8,12 @@ from logview import MsgType
 class Dungeon():
     """Dungeon class."""
 
-    def __init__(self, surface, pos_rect, width, height, logview):
+    def __init__(self, surface, pos_rect, logview):
         """Contsructs a random map, items and monsters."""
         self.logview = logview
         self.typebank = TypeBank()
         self.logview.post("Loading map..", MsgType.INFO)
-        self.map = Map(surface, pos_rect, self.typebank, 'testmap.txt')
+        self.map = Map(surface, pos_rect, self.typebank, 'map-huge.txt')
 
     def draw(self, screen, x, y):
         """Draws the map on the screen."""

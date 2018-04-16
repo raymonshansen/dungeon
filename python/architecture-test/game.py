@@ -31,13 +31,13 @@ class Game():
         logsurface = pygame.Surface(cons.LOG_DIM)
         self.logview = LogView(logsurface, cons.LOG_POS)
         dungeonsurf = pygame.Surface(cons.MAP_DIM)
-        self.dungeon = Dungeon(dungeonsurf, cons.MAP_POS, 50, 50, self.logview)
+        self.dungeon = Dungeon(dungeonsurf, cons.MAP_POS, self.logview)
         statsurface = pygame.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
 
         # Test player
-        self.px = 25
-        self.py = 25
+        self.px = 1
+        self.py = 1
 
     def handle_events(self):
         events = pygame.event.get()
