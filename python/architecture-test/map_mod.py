@@ -5,7 +5,9 @@ import pygame
 import constants as cons
 from tile import Tile
 from tiletypes import TileStatus, TileTypes
+from typebank import TypeBank
 from utils import plot_line
+from logview import MsgType
 
 
 class Map():
@@ -14,8 +16,9 @@ class Map():
     Contains various methods for working with the map.
     """
 
-    def __init__(self, surface, pos_rect, bank, mapfile):
+    def __init__(self, surface, pos_rect, mapfile, logview):
         """Construct a map."""
+        self.logview = logview
         self.map_view = surface
         self.topleft = pos_rect
         self.dirty = True
@@ -24,7 +27,7 @@ class Map():
         self.width = 0
         self.height = 0
         self.tiles = list()
-        self.map = self.load_map(mapfile, bank)
+        self.map = self.load_map(mapfile, TypeBank())
         self.set_walltypes()
 
     def setup_tiles(self, w, h, bank):
@@ -38,6 +41,7 @@ class Map():
 
     def load_map(self, filename, bank):
         """Load a map from a .txt file."""
+        self.logview.post("Loading "+filename, MsgType.INFO)
         with open(filename, 'rt') as file:
             # Get the width and heigth of the map.
             maplist = list()
@@ -203,8 +207,7 @@ class Map():
 
             screen.blit(self.map_view, self.topleft)
 
-            self.dirty = True
-
+            self.dirty = False
             # Blit fake player pos
             red = pygame.color.Color("red")
             x = (playerx - leftx) * cons.TILE_D + (cons.TILE_D//2)
