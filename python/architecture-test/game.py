@@ -2,7 +2,8 @@ import pygame
 
 import constants as cons
 from dungeon import Dungeon
-from logview import LogView, MsgType
+from logview import LogView
+from message import Message, MsgType
 
 
 class StatView():
@@ -39,6 +40,23 @@ class Game():
         self.px = 1
         self.py = 1
 
+    def menu_loop(self):
+        done = False
+        menuscreen = pygame.Surface(cons.MAP_DIM)
+        bgcolor = pygame.color.Color('darkslategrey')
+        while not done:
+            menuscreen.fill(bgcolor)
+            # Blit choices
+            title = Message("Main Menu", MsgType.INFO)
+            title.set_bgcolor(bgcolor)
+            menuscreen.blit(title.get_surface(), (200, 20))
+            self.screen.blit(menuscreen, (0,0))
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                    done = True
+            pygame.display.update()
+
     def handle_events(self):
         events = pygame.event.get()
         for event in events:
@@ -68,11 +86,15 @@ class Game():
             # Test log
             if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
                 string = "Testing log with way too much text so that it will need to wrap many, many times to fit into the text-view."
                 self.logview.post(string, MsgType.INFO)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
                 self.logview.post("DEBUG TEXT.", MsgType.DEBUG)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                print("Entering main menu")
+                self.menu_loop()
+                print("Exited main menu")
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)

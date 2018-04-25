@@ -7,7 +7,7 @@ from tile import Tile
 from tiletypes import TileStatus, TileTypes
 from typebank import TypeBank
 from utils import plot_line
-from logview import MsgType
+from message import MsgType
 
 
 class Map():
@@ -207,7 +207,7 @@ class Map():
 
             screen.blit(self.map_view, self.topleft)
 
-            self.dirty = False
+            self.dirty = True
             # Blit fake player pos
             red = pygame.color.Color("red")
             x = (playerx - leftx) * cons.TILE_D + (cons.TILE_D//2)

@@ -10,7 +10,7 @@ class Dungeon():
     def __init__(self, surface, pos_rect, logview):
         """Contsructs a random map, items and monsters."""
         self.logview = logview
-        self.map = Map(surface, pos_rect, 'map-huge.txt', logview)
+        self.map = Map(surface, pos_rect, 'map-tiny.txt', logview)
 
     def draw(self, screen, x, y):
         """Draws the map on the screen."""
