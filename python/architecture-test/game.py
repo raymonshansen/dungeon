@@ -92,9 +92,7 @@ class Game():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
                 self.logview.post("DEBUG TEXT.", MsgType.DEBUG)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                print("Entering main menu")
                 self.menu_loop()
-                print("Exited main menu")
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)

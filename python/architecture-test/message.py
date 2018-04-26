@@ -27,10 +27,12 @@ class Message():
         self.textsurf = self.generate_surface()
 
     def set_bgcolor(self, color):
+        """Set the background color for the text surface."""
         self.bgcolor = color
         self.textsurf = self.generate_surface()
 
     def get_surface(self):
+        """Return the text surface."""
         return self.textsurf
 
     def get_height(self):
@@ -84,7 +86,7 @@ class Message():
         Draw multiple lines of text in the given font onto a single surface
         with no background color, and return the result.
         """
-        print(self.bgcolor)
+
         rendered = [self.font.render(line, True, self.color, self.bgcolor)
                     for line in lines]
 
