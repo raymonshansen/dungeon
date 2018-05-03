@@ -1,9 +1,9 @@
-import pygame
+import pygame as pg
 
 import constants as cons
 from dungeon import Dungeon
 from logview import LogView
-from message import Message, MsgType
+from message import MsgType
 
 
 class StatView():
@@ -14,99 +14,65 @@ class StatView():
 
     def draw(self, screen):
         if self.dirty:
-            self.surface.fill(pygame.color.Color("black"))
+            self.surface.fill(pg.color.Color("black"))
             screen.blit(self.surface, self.topleft)
 
 
 class Game():
-    def __init__(self):
-        pygame.init()
-        self.window_w = cons.TILE_D*cons.SCREEN_TW
-        self.window_h = cons.TILE_D*cons.SCREEN_TH
-        self.screensize = (self.window_w, self.window_h)
-        self.screen = pygame.display.set_mode(self.screensize)
-        self.running = True
+    def __init__(self, screen, statemanager):
+        pg.init()
+        self.screen = screen
+        self.statemanager = statemanager
         self.setup()
 
     def setup(self):
-        logsurface = pygame.Surface(cons.LOG_DIM)
+        logsurface = pg.Surface(cons.LOG_DIM)
         self.logview = LogView(logsurface, cons.LOG_POS)
-        dungeonsurf = pygame.Surface(cons.MAP_DIM)
+        dungeonsurf = pg.Surface(cons.MAP_DIM)
         self.dungeon = Dungeon(dungeonsurf, cons.MAP_POS, self.logview)
-        statsurface = pygame.Surface(cons.STAT_DIM)
+        statsurface = pg.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
 
         # Test player
         self.px = 1
         self.py = 1
 
-    def menu_loop(self):
-        done = False
-        menuscreen = pygame.Surface(cons.MAP_DIM)
-        bgcolor = pygame.color.Color('darkslategrey')
-        while not done:
-            menuscreen.fill(bgcolor)
-            # Blit choices
-            title = Message("Main Menu", MsgType.INFO)
-            title.set_bgcolor(bgcolor)
-            menuscreen.blit(title.get_surface(), (200, 20))
-            self.screen.blit(menuscreen, (0,0))
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                    done = True
-            pygame.display.update()
 
     def handle_events(self):
-        events = pygame.event.get()
+        events = pg.event.get()
         for event in events:
             # Quit the game.
-            if event.type == pygame.QUIT:
-                self.running = False
+            if event.type == pg.QUIT:
+                self.statemanager.switch_state('EXITING')
                 break
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                self.running = False
+            if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                self.statemanager.switch_state('EXITING')                
                 break
-            # Toggle fullscreen.
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_f:
-                if self.screen.get_flags() & pygame.FULLSCREEN:
-                    pygame.display.set_mode(self.screensize)
-                else:
-                    pygame.display.set_mode(self.screensize, pygame.FULLSCREEN)
-
             # Move the player.
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+            if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.py -= 1
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+            if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
                 self.py += 1
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            if event.type == pg.KEYDOWN and event.key == pg.K_LEFT:
                 self.px -= 1
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
                 self.px += 1
             # Test log
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_l:
+            if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+            if event.type == pg.KEYDOWN and event.key == pg.K_n:
                 string = "Testing log with way too much text so that it will need to wrap many, many times to fit into the text-view."
                 self.logview.post(string, MsgType.INFO)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
+            if event.type == pg.KEYDOWN and event.key == pg.K_i:
                 self.logview.post("DEBUG TEXT.", MsgType.DEBUG)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                self.menu_loop()
+            # Test StateManager
+            if event.type == pg.KEYDOWN and event.key == pg.K_m:
+                self.statemanager.switch_state('MAINMENU')
+
+    def update(self):
+        self.handle_events()
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)
         self.statview.draw(self.screen)
         self.logview.draw(self.screen)
-
-    def loop(self):
-        while self.running:
-            self.handle_events()
-            self.draw()
-            pygame.display.update()
-        pygame.quit()
-
-
-if __name__ == '__main__':
-    game = Game()
-    game.loop()

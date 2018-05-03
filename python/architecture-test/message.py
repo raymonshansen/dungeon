@@ -20,11 +20,14 @@ class Message():
         self.rect = pygame.Rect(0, 0, cons.LOG_DIM[0], cons.LOG_DIM[1])
         self.text = text
         self.type = logtype
-        path = os.path.join('Avara.otf')
-        self.font = pygame.font.Font(path, cons.TILE_D//2)
+        self.path = os.path.join('Avara.otf')
+        self.font = pygame.font.Font(self.path, cons.LOG_FONTSIZE)
         self.color = self.set_color()
         self.bgcolor = None
         self.textsurf = self.generate_surface()
+
+    def set_size(self, size):
+        self.font = pygame.font.Font(self.path, size)
 
     def set_bgcolor(self, color):
         """Set the background color for the text surface."""

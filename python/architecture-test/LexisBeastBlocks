@@ -1,0 +1,56 @@
+<style>
+  .phb{
+    width : 210mm;
+    height : 296.8mm;
+  }
+</style>
+___
+> ## Dire Wolf
+>*Large beast, unaligned*
+> ___
+> - **Armor Class** 14 (natural armor)
+> - **Hit Points** 37(5d10 + 10)
+> - **Speed** 50 ft.
+>___
+>|STR|DEX|CON|INT|WIS|CHA|
+>|:---:|:---:|:---:|:---:|:---:|:---:|
+>|17 (+3)|15 (+2)|15 (+4)|3 (-4)|12 (+1)|7 (-2)|
+>___
+> - **Skills** Perception +3, Stealth +4
+> - **Senses** passive Perception 13
+> - **Languages** None
+> - **Challenge** 1 (200 XP)
+> ___
+> ***Keen Hearing and Smell. *** The wolf has advantage on Wisdom(Perception) checks that rely on hearing or smell.
+>
+> ***Pack Tactics. *** The wolf has advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally isn't incapacitated.
+> ### Actions
+> ***Bite.*** *Melee Weapon Attack:* +5 to hit, reach 5ft., one target. *Hit:* 10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.
+
+```
+```
+___
+> ## Brown Bear
+>*Large beast, unaligned*
+> ___
+> - **Armor Class** 11 (natural armor)
+> - **Hit Points** 34 (4d10 + 12)
+> - **Speed** 40 ft., climb 30 ft.
+>___
+>|STR|DEX|CON|INT|WIS|CHA|
+>|:---:|:---:|:---:|:---:|:---:|:---:|
+>|19 (+4)|10 (+0)|16 (+3)|2 (-4)|13 (+1)|7 (-2)|
+>___
+> - **Skills** Perception +3
+> - **Senses** passive Perception 13
+> - **Languages** None
+> - **Challenge** 1 (200 XP)
+> ___
+> ***Keen Smell. *** The bear has advantage on Wisdom(Perception) checks that rely on smell.
+>
+> ### Actions
+> ***Multiattack.*** The bear makes two attacks with its bite and claws.
+
+> ***Bite.*** *Melee Weapon Attack:* +5 to hit, reach 5ft., one target. *Hit:* 8 (1d8 + 4) piercing damage.
+
+> ***Claws.*** *Melee Weapon Attack:* +5 to hit, reach 5ft., one target. *Hit:* 11 (2d6 + 4) slashing damage.

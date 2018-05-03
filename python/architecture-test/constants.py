@@ -4,8 +4,10 @@ TILE_D = 32
 
 # 1600px
 SCREEN_TW = 40
+SCREEN_W_PX = SCREEN_TW * TILE_D
 # 960px
 SCREEN_TH = 20
+SCREEN_H_PX = SCREEN_TH * TILE_D
 
 
 MAP_VIEW_TW = int(SCREEN_TW * 0.7)
@@ -33,3 +35,7 @@ DIRECTIONS = {'NW': (-1, -1),
               'SW': (-1, 1),
               'S': (0, 1),
               'SE': (1, 1)}
+
+# Font
+LOG_FONTSIZE = TILE_D // 2
+MAINMENU_FONTSIZE = TILE_D * 2
