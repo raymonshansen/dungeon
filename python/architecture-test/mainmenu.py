@@ -46,7 +46,7 @@ class MainMenu():
 
     def item_list(self):
         retlist = list()
-        menuitemnames = ["Resume", "Quit"]
+        menuitemnames = ["Resume", "Quit", "Editor"]
         for idx, item in enumerate(menuitemnames):
             dist_from_top = (idx * 100) + 200
             pos = (cons.SCREEN_W_PX//2, dist_from_top)
@@ -54,16 +54,12 @@ class MainMenu():
             retlist.append(it)
         return retlist
 
-    def up(self):
+    def up_or_down(self, step):
+        """Select next or previous item in the item_list.
+        Negative step is down, positive step is up."""
         self.menu_items[self.current_choice].set_deselected()
-        self.current_choice -= 1
+        self.current_choice -= step
         self.current_choice %= len(self.menu_items)        
-        self.menu_items[self.current_choice].set_selected()
-
-    def down(self):
-        self.menu_items[self.current_choice].set_deselected()
-        self.current_choice += 1
-        self.current_choice %= len(self.menu_items)
         self.menu_items[self.current_choice].set_selected()
 
     def handle_events(self):
@@ -77,9 +73,9 @@ class MainMenu():
                 self.statemanager.switch_state('EXITING')
                 break
             if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
-                self.down()
+                self.up_or_down(-1)
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:
-                self.up()
+                self.up_or_down(1)
 
     def update(self):
         self.handle_events()
