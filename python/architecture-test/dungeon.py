@@ -1,7 +1,6 @@
 """Dungeon module."""
 
 from map_mod import Map
-#from logview import MsgType
 
 
 class Dungeon():
