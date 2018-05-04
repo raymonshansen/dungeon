@@ -24,6 +24,9 @@ class MainMenuItem():
     def get_text_surface(self):
         return self.font.render(self.text, True, self.default_col, self.bgcolor)
 
+    def get_text(self):
+        return self.text
+
     def set_text_color(self, color):
         self.textsurf = self.font.render(self.text, True, color, self.bgcolor)
 
@@ -39,6 +42,7 @@ class MainMenu():
     def __init__(self, screen, statemanager):
         self.statemanager = statemanager
         self.screen = screen
+        self.func_name = {"Resume": self.resume, "Quit": self.quit, "Editor": self.editor}        
         self.bgcolor = cons.MAINMENU_BGCOL
         self.menu_items = self.item_list()
         self.current_choice = 0
@@ -46,8 +50,7 @@ class MainMenu():
 
     def item_list(self):
         retlist = list()
-        menuitemnames = ["Resume", "Quit", "Editor"]
-        for idx, item in enumerate(menuitemnames):
+        for idx, item in enumerate(self.func_name):
             dist_from_top = (idx * 100) + 200
             pos = (cons.SCREEN_W_PX//2, dist_from_top)
             it = MainMenuItem(pos, self.screen, item)
@@ -69,13 +72,23 @@ class MainMenu():
             if event.type == pg.QUIT:
                 self.statemanager.switch_state('EXITING')
                 break
-            if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-                self.statemanager.switch_state('EXITING')
-                break
+            # Select menu-item
             if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
                 self.up_or_down(-1)
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.up_or_down(1)
+            # Call apropriate method from menuitem
+            if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
+                self.func_name.get(self.menu_items[self.current_choice].get_text())()
+
+    def resume(self):
+        self.statemanager.switch_state('GAME')
+
+    def quit(self):
+        self.statemanager.switch_state('EXITING')        
+    
+    def editor(self):
+        print("Editor is forthcoming...")
 
     def update(self):
         self.handle_events()
