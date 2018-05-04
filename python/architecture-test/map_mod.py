@@ -1,6 +1,7 @@
 """Map-module."""
 
 import pygame
+from random import randint
 
 import constants as cons
 from tile import Tile
@@ -16,63 +17,57 @@ class Map():
     Contains various methods for working with the map.
     """
 
-    def __init__(self, surface, pos_rect, mapfile, logview):
+    def __init__(self, surface, logview, width, height):
         """Construct a map."""
-        self.logview = logview
         self.map_view = surface
-        self.topleft = pos_rect
+        self.logview = logview
+        self.width = width
+        self.height = height
+        self.topleft = cons.MAP_POS
         self.dirty = True
         self.view_width = cons.MAP_VIEW_TW
         self.view_height = cons.MAP_VIEW_TH
-        self.width = 0
-        self.height = 0
-        self.tiles = list()
-        self.map = self.load_map(mapfile, TypeBank())
-        self.set_walltypes()
+        self.tiles = self.setup_tiles(self.width, self.height, TypeBank())
+
+    def set_type(self, x, y, tiletype):
+        """Enables setting a tile type from outside the map."""
+        if self.width <= x < 0:
+            return
+        if self.height <= y < 0:
+            return
+        self.get_tile(x, y).set_type(tiletype)
+
+    def get_type(self, x, y):
+        """Return the tile-type at the given coordinate."""
+        if self.width <= x < 0:
+            return
+        if self.height <= y < 0:
+            return
+        return self.get_tile(x, y).get_type()
 
     def setup_tiles(self, w, h, bank):
-        """Fill the map with default tiles."""
-        return [Tile(x, y, bank) for y in range(h) for x in range(w)]
-
-    def set_types(self, maplist):
-        """Set types given by the maplist."""
-        for tile, filtype in zip(self.tiles, maplist):
-            tile.set_type(filtype)
-
-    def load_map(self, filename, bank):
-        """Load a map from a .txt file."""
-        self.logview.post("Loading "+filename, MsgType.INFO)
-        with open(filename, 'rt') as file:
-            # Get the width and heigth of the map.
-            maplist = list()
-            lines = file.readlines()
-            self.width, self.height = [int(x) for x in lines[0].split()]
-            # Load the rest into a list.
-            for line in lines[1:]:
-                for x in line.strip():
-                    maplist.append(int(x))
-
-            # Setup the tiles
-            self.tiles = self.setup_tiles(self.width, self.height, bank)
-            # Finally set all tile-types from the maplist
-            self.set_types(maplist)
+        """Fill the map with floor tiles."""
+        tiles = [Tile(x, y, bank) for y in range(h) for x in range(w)]
+        for tile in tiles:
+            # Test randomness...
+            if randint(0, 2):
+                tile.set_type(TileTypes.WALL)
+            else:
+                tile.set_type(TileTypes.WALL)
+        return tiles
 
     def get_tile(self, x, y):
         """Take an x and y, returns the tile at that coordinate.
-
         Return 0 if coordinate is off the map.
         """
         if (0 <= x < self.width) and (0 <= y < self.height):
-            # print(f"{x}, {y} - {(y*self.height)+x}")
             return self.tiles[(y * self.height) + x]
         else:
             return 0
 
     def get_tile_neighbours(self, x, y):
-        """Take an x and y.
-
-        returns all tiles around that tile.
-        Might contain Nones (see get_tile)
+        """Take an x and y, returns all tiles around that tile.
+        Might contain zeroes (see get_tile).
         """
         res = list()
         for key in cons.DIRECTIONS:
@@ -85,27 +80,6 @@ class Map():
         coordinates = plot_line(x1, y1, x2, y2)
         ret = [self.get_tile(cor[0], cor[1]) for cor in coordinates]
         return ret
-
-    def get_wall_list(self):
-        """Return a list of all the tiles that should be walls.
-        """
-        wall_to_be = list()
-        for tile in self.tiles:
-            # If it's not a floor-tile
-            if tile.get_type() != 1:
-                all_neighbours = self.get_tile_neighbours(tile.x, tile.y)
-                neighbours = [x for x in all_neighbours if x != 0]
-                for neighb_tile in neighbours:
-                    # but one of the adjacent ones are
-                    # add to the list, if it wasn't already
-                    if neighb_tile.get_type() == 1 and tile not in wall_to_be:
-                        wall_to_be.append(tile)
-        return wall_to_be
-
-    def set_walltypes(self):
-        """Sets the walltypes based on the loaded map-file."""
-        for tile in self.get_wall_list():
-            tile.set_type(TileTypes.WALL)
 
     def refresh_visibility(self, x, y, radius):
         """Refresh the visibility given a certain point."""

@@ -29,7 +29,7 @@ class Game():
         logsurface = pg.Surface(cons.LOG_DIM)
         self.logview = LogView(logsurface, cons.LOG_POS)
         dungeonsurf = pg.Surface(cons.MAP_DIM)
-        self.dungeon = Dungeon(dungeonsurf, cons.MAP_POS, self.logview)
+        self.dungeon = Dungeon(dungeonsurf, self.logview)
         statsurface = pg.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
 
@@ -51,19 +51,19 @@ class Game():
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.py -= 1
                 string = "{}, {}".format(self.px, self.py)
-                self.logview.post(string, MsgType.INFO)
+                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
                 self.py += 1
                 string = "{}, {}".format(self.px, self.py)
-                self.logview.post(string, MsgType.INFO)
+                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_LEFT:
                 self.px -= 1
                 string = "{}, {}".format(self.px, self.py)
-                self.logview.post(string, MsgType.INFO)
+                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
                 self.px += 1
                 string = "{}, {}".format(self.px, self.py)
-                self.logview.post(string, MsgType.INFO)
+                #self.logview.post(string, MsgType.INFO)
             # Test log
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)

@@ -12,7 +12,6 @@ class TypeBank():
 
     def load_all(self):
         for key in self.filenames:
-            # print(f"loading: {self.filenames[key]}")
             path = os.path.join('tiles2', self.filenames.get(key, 'none.png'))
             img = pygame.image.load(path).convert_alpha()
             self.images.append(img)
