@@ -52,7 +52,7 @@ class MainMenu():
         retlist = list()
         names = ["Resume", "Editor", "Quit"]
         for idx, item in enumerate(names):
-            dist_from_top = (idx * 100) + 200
+            dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 6
             pos = (cons.SCREEN_W_PX//2, dist_from_top)
             it = MainMenuItem(pos, self.screen, item)
             retlist.append(it)
