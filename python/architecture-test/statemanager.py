@@ -35,7 +35,6 @@ class StateManager():
             self.current_state.update()
             self.current_state.draw()
             pg.display.update()
-        
         self.exit()
 
 

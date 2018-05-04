@@ -37,7 +37,6 @@ class Game():
         self.px = 1
         self.py = 1
 
-
     def handle_events(self):
         events = pg.event.get()
         for event in events:
@@ -46,7 +45,7 @@ class Game():
                 self.statemanager.switch_state('EXITING')
                 break
             if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-                self.statemanager.switch_state('EXITING')                
+                self.statemanager.switch_state('EXITING')
                 break
             # Move the player.
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:

@@ -15,7 +15,7 @@ class MainMenuItem():
         self.bgcolor = cons.MAINMENU_BGCOL
         self.textsurf = self.get_text_surface()
         self.selected = False
-    
+
     def get_bottom_left(self):
         return (self.pos[0], self.pos[1]+cons.MAINMENU_FONTSIZE)
 
@@ -52,13 +52,13 @@ class MainMenu():
     def __init__(self, screen, statemanager):
         self.statemanager = statemanager
         self.screen = screen
-        self.func_name = {"Resume": self.resume, "Editor": self.editor, "Quit": self.quit}        
+        self.func_name = {"Resume": self.resume, "Editor": self.editor, "Quit": self.quit}
         self.bgcolor = cons.MAINMENU_BGCOL
         self.menu_items = self.item_list()
         self.current_choice = 0
         self.menu_items[self.current_choice].set_selected()
         self.infoboxlist = self.infobox_list()
-    
+
     def infobox_list(self):
         retlist = list()
         for text in cons.MAINMENU_ITEM_INFO:
@@ -83,7 +83,7 @@ class MainMenu():
         Negative step is down, positive step is up."""
         self.menu_items[self.current_choice].set_deselected()
         self.current_choice -= step
-        self.current_choice %= len(self.menu_items)        
+        self.current_choice %= len(self.menu_items)
         self.menu_items[self.current_choice].set_selected()
 
     def handle_events(self):
@@ -106,8 +106,8 @@ class MainMenu():
         self.statemanager.switch_state('GAME')
 
     def quit(self):
-        self.statemanager.switch_state('EXITING')        
-    
+        self.statemanager.switch_state('EXITING')
+
     def editor(self):
         print("Editor is forthcoming...")
 
@@ -118,13 +118,15 @@ class MainMenu():
         """Draw some ey-candy."""
         # Draw underscore
         item, infobox = item_info
-        start = item.get_bottom_left()
-        end = (infobox.get_rect().left-cons.TILE_D//2, start[1])
-        pg.draw.line(self.screen, cons.MAINMENU_SELECTED_COL, start, end, 1)
+        col = cons.MAINMENU_SELECTED_COL
+        x1, y1 = item.get_bottom_left()
+        x2, y2 = infobox.get_rect().left-cons.TILE_D//2, y1
+        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
+        pg.draw.line(self.screen, col, (x1 + 7, y1 + 7), (x2 - 7, y2 + 7), 1)
         # Draw vertical
-        start = end
-        end = (infobox.get_rect().x-cons.TILE_D//2, infobox.get_rect().y)
-        pg.draw.line(self.screen, cons.MAINMENU_SELECTED_COL, start, end, 1)
+        x1, y1 = infobox.get_rect().x-cons.TILE_D//2, infobox.get_rect().y
+        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
+        pg.draw.line(self.screen, col, (x1 - 7, y1 + 7), (x2 - 7, y2 + 7), 1)
 
     def draw(self):
         self.screen.fill(self.bgcolor)
