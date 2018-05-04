@@ -2,12 +2,14 @@ import pygame as pg
 
 TILE_D = 32
 
-# 1600px
+
 SCREEN_TW = 50
 SCREEN_W_PX = SCREEN_TW * TILE_D
-# 960px
+
 SCREEN_TH = 30
 SCREEN_H_PX = SCREEN_TH * TILE_D
+
+SCREEN_SIZE = (SCREEN_W_PX, SCREEN_H_PX)
 
 
 MAP_VIEW_TW = int(SCREEN_TW * 0.7)

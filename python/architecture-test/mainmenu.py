@@ -58,13 +58,21 @@ class MainMenu():
         self.current_choice = 0
         self.menu_items[self.current_choice].set_selected()
         self.infoboxlist = self.infobox_list()
+        self.headline = self.get_headline()
+
+    def get_headline(self):
+        headline = Message("Dungeon", MsgType.INFO)
+        headline.set_size(cons.TILE_D * 4)
+        headline.set_rect(cons.SCREEN_W_PX//12, cons.TILE_D, 400, cons.TILE_D * 2)
+        headline.set_color(cons.MAINMENU_DEFAULT_COL)
+        return headline
 
     def infobox_list(self):
         retlist = list()
         for text in cons.MAINMENU_ITEM_INFO:
             info = Message(text, MsgType.INFO)
             info.set_size(cons.TILE_D)
-            info.set_rect((cons.SCREEN_W_PX//2)+150, cons.TILE_D * 6, cons.SCREEN_W_PX//4, cons.SCREEN_H_PX//2)
+            info.set_rect((cons.SCREEN_W_PX//2)+150, cons.TILE_D * 10, cons.SCREEN_W_PX//4, cons.SCREEN_H_PX//2)
             info.set_color(cons.MAINMENU_SELECTED_COL)
             retlist.append(info)
         return retlist
@@ -72,7 +80,7 @@ class MainMenu():
     def item_list(self):
         retlist = list()
         for idx, item in enumerate(cons.MAINMENU_ITEM_LABELS):
-            dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 6
+            dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 10
             pos = (cons.SCREEN_W_PX//2-200, dist_from_top)
             it = MainMenuItem(pos, self.screen, item)
             retlist.append(it)
@@ -127,6 +135,12 @@ class MainMenu():
         x1, y1 = infobox.get_rect().x-cons.TILE_D//2, infobox.get_rect().y
         pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
         pg.draw.line(self.screen, col, (x1 - 7, y1 + 7), (x2 - 7, y2 + 7), 1)
+        # Headline... lines
+        hrec = self.headline.get_rect()
+        x1, y1 = hrec.left, hrec.bottom + 5
+        x2, y2 = hrec.right + hrec.width + hrec.width, hrec.bottom + 5
+        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
+        pg.draw.line(self.screen, col, (x1 + 7, y1 + 7), (x2 + 7, y2 + 7), 1)
 
     def draw(self):
         self.screen.fill(self.bgcolor)
@@ -137,3 +151,4 @@ class MainMenu():
                 item_info[1].draw(self.screen)
                 # Then the lines...
                 self.draw_lines(item_info)
+        self.headline.draw(self.screen)

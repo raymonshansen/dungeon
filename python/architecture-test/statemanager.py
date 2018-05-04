@@ -8,10 +8,7 @@ import constants as cons
 
 class StateManager():
     def __init__(self):
-        self.window_w = cons.TILE_D*cons.SCREEN_TW
-        self.window_h = cons.TILE_D*cons.SCREEN_TH
-        self.screensize = (self.window_w, self.window_h)
-        self.screen = pg.display.set_mode(self.screensize)
+        self.screen = pg.display.set_mode(cons.SCREEN_SIZE, pg.FULLSCREEN)
         self.game_state = Game(self.screen, self)
         self.main_menu_state = MainMenu(self.screen, self)
         self.current_state = self.game_state
