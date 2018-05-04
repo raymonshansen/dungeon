@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 TILE_D = 32
 
@@ -23,9 +23,9 @@ MAP_DIM = (TILE_D*MAP_VIEW_TW, TILE_D*MAP_VIEW_TH)
 STAT_DIM = (TILE_D*STAT_VIEW_TW, TILE_D*STAT_VIEW_TH)
 LOG_DIM = (TILE_D*LOG_VIEW_TW, TILE_D*LOG_VIEW_TH)
 
-MAP_POS = pygame.Rect(0, 0, MAP_DIM[0], MAP_DIM[1])
-STAT_POS = pygame.Rect(0, TILE_D*MAP_VIEW_TH, STAT_DIM[0], STAT_DIM[1])
-LOG_POS = pygame.Rect(TILE_D*MAP_VIEW_TW, 0, LOG_DIM[0], LOG_DIM[1])
+MAP_POS = pg.Rect(0, 0, MAP_DIM[0], MAP_DIM[1])
+STAT_POS = pg.Rect(0, TILE_D*MAP_VIEW_TH, STAT_DIM[0], STAT_DIM[1])
+LOG_POS = pg.Rect(TILE_D*MAP_VIEW_TW, 0, LOG_DIM[0], LOG_DIM[1])
 
 DIRECTIONS = {'NW': (-1, -1),
               'N': (0, -1),
@@ -39,3 +39,6 @@ DIRECTIONS = {'NW': (-1, -1),
 # Font
 LOG_FONTSIZE = TILE_D // 2
 MAINMENU_FONTSIZE = TILE_D * 2
+MAINMENU_BGCOL = pg.color.Color("black")
+MAINMENU_DEFAULT_COL = pg.color.Color("antiquewhite")
+MAINMENU_SELECTED_COL = pg.color.Color("goldenrod")

@@ -4,14 +4,14 @@ import constants as cons
 
 
 class MainMenuItem():
-    def __init__(self, pos, surface, text, bgcolor):
+    def __init__(self, pos, surface, text):
         self.pos = pos
+        self.text = text
         self.fontpath = os.path.join('Avara.otf')
         self.font = pg.font.Font(self.fontpath, cons.MAINMENU_FONTSIZE)
-        self.text = text
-        self.default_col = pg.color.Color("antiquewhite")
-        self.selected_col = pg.color.Color("red")
-        self.bgcolor = bgcolor
+        self.default_col = cons.MAINMENU_DEFAULT_COL
+        self.selected_col = cons.MAINMENU_SELECTED_COL
+        self.bgcolor = cons.MAINMENU_BGCOL
         self.textsurf = self.get_text_surface()
         self.selected = False
 
@@ -39,7 +39,7 @@ class MainMenu():
     def __init__(self, screen, statemanager):
         self.statemanager = statemanager
         self.screen = screen
-        self.bgcolor = pg.color.Color("black")
+        self.bgcolor = cons.MAINMENU_BGCOL
         self.menu_items = self.item_list()
         self.current_choice = 0
         self.menu_items[self.current_choice].set_selected()
@@ -50,7 +50,7 @@ class MainMenu():
         for idx, item in enumerate(menuitemnames):
             dist_from_top = (idx * 100) + 200
             pos = (cons.SCREEN_W_PX//2, dist_from_top)
-            it = MainMenuItem(pos, self.screen, item, self.bgcolor)
+            it = MainMenuItem(pos, self.screen, item)
             retlist.append(it)
         return retlist
 
