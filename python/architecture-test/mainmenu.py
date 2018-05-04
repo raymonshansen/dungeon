@@ -42,7 +42,7 @@ class MainMenu():
     def __init__(self, screen, statemanager):
         self.statemanager = statemanager
         self.screen = screen
-        self.func_name = {"Resume": self.resume, "Quit": self.quit, "Editor": self.editor}        
+        self.func_name = {"Resume": self.resume, "Editor": self.editor, "Quit": self.quit}        
         self.bgcolor = cons.MAINMENU_BGCOL
         self.menu_items = self.item_list()
         self.current_choice = 0
@@ -50,7 +50,9 @@ class MainMenu():
 
     def item_list(self):
         retlist = list()
-        for idx, item in enumerate(self.func_name):
+        print(self.func_name)
+        names = ["Resume", "Editor", "Quit"]
+        for idx, item in enumerate(names):
             dist_from_top = (idx * 100) + 200
             pos = (cons.SCREEN_W_PX//2, dist_from_top)
             it = MainMenuItem(pos, self.screen, item)
