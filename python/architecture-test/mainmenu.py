@@ -50,7 +50,6 @@ class MainMenu():
 
     def item_list(self):
         retlist = list()
-        print(self.func_name)
         names = ["Resume", "Editor", "Quit"]
         for idx, item in enumerate(names):
             dist_from_top = (idx * 100) + 200
