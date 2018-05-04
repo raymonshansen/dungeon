@@ -33,7 +33,7 @@ class Tile():
 
     def __repr__(self):
         """Official string representation of a tile."""
-        return f"({self.x},{self.y} - {self.get_type()})"
+        return "({},{} - {})".format(self.x, self.y, self.get_type())
 
     def get_type(self):
         """Return the tiles type."""
