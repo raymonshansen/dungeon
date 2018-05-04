@@ -1,6 +1,7 @@
 import os
 import pygame as pg
 import constants as cons
+from message import Message, MsgType
 
 
 class MainMenuItem():
@@ -14,6 +15,15 @@ class MainMenuItem():
         self.bgcolor = cons.MAINMENU_BGCOL
         self.textsurf = self.get_text_surface()
         self.selected = False
+    
+    def get_bottom_left(self):
+        return (self.pos[0], self.pos[1]+cons.MAINMENU_FONTSIZE)
+
+    def get_width(self):
+        return self.textsurf.get_width()
+
+    def is_selected(self):
+        return self.selected
 
     def set_selected(self):
         self.selected = True
@@ -47,13 +57,23 @@ class MainMenu():
         self.menu_items = self.item_list()
         self.current_choice = 0
         self.menu_items[self.current_choice].set_selected()
+        self.infoboxlist = self.infobox_list()
+    
+    def infobox_list(self):
+        retlist = list()
+        for text in cons.MAINMENU_ITEM_INFO:
+            info = Message(text, MsgType.INFO)
+            info.set_size(cons.TILE_D)
+            info.set_rect((cons.SCREEN_W_PX//2)+150, cons.TILE_D * 6, cons.SCREEN_W_PX//4, cons.SCREEN_H_PX//2)
+            info.set_color(cons.MAINMENU_SELECTED_COL)
+            retlist.append(info)
+        return retlist
 
     def item_list(self):
         retlist = list()
-        names = ["Resume", "Editor", "Quit"]
-        for idx, item in enumerate(names):
+        for idx, item in enumerate(cons.MAINMENU_ITEM_LABELS):
             dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 6
-            pos = (cons.SCREEN_W_PX//2, dist_from_top)
+            pos = (cons.SCREEN_W_PX//2-200, dist_from_top)
             it = MainMenuItem(pos, self.screen, item)
             retlist.append(it)
         return retlist
@@ -94,7 +114,24 @@ class MainMenu():
     def update(self):
         self.handle_events()
 
+    def draw_lines(self, item_info):
+        """Draw some ey-candy."""
+        # Draw underscore
+        item, infobox = item_info
+        start = item.get_bottom_left()
+        end = (infobox.get_rect().left-cons.TILE_D//2, start[1])
+        pg.draw.line(self.screen, cons.MAINMENU_SELECTED_COL, start, end, 1)
+        # Draw vertical
+        start = end
+        end = (infobox.get_rect().x-cons.TILE_D//2, infobox.get_rect().y)
+        pg.draw.line(self.screen, cons.MAINMENU_SELECTED_COL, start, end, 1)
+
     def draw(self):
         self.screen.fill(self.bgcolor)
-        for menu_item in self.menu_items:
-            menu_item.draw(self.screen)
+        for item_info in zip(self.menu_items, self.infoboxlist):
+            # Draw text first
+            item_info[0].draw(self.screen)
+            if item_info[0].is_selected():
+                item_info[1].draw(self.screen)
+                # Then the lines...
+                self.draw_lines(item_info)

@@ -3,10 +3,10 @@ import pygame as pg
 TILE_D = 32
 
 # 1600px
-SCREEN_TW = 40
+SCREEN_TW = 100
 SCREEN_W_PX = SCREEN_TW * TILE_D
 # 960px
-SCREEN_TH = 20
+SCREEN_TH = 60
 SCREEN_H_PX = SCREEN_TH * TILE_D
 
 
@@ -38,6 +38,10 @@ DIRECTIONS = {'NW': (-1, -1),
 
 # Font
 LOG_FONTSIZE = TILE_D // 2
+
+# Main Menu
+MAINMENU_ITEM_LABELS = ["Resume", "Editor", "Quit"]
+MAINMENU_ITEM_INFO = ["Resume the game.", "Switch between 'Game' and 'Editor' mode. This is a future feature not yet implemented.", "Quit the game. Without saving."]
 MAINMENU_FONTSIZE = TILE_D * 2
 MAINMENU_BGCOL = pg.color.Color("black")
 MAINMENU_DEFAULT_COL = pg.color.Color("antiquewhite")

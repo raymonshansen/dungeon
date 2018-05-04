@@ -22,12 +22,19 @@ class Message():
         self.type = logtype
         self.path = os.path.join('Avara.otf')
         self.font = pygame.font.Font(self.path, cons.LOG_FONTSIZE)
-        self.color = self.set_color()
+        self.color = self.set_color_by_type()
         self.bgcolor = None
         self.textsurf = self.generate_surface()
 
+    def set_rect(self, left, top, width, height):
+        self.rect = pygame.Rect(left, top, width, height)      
+
+    def get_rect(self):
+        return self.rect
+
     def set_size(self, size):
         self.font = pygame.font.Font(self.path, size)
+        self.textsurf = self.generate_surface()
 
     def set_bgcolor(self, color):
         """Set the background color for the text surface."""
@@ -41,8 +48,16 @@ class Message():
     def get_height(self):
         """Return the hight of the textsurf in pixels."""
         return self.textsurf.get_height()
+    
+    def get_width(self):
+        """Return the width of the textsurf in pixels."""
+        return self.textsurf.get_width()
 
-    def set_color(self):
+    def set_color(self, color):
+        self.color = color
+        self.textsurf = self.generate_surface()        
+
+    def set_color_by_type(self):
         """Set the color based on what type it is."""
         if self.type == MsgType.INFO:
             return pygame.color.Color('antiquewhite')
@@ -107,4 +122,4 @@ class Message():
 
     def draw(self, surface):
         """Draw the text."""
-        surface.blit(self.textsurf, (5, self.rect.y))
+        surface.blit(self.textsurf, self.rect)
