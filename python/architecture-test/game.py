@@ -37,6 +37,10 @@ class Game():
         self.px = 1
         self.py = 1
 
+    def call(self, callback):
+        if callback:
+            callback()
+
     def handle_events(self):
         events = pg.event.get()
         for event in events:
@@ -75,6 +79,9 @@ class Game():
             # Test StateManager
             if event.type == pg.KEYDOWN and event.key == pg.K_m:
                 self.statemanager.switch_state('MAINMENU')
+            # Reload level
+            if event.type == pg.KEYDOWN and event.key == pg.K_r:
+                self.setup()
 
     def update(self):
         self.handle_events()

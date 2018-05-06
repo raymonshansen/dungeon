@@ -65,6 +65,14 @@ class Map():
         else:
             return 0
 
+    def get_tile_neighbour(self, x, y, dir, numstep=1):
+        """Take and x and y and dir. Return the neighbour-tile
+        numstep in that dierction. Might contain zeroes (see get_tile).
+        """
+        xstep = dir[0] * numstep
+        ystep = dir[1] * numstep
+        return self.get_tile(x + xstep, y + ystep)
+
     def get_tile_neighbours(self, x, y):
         """Take an x and y, returns all tiles around that tile.
         Might contain zeroes (see get_tile).
@@ -72,7 +80,7 @@ class Map():
         res = list()
         for key in cons.DIRECTIONS:
             tup = cons.DIRECTIONS.get(key)
-            res.append(self.get_tile(x + tup[0], y + tup[1]))
+            res.append(self.get_tile_neighbour(x, y, tup))
         return res
 
     def get_tiles_along_line(self, x1, y1, x2, y2):

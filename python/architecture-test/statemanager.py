@@ -14,7 +14,7 @@ class StateManager():
         self.current_state = self.game_state
         self.done = False
 
-    def switch_state(self, state):
+    def switch_state(self, state, callback=None):
         if state == 'MAINMENU':
             self.current_state = self.main_menu_state
         elif state == 'GAME':
