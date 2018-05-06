@@ -18,16 +18,16 @@ class Dungeon():
 
     def generate_dungeon(self):
         level = Map(self.screen, self.logview, 50, 50)
-        roomnum = randint(20, 30)
-        maxtries = 200
+        roomnum = randint(40, 50)
+        maxtries = 1000
         tries = 0
-        self.logview.post("Roomnum: {}".format(roomnum), MsgType.DEBUG)
-        self.logview.post("Maxtries: {}".format(maxtries), MsgType.DEBUG)
+        self.logview.post("Roomnum: {}".format(roomnum), MsgType.INFO)
+        self.logview.post("Maxtries: {}".format(maxtries), MsgType.INFO)
         placed_rooms = 0
-        while placed_rooms < roomnum or tries < maxtries:
+        while (placed_rooms < roomnum) or (tries < maxtries):
             # Define a random room by its left, top, width and height
-            width = randint(5, 20)
-            height = randint(5, 20)
+            width = randint(3, 10)
+            height = randint(3, 10)
             left = randint(2, 49 - width)
             top = randint(2, 49 - height)
             # Check placement
@@ -47,6 +47,13 @@ class Dungeon():
                 tries += 1
             if tries > maxtries:
                 break
+
+        self.logview.post("\n", MsgType.INFO)
+        self.logview.post("Placed rooms: {}".format(placed_rooms), MsgType.INFO)
+        self.logview.post("Tries: {}".format(tries), MsgType.INFO)
+        self.logview.post("\n", MsgType.INFO)
+
+        
         return level
 
     def draw(self, screen, x, y):
