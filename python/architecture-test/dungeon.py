@@ -7,6 +7,67 @@ from tiletypes import TileTypes
 from message import MsgType
 
 
+class Room():
+    """A room in a dungeon. Holds info about as well as
+    methods for interacting with a room while randomly constructing
+    a level."""
+
+    def __init__(self, left, top, width, height, level):
+        """Constructor for room. The walls of the room is included in
+        the given parameters."""
+        if width < 3 or height < 3:
+            raise AttributeError("Room too small!")
+        self.left = left
+        self.top = top
+        self.width = width
+        self.height = height
+        self.level = level
+        self.floor = self.floor_tiles()
+        self.walls = self.wall_tiles()
+        self.all_tiles = self.floor + self.walls
+
+    def overlap(self, room):
+        """Return true if there are any tiles overlapping with the
+        given room object. Checked by comparing coordinates as tile-types
+        may change."""
+        for tile in self.all_tiles:
+            for comp_tile in room.all_tiles:
+                if tile.coor == comp_tile.coor:
+                    return True
+        return False
+
+    def wall_tiles(self):
+        walllist = list()
+        # Top and bottom row
+        for x in range(self.left, self.left + self.width):
+            walllist.append(self.level.get_tile(x, self.top))
+            walllist.append(self.level.get_tile(x, self.top + self.height - 1))
+        # Sides
+        for y in range(self.top + 1, self.top + self.height - 1):
+            walllist.append(self.level.get_tile(self.left, y))
+            walllist.append(self.level.get_tile(self.left + self.width - 1, y))
+        return walllist
+
+    def floor_tiles(self):
+        floorlist = list()
+        for x in range(self.left + 1, self.left + self.width - 1):
+            for y in range(self.top + 1, self.top + self.height - 1):
+                floorlist.append(self.level.get_tile(x, y))
+        return floorlist
+
+    def set_floor_tiles(self):
+        for tile in self.floor:
+            tile.set_type(TileTypes.FLOOR)
+
+    @property
+    def floor_area(self):
+        return (self.width - 2) * (self.height - 2)
+
+    @property
+    def total_area(self):
+        return (self.width) * (self.height)
+
+
 class Dungeon():
     """Dungeon class."""
 
@@ -14,46 +75,43 @@ class Dungeon():
         """Contsructs a random map, items and monsters."""
         self.logview = logview
         self.screen = surface
+        self.rooms = list()
         self.map = self.generate_dungeon()
 
     def generate_dungeon(self):
         level = Map(self.screen, self.logview, 50, 50)
-        roomnum = randint(40, 50)
-        maxtries = 1000
+        roomnum = randint(7, 17)
+        maxtries = 100
         tries = 0
         self.logview.post("Roomnum: {}".format(roomnum), MsgType.INFO)
         self.logview.post("Maxtries: {}".format(maxtries), MsgType.INFO)
-        placed_rooms = 0
-        while (placed_rooms < roomnum) or (tries < maxtries):
+
+        while tries < maxtries and len(self.rooms) < roomnum:
             # Define a random room by its left, top, width and height
-            width = randint(3, 10)
-            height = randint(3, 10)
-            left = randint(2, 49 - width)
-            top = randint(2, 49 - height)
+            width = randint(6, 10)
+            height = randint(6, 10)
+            left = randint(0, 49 - width)
+            top = randint(0, 49 - height)
+            room = Room(left, top, width, height, level)
             # Check placement
             good = True
-            for x in range(left-1, left + width + 1):
-                for y in range(top-1, top + height + 1):
-                    if level.get_type(x, y) == TileTypes.FLOOR:
-                        good = False
-                        break
-            # Place room, or not...
+            
+            for existing_room in self.rooms:
+                if room.overlap(existing_room):
+                    good = False
             if good:
-                for x in range(left, left + width):
-                    for y in range(top, top + height):
-                        level.set_type(x, y, TileTypes.FLOOR)
-                placed_rooms += 1
+                room.set_floor_tiles()
+                self.rooms.append(room)
             else:
                 tries += 1
-            if tries > maxtries:
-                break
+            print(tries)
+            print(maxtries)
 
         self.logview.post("\n", MsgType.INFO)
-        self.logview.post("Placed rooms: {}".format(placed_rooms), MsgType.INFO)
+        self.logview.post("Total rooms: {}".format(len(self.rooms)), MsgType.INFO)
         self.logview.post("Tries: {}".format(tries), MsgType.INFO)
         self.logview.post("\n", MsgType.INFO)
 
-        
         return level
 
     def draw(self, screen, x, y):
