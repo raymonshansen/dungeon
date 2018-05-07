@@ -108,9 +108,10 @@ class Dungeon():
                     overlap = True
             if not overlap:
                 x, y = startingtile.coor
-                if not (x % 2) and not (y % 2):
+                if not (x % 2) or not (y % 2):
                     startingtile = False
                 else:
+                    self.logview.post("Startingtile: x: {} y: {}".format(x, y), MsgType.DEBUG)
                     return startingtile
 
     def generate_corridors(self, level_with_rooms):
@@ -169,8 +170,8 @@ class Dungeon():
         while tries < maxtries and len(self.rooms) < roomnum:
             # Could move these into the Room-class, but might
             # want to fiddle with them later...
-            width = self.randint_odd(6, 10)
-            height = self.randint_odd(6, 10)
+            width = self.randint_odd(6, 16)
+            height = self.randint_odd(6, 16)
             left = self.randint_even(0, 49 - width)
             top = self.randint_even(0, 49 - height)
             while left <= 1 or top <= 1:
