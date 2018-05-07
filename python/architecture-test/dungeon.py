@@ -1,6 +1,6 @@
 """Dungeon module."""
 
-from random import randint, choice
+from random import randint, choice, sample
 
 from map_mod import Map
 from tiletypes import TileTypes
@@ -23,6 +23,7 @@ class Room():
         self.width = width
         self.height = height
         self.level = level
+        self.doors = list()
         self.floor = self.floor_tiles()
         self.walls = self.wall_tiles()
         self.all_tiles = self.floor + self.walls
@@ -32,8 +33,6 @@ class Room():
         given tile object. Checked by comparing coordinates as tile-types
         may change."""
         for tile in self.all_tiles:
-            print(tile)
-            print(comptile)
             if tile.coor == comptile.coor:
                 return True
         return False
@@ -48,17 +47,58 @@ class Room():
                     return True
         return False
 
-    def wall_tiles(self):
-        walllist = list()
-        # Top and bottom row
-        for x in range(self.left, self.left + self.width):
-            walllist.append(self.level.get_tile(x, self.top))
-            walllist.append(self.level.get_tile(x, self.top + self.height - 1))
-        # Sides
+    def get_top_wall(self):
+        wallist = list()
+        for x in range(self.left+1, self.left + self.width-1):
+            wallist.append(self.level.get_tile(x, self.top))
+        return wallist
+
+    def get_bottom_wall(self):
+        wallist = list()
+        for x in range(self.left+1, self.left + self.width-1):
+            wallist.append(self.level.get_tile(x, self.top + self.height - 1))
+        return wallist
+
+    def get_left_wall(self):
+        wallist = list()
         for y in range(self.top + 1, self.top + self.height - 1):
-            walllist.append(self.level.get_tile(self.left, y))
-            walllist.append(self.level.get_tile(self.left + self.width - 1, y))
-        return walllist
+            wallist.append(self.level.get_tile(self.left, y))
+        return wallist
+
+    def get_right_wall(self):
+        wallist = list()
+        for y in range(self.top + 1, self.top + self.height - 1):
+            wallist.append(self.level.get_tile(self.left + self.width - 1, y))
+        return wallist
+
+    def get_corner_wall(self):
+        wallist = list()
+        wallist.append(self.level.get_tile(self.left, self.top))
+        wallist.append(self.level.get_tile(self.left, self.top + self.height - 1))
+        wallist.append(self.level.get_tile(self.left + self.width - 1, self.top))
+        wallist.append(self.level.get_tile(self.left + self.width - 1, self.top + self.height - 1))
+        return wallist
+
+    def random_tile_from_list(self, tiles, tilenum):
+        return sample(tiles, tilenum)
+
+    def wall_tiles(self):
+        wallist = list()
+        north = self.get_top_wall()
+        wallist += north
+        self.doors += self.random_tile_from_list(north, randint(1, 3))
+        south = self.get_bottom_wall()
+        wallist += south
+        self.doors += self.random_tile_from_list(south, randint(1, 3))
+        west = self.get_left_wall()
+        wallist += west
+        self.doors += self.random_tile_from_list(west, randint(1, 3))
+        east = self.get_right_wall()
+        wallist += east
+        self.doors += self.random_tile_from_list(east, randint(1, 3))
+        corners = self.get_corner_wall()
+        wallist += corners
+        return wallist
 
     def floor_tiles(self):
         floorlist = list()
@@ -95,6 +135,40 @@ class Dungeon():
         """Wrapper for various stages of random generation."""
         level_with_rooms = self.generate_rooms()
         level_with_corridors = self.generate_corridors(level_with_rooms)
+        self.generate_doors(level_with_corridors)
+        self.remove_dead_ends(level_with_corridors)
+        return level_with_corridors
+
+    def is_dead_end(self, tile, level):
+        """Return true if tile is a dead end."""
+        x, y = tile.coor
+        i = 0
+        for _, tup in cons.FOUR_DIRECTIONS.items():
+            neighbour = level.get_tile_neighbour(x, y, tup, 1)
+            if neighbour.get_type() == TileTypes.FLOOR:
+                i += 1
+        return 0 < i < 2
+
+    def remove_dead_ends(self, level):
+        """Removes some of the dead ends of the maze"""
+        done = False
+        while not done:
+            done = True
+            # Check for dead ends
+            for tile in self.corridor_tiles:
+                if self.is_dead_end(tile, level):
+                    tile.set_type(TileTypes.WALL)
+                    self.corridor_tiles.remove(tile)
+                    # Keep checking
+                    done = False
+
+    def generate_doors(self, level_with_corridors):
+        # For each room, pick a number of doors
+        for room in self.rooms:
+            doornum = randint(1, 5)
+            while doornum:
+                choice(room.doors).set_type(TileTypes.FLOOR)
+                doornum -= 1
         return level_with_corridors
 
     def find_startingtile(self, level_with_rooms):

@@ -1,6 +1,5 @@
 """Log module."""
 import pygame
-from enum import Enum
 from message import Message
 
 
@@ -28,6 +27,7 @@ class LogView():
             if current_y < 0:
                 break
             message.rect.y = current_y
+            message.rect.x += 5
             message.draw(self.surface)
 
     def draw(self, screen):
