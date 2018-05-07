@@ -33,13 +33,9 @@ class Game():
         statsurface = pg.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
 
-        # Test player
-        self.px = 1
-        self.py = 1
-
-    def call(self, callback):
-        if callback:
-            callback()
+        x, y = self.dungeon.get_starting_coor()
+        self.px = x
+        self.py = y
 
     def handle_events(self):
         events = pg.event.get()

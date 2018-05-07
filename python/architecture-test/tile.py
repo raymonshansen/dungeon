@@ -60,7 +60,7 @@ class Tile():
 
         # Make sure already explored tiles never go completely dark again.
         if self.status == TileStatus.EXPLORED and luminosity == 255:
-            self.light.set_alpha(210)
+            self.light.set_alpha(100)
             return
 
         self.light.set_alpha(luminosity)
