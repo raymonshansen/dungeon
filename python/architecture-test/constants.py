@@ -46,7 +46,7 @@ FOUR_DIRECTIONS = {'N': (0, -1),
 LOG_FONTSIZE = TILE_D // 2
 
 # Main Menu
-MAINMENU_ITEM_LABELS = ["Resume", "Editor", "Quit", "Reload"]
+MAINMENU_ITEM_LABELS = ["Resume", "Editor", "Quit"]
 MAINMENU_ITEM_INFO = ["Resume the game.",
                       "Switch between 'Game' and 'Editor' mode. This is a future feature not yet implemented.", 
                       "Quit the game. Without saving."]
