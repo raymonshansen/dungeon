@@ -199,32 +199,28 @@ class Dungeon():
         cells.append(start)
         while cells:
             current = choice(cells)
-            print(current)
             current.set_type(TileTypes.FLOOR)
             self.corridor_tiles.append(current)
             one_step_valid = list()
             two_step_valid = list()
+            x, y = current.coor
             for key in cons.FOUR_DIRECTIONS:
                 tup = cons.FOUR_DIRECTIONS.get(key)
-                x, y = current.coor
                 neig = level_with_rooms.get_tile_neighbour(x, y, tup, 2)
-                # TODO: What if the first tile we looked at was off the map!?
-                if not neig:
-                    # Abort if we go off the map!
-                    break
-                elif neig.get_type() == TileTypes.WALL:
-                    one_step_valid.append(neig)
+                if neig and neig.get_type() == TileTypes.WALL:
                     neig2 = level_with_rooms.get_tile_neighbour(x, y, tup)
                     if neig2 and neig2.get_type() == TileTypes.WALL:
+                        one_step_valid.append(neig)
                         two_step_valid.append(neig2)
             if not one_step_valid:
                 cells.remove(current)
             else:
-                idx = randint(0, len(one_step_valid)-1)
-                one_step_valid[idx].set_type(TileTypes.FLOOR)
-                two_step_valid[idx].set_type(TileTypes.FLOOR)
-                self.corridor_tiles.append(two_step_valid[idx])
-                cells.append(one_step_valid[idx])
+                zipped = list(zip(one_step_valid, two_step_valid))
+                one, two = choice(zipped)
+                one.set_type(TileTypes.FLOOR)
+                two.set_type(TileTypes.FLOOR)
+                self.corridor_tiles.append(two)
+                cells.append(one)
 
         return level_with_rooms
 
