@@ -129,8 +129,8 @@ class Dungeon():
         self.screen = surface
         self.corridor_tiles = list()
         self.rooms = list()
-        self.startingtile = None
         self.map = self.generate_dungeon()
+        self.startingtile = choice(self.corridor_tiles)
 
     def get_starting_coor(self):
         return self.startingtile.coor
@@ -140,7 +140,7 @@ class Dungeon():
         level_with_rooms = self.generate_rooms()
         level_with_corridors = self.generate_corridors(level_with_rooms)
         self.generate_doors(level_with_corridors)
-        self.remove_dead_ends(level_with_corridors)
+        #self.remove_dead_ends(level_with_corridors)
         return level_with_corridors
 
     def is_dead_end(self, tile, level):
@@ -175,7 +175,7 @@ class Dungeon():
                 doornum -= 1
         return level_with_corridors
 
-    def find_startingtile(self, level_with_rooms):
+    def find_maze_start(self, level_with_rooms):
         starting = False
         while not starting:
             starting = choice(level_with_rooms.tiles)
@@ -190,15 +190,15 @@ class Dungeon():
                     starting = False
                 else:
                     self.logview.post("Startingtile: x: {} y: {}".format(x, y), MsgType.DEBUG)
-                    self.startingtile = starting
                     return starting
 
     def generate_corridors(self, level_with_rooms):
-        start = self.find_startingtile(level_with_rooms)
+        start = self.find_maze_start(level_with_rooms)
         cells = list()
         cells.append(start)
         while cells:
             current = choice(cells)
+            print(current)
             current.set_type(TileTypes.FLOOR)
             self.corridor_tiles.append(current)
             one_step_valid = list()
@@ -237,7 +237,7 @@ class Dungeon():
         return num
 
     def generate_rooms(self):
-        level_with_rooms = Map(self.screen, self.logview, 63, 63)
+        level_with_rooms = Map(self.screen, self.logview, 33, 33)
         roomnum = randint(7, 17)
         maxtries = 100
         tries = 0
@@ -249,11 +249,11 @@ class Dungeon():
             # want to fiddle with them later...
             width = self.randint_odd(6, 16)
             height = self.randint_odd(6, 16)
-            left = self.randint_even(0, 49 - width)
-            top = self.randint_even(0, 49 - height)
+            left = self.randint_even(0, 33 - width)
+            top = self.randint_even(0, 33 - height)
             while left <= 1 or top <= 1:
-                left = self.randint_even(0, 49 - width)
-                top = self.randint_even(0, 49 - height)
+                left = self.randint_even(0, 33 - width)
+                top = self.randint_even(0, 33 - height)
 
             room = Room(left, top, width, height, level_with_rooms)
             good = True

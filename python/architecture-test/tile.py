@@ -26,7 +26,7 @@ class Tile():
         self.set_type(0)
         darkpath = os.path.join('tiles', 'dark.png')
         self.light = pygame.image.load(darkpath).convert()
-        self.status = TileStatus.UNEXPLORED
+        self.status = TileStatus.EXPLORED
         self.set_light(255)
         self.debugmark = False
         self.debugcol = None
