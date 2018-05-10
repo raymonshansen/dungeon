@@ -84,21 +84,32 @@ class Room():
 
     def wall_tiles(self):
         wallist = list()
-        north = self.get_top_wall()
-        wallist += north
-        self.doors += self.random_tile_from_list(north, randint(1, 3))
-        south = self.get_bottom_wall()
-        wallist += south
-        self.doors += self.random_tile_from_list(south, randint(1, 3))
-        west = self.get_left_wall()
-        wallist += west
-        self.doors += self.random_tile_from_list(west, randint(1, 3))
-        east = self.get_right_wall()
-        wallist += east
-        self.doors += self.random_tile_from_list(east, randint(1, 3))
-        corners = self.get_corner_wall()
-        wallist += corners
+        wallist += self.get_top_wall()
+        for tile in wallist:
+            tile.set_debug((0,100,100))
+        wallist += self.get_bottom_wall()
+        wallist += self.get_left_wall()
+        wallist += self.get_right_wall()
+        wallist += self.get_corner_wall()
         return wallist
+
+    def set_doors(self, doornum):
+        chosen_doors = list()
+        potential_doors = list()
+        for tile in self.get_top_wall():
+            x, y = tile.coor
+            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('N'))
+            print(pot)
+        for tile in self.get_bottom_wall():
+            x, y = tile.coor
+            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('S'))
+        for tile in self.get_left_wall():
+            x, y = tile.coor
+            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('W'))
+        for tile in self.get_right_wall():
+            x, y = tile.coor
+            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('E'))
+        self.doors = chosen_doors
 
     def floor_tiles(self):
         floorlist = list()
@@ -131,6 +142,16 @@ class Dungeon():
         self.rooms = list()
         self.map = self.generate_dungeon()
         self.startingtile = choice(self.corridor_tiles)
+        for tile in self.corridor_tiles:
+            tile.set_debug((255,0,0))
+        for room in self.rooms:
+            for tile in room.walls:
+                tile.set_debug((0,255,0))
+            for tile in room.doors:
+                tile.set_debug((0,0,255))
+            for tile in room.floor:
+                tile.set_debug((0,255,255))
+
 
     def get_starting_coor(self):
         return self.startingtile.coor
@@ -170,9 +191,7 @@ class Dungeon():
         # For each room, pick a number of doors
         for room in self.rooms:
             doornum = randint(1, 5)
-            while doornum:
-                choice(room.doors).set_type(TileTypes.FLOOR)
-                doornum -= 1
+            room.set_doors(doornum)
         return level_with_corridors
 
     def find_maze_start(self, level_with_rooms):
@@ -264,6 +283,8 @@ class Dungeon():
                 room.set_floor_tiles()
                 self.rooms.append(room)
                 self.logview.post("Room nr: {}. left: {} top: {} width: {} height: {}".format(len(self.rooms), room.left, room.top, room.width, room.height), MsgType.DEBUG)
+            else:
+                del room
             tries += 1
 
         # Print the results to the logviewer.
