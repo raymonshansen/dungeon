@@ -65,13 +65,13 @@ class Map():
         else:
             return 0
 
-    def get_tile_neighbour(self, tile, dir, numstep=1):
+    def get_tile_neighbour(self, tile, dir_tup, numstep=1):
         """Return the neighbour-tile
         numstep in that dierction. Might contain zeroes (see get_tile).
         """
         x, y = tile.coor
-        xstep = x * numstep
-        ystep = y * numstep
+        xstep = dir_tup[0] * numstep
+        ystep = dir_tup[1] * numstep
         return self.get_tile(x + xstep, y + ystep)
 
     def get_tile_neighbours(self, x, y):
