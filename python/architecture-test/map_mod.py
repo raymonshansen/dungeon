@@ -28,6 +28,10 @@ class Map():
         self.view_width = cons.MAP_VIEW_TW
         self.view_height = cons.MAP_VIEW_TH
         self.tiles = self.setup_tiles(self.width, self.height, TypeBank())
+    
+    def get_width_height(self):
+        """Return the width and height of the map."""
+        return self.width, self.height
 
     def set_type(self, x, y, tiletype):
         """Enables setting a tile type from outside the map."""
