@@ -134,7 +134,7 @@ class Dungeon():
     def generate_dungeon(self):
         """Wrapper for various stages of random generation."""
         self.generate_rooms()
-        #self.generate_corridors()
+        self.generate_corridors()
         #self.remove_dead_ends()
         #self.generate_doors()
 
@@ -182,35 +182,41 @@ class Dungeon():
                 if not (x % 2) or not (y % 2):
                     starting = False
                 else:
+                    self.logview.post("maze start: {}".format(starting), MsgType.INFO)
                     return starting
 
     def generate_corridors(self):
-        start = self.find_maze_start()
+        start = self.map.get_tile(1, 1)
         cells = list()
         cells.append(start)
         while cells:
             current = choice(cells)
             current.set_type(TileTypes.FLOOR)
             self.corridor_tiles.append(current)
-            one_step_valid = list()
-            two_step_valid = list()
+            can_dig = list()
+            valid_neighbours = list()
             for key in cons.FOUR_DIRECTIONS:
                 tup = cons.FOUR_DIRECTIONS.get(key)
                 neig = self.map.get_tile_neighbour(current, tup, 2)
-                if neig != 0 and neig.get_type() == TileTypes.WALL:
-                    neig2 = self.map.get_tile_neighbour(current, tup)
-                    if neig2 != 0 and neig2.get_type() == TileTypes.WALL:
-                        one_step_valid.append(neig)
-                        two_step_valid.append(neig2)
-            if not one_step_valid:
+                dig = self.map.get_tile_neighbour(current, tup)
+                if neig and dig:
+                    neig_is_wall = neig.get_type() == TileTypes.WALL
+                    dig_is_wall = dig.get_type() == TileTypes.WALL
+                    if neig_is_wall and dig_is_wall:
+                        valid_neighbours.append(neig)
+                        can_dig.append(dig)
+            print(valid_neighbours, can_dig)
+            self.logview.post("valid_neighbours: {}".format(valid_neighbours), MsgType.INFO)
+            self.logview.post("can_dig: {}".format(can_dig), MsgType.INFO)            
+            if not valid_neighbours:
                 cells.remove(current)
             else:
-                zipped = list(zip(one_step_valid, two_step_valid))
-                one, two = choice(zipped)
-                one.set_type(TileTypes.FLOOR)
-                two.set_type(TileTypes.FLOOR)
-                self.corridor_tiles.append(two)
-                cells.append(one)
+                # Pick a random direction to go
+                idx = randint(0, len(valid_neighbours) - 1)
+                valid_neighbours[idx].set_type(TileTypes.FLOOR)
+                can_dig[idx].set_type(TileTypes.FLOOR)
+                self.corridor_tiles.append(can_dig[idx])
+                cells.append(valid_neighbours[idx])
 
     def randint_odd(self, start, stop):
         num = randint(start, stop)
@@ -234,8 +240,8 @@ class Dungeon():
         while tries < maxtries and len(self.rooms) < roomnum:
             width = self.randint_odd(6, 16)
             height = self.randint_odd(6, 16)
-            left = self.randint_even(1, 33 - width)
-            top = self.randint_even(1, 33 - height)
+            left = self.randint_even(2, 33 - width)
+            top = self.randint_even(2, 33 - height)
             tiles_in_room = self.map.get_tiles_in_rect(left, top, width, height)
             # Make sure we don't overlap existing rooms
             good = True
