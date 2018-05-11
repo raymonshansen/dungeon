@@ -28,8 +28,6 @@ class Room():
         self.set_floor_tiles()
         self.walls = self.wall_tiles()
         self.all_tiles = self.floor + self.walls
-        for tile in self.all_tiles:
-            tile.set_debug((0,255,0))
 
     def overlap_tile(self, comptile):
         """Return true if there are any tiles overlapping with the
@@ -95,7 +93,24 @@ class Room():
         return wallist
 
     def set_doors(self, doornum):
-        pass
+        possible_doors = list()
+        list_and_dir = [(self.get_top_wall(), 'N'),
+                        (self.get_bottom_wall(), 'S'),
+                        (self.get_left_wall(), 'W'),
+                        (self.get_right_wall(), 'E')]
+        for tiles, dirr in list_and_dir:
+            for tile in tiles:
+                direction = cons.FOUR_DIRECTIONS.get(dirr)
+                neighbour = self.level.get_tile_neighbour(tile, direction)
+                # A door has to lead somewhere!
+                if neighbour and neighbour.get_type() == TileTypes.FLOOR:
+                    possible_doors.append(tile)
+        while doornum:
+            self.doors.append(choice(possible_doors))
+            doornum -= 1
+        # Finally dig those doors!
+        for door in self.doors:
+            door.set_type(TileTypes.FLOOR)
 
     def floor_tiles(self):
         floorlist = list()
@@ -128,17 +143,13 @@ class Dungeon():
         self.rooms = list()
         self.map = Map(self.screen, self.logview, 33, 33)
         self.generate_dungeon()
-        #self.startingtile = choice(self.corridor_tiles)
-
-    def get_starting_coor(self):
-        return self.startingtile.coor
 
     def generate_dungeon(self):
         """Wrapper for various stages of random generation."""
         self.generate_rooms()
         self.generate_corridors()
-        #self.generate_doors()
-        #self.remove_dead_ends()
+        self.generate_doors()
+        self.remove_dead_ends()
 
     def is_dead_end(self, tile):
         """Return true if tile is a dead end."""
@@ -150,7 +161,7 @@ class Dungeon():
         return 0 < i < 2
 
     def remove_dead_ends(self):
-        """Removes some of the dead ends of the maze"""
+        """Remove all of the dead ends of the maze."""
         done = False
         while not done:
             done = True
@@ -159,15 +170,13 @@ class Dungeon():
                 if self.is_dead_end(tile):
                     tile.set_type(TileTypes.WALL)
                     self.corridor_tiles.remove(tile)
-                    # Keep checking
                     done = False
 
-    def generate_doors(self, level_with_corridors):
+    def generate_doors(self):
         # For each room, pick a number of doors
         for room in self.rooms:
             doornum = randint(1, 5)
             room.set_doors(doornum)
-        return level_with_corridors
 
     def find_maze_start(self):
         starting = False
@@ -209,7 +218,7 @@ class Dungeon():
                     if neig_is_wall and dig_is_wall:
                         valid_neighbours.append(neig)
                         can_dig.append(dig)
-            
+
             # Either we don't have any valid directions to go.
             if not valid_neighbours:
                 # In which case we go back and pick one of the others.
@@ -218,7 +227,7 @@ class Dungeon():
             else:
                 # In which case we pick a random direction to go.
                 # This choice can greatly influence the look of the maze!
-                # Currently, it's a completely random choice, but it go favor 
+                # Currently, it's a completely random choice, but it go favor
                 # the direction it came from, vertical or horizontal etc.
                 idx = randint(0, len(valid_neighbours) - 1)
                 valid_neighbours[idx].set_type(TileTypes.FLOOR)
@@ -250,25 +259,17 @@ class Dungeon():
             height = self.randint_odd(6, 16)
             left = self.randint_even(2, map_w - width)
             top = self.randint_even(2, map_h - height)
-            tiles_in_room = self.map.get_tiles_in_rect(left, top, width, height)
+            tiles_in_rom = self.map.get_tiles_in_rect(left, top, width, height)
             # Make sure we don't overlap existing rooms
             good = True
             for existing_room in self.rooms:
-                for tile in tiles_in_room:
+                for tile in tiles_in_rom:
                     if existing_room.overlap_tile(tile):
                         good = False
-
             if good:
                 room = Room(left, top, width, height, self.map)
                 self.rooms.append(room)
-                self.logview.post("Room nr: {}. left: {} top: {} width: {} height: {}".format(len(self.rooms), room.left, room.top, room.width, room.height), MsgType.DEBUG)
             tries += 1
-
-        # Print the results to the logviewer.
-        self.logview.post("\n", MsgType.INFO)
-        self.logview.post("Total rooms: {}".format(len(self.rooms)), MsgType.INFO)
-        self.logview.post("Tries: {}".format(tries), MsgType.INFO)
-        self.logview.post("\n", MsgType.INFO)
 
     def draw(self, screen, x, y):
         """Draws the map on the screen."""
