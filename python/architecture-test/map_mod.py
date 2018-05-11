@@ -65,12 +65,13 @@ class Map():
         else:
             return 0
 
-    def get_tile_neighbour(self, x, y, dir, numstep=1):
-        """Take and x and y and dir. Return the neighbour-tile
+    def get_tile_neighbour(self, tile, dir, numstep=1):
+        """Return the neighbour-tile
         numstep in that dierction. Might contain zeroes (see get_tile).
         """
-        xstep = dir[0] * numstep
-        ystep = dir[1] * numstep
+        x, y = tile.coor
+        xstep = x * numstep
+        ystep = y * numstep
         return self.get_tile(x + xstep, y + ystep)
 
     def get_tile_neighbours(self, x, y):
@@ -88,6 +89,17 @@ class Map():
         coordinates = plot_line(x1, y1, x2, y2)
         ret = [self.get_tile(cor[0], cor[1]) for cor in coordinates]
         return ret
+    
+    def get_tiles_in_rect(self, left, top, width, height):
+        """Return a list of all the tiles in the rectangle made
+        by left, top, width and height.
+        Might contain zeroes if part of rectangle is outside map.
+        """
+        retlist = list()
+        for x in range(left, left + width):
+            for y in range(top, top + height):
+                retlist.append(self.get_tile(x, y))
+        return retlist
 
     def refresh_visibility(self, x, y, radius):
         """Refresh the visibility given a certain point."""

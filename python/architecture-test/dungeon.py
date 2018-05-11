@@ -25,6 +25,7 @@ class Room():
         self.level = level
         self.doors = list()
         self.floor = self.floor_tiles()
+        self.set_floor_tiles()
         self.walls = self.wall_tiles()
         self.all_tiles = self.floor + self.walls
 
@@ -85,8 +86,6 @@ class Room():
     def wall_tiles(self):
         wallist = list()
         wallist += self.get_top_wall()
-        for tile in wallist:
-            tile.set_debug((0,100,100))
         wallist += self.get_bottom_wall()
         wallist += self.get_left_wall()
         wallist += self.get_right_wall()
@@ -94,22 +93,7 @@ class Room():
         return wallist
 
     def set_doors(self, doornum):
-        chosen_doors = list()
-        potential_doors = list()
-        for tile in self.get_top_wall():
-            x, y = tile.coor
-            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('N'))
-            print(pot)
-        for tile in self.get_bottom_wall():
-            x, y = tile.coor
-            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('S'))
-        for tile in self.get_left_wall():
-            x, y = tile.coor
-            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('W'))
-        for tile in self.get_right_wall():
-            x, y = tile.coor
-            pot = self.level.get_tile_neighbour(x, y, cons.FOUR_DIRECTIONS.get('E'))
-        self.doors = chosen_doors
+        pass
 
     def floor_tiles(self):
         floorlist = list()
@@ -140,48 +124,37 @@ class Dungeon():
         self.screen = surface
         self.corridor_tiles = list()
         self.rooms = list()
-        self.map = self.generate_dungeon()
-        self.startingtile = choice(self.corridor_tiles)
-        for tile in self.corridor_tiles:
-            tile.set_debug((255,0,0))
-        for room in self.rooms:
-            for tile in room.walls:
-                tile.set_debug((0,255,0))
-            for tile in room.doors:
-                tile.set_debug((0,0,255))
-            for tile in room.floor:
-                tile.set_debug((0,255,255))
-
+        self.map = Map(self.screen, self.logview, 33, 33)
+        self.generate_dungeon()
+        #self.startingtile = choice(self.corridor_tiles)
 
     def get_starting_coor(self):
         return self.startingtile.coor
 
     def generate_dungeon(self):
         """Wrapper for various stages of random generation."""
-        level_with_rooms = self.generate_rooms()
-        level_with_corridors = self.generate_corridors(level_with_rooms)
-        self.generate_doors(level_with_corridors)
-        #self.remove_dead_ends(level_with_corridors)
-        return level_with_corridors
+        self.generate_rooms()
+        #self.generate_corridors()
+        #self.remove_dead_ends()
+        #self.generate_doors()
 
-    def is_dead_end(self, tile, level):
+    def is_dead_end(self, tile):
         """Return true if tile is a dead end."""
-        x, y = tile.coor
         i = 0
         for _, tup in cons.FOUR_DIRECTIONS.items():
-            neighbour = level.get_tile_neighbour(x, y, tup, 1)
+            neighbour = self.map.get_tile_neighbour(tile, tup)
             if neighbour.get_type() == TileTypes.FLOOR:
                 i += 1
         return 0 < i < 2
 
-    def remove_dead_ends(self, level):
+    def remove_dead_ends(self):
         """Removes some of the dead ends of the maze"""
         done = False
         while not done:
             done = True
             # Check for dead ends
             for tile in self.corridor_tiles:
-                if self.is_dead_end(tile, level):
+                if self.is_dead_end(tile):
                     tile.set_type(TileTypes.WALL)
                     self.corridor_tiles.remove(tile)
                     # Keep checking
@@ -194,41 +167,39 @@ class Dungeon():
             room.set_doors(doornum)
         return level_with_corridors
 
-    def find_maze_start(self, level_with_rooms):
+    def find_maze_start(self):
         starting = False
         while not starting:
-            starting = choice(level_with_rooms.tiles)
+            starting = choice(self.map.tiles)
             # Can't start digging inside the rooms!
             for room in self.rooms:
                 overlap = False
                 if room.overlap_tile(starting):
                     overlap = True
             if not overlap:
+                # Check for valid coordinates!
                 x, y = starting.coor
                 if not (x % 2) or not (y % 2):
                     starting = False
                 else:
-                    self.logview.post("Startingtile: x: {} y: {}".format(x, y), MsgType.DEBUG)
                     return starting
 
-    def generate_corridors(self, level_with_rooms):
-        start = self.find_maze_start(level_with_rooms)
+    def generate_corridors(self):
+        start = self.find_maze_start()
         cells = list()
         cells.append(start)
         while cells:
             current = choice(cells)
-            print(current)
             current.set_type(TileTypes.FLOOR)
             self.corridor_tiles.append(current)
             one_step_valid = list()
             two_step_valid = list()
-            x, y = current.coor
             for key in cons.FOUR_DIRECTIONS:
                 tup = cons.FOUR_DIRECTIONS.get(key)
-                neig = level_with_rooms.get_tile_neighbour(x, y, tup, 2)
-                if neig and neig.get_type() == TileTypes.WALL:
-                    neig2 = level_with_rooms.get_tile_neighbour(x, y, tup)
-                    if neig2 and neig2.get_type() == TileTypes.WALL:
+                neig = self.map.get_tile_neighbour(current, tup, 2)
+                if neig != 0 and neig.get_type() == TileTypes.WALL:
+                    neig2 = self.map.get_tile_neighbour(current, tup)
+                    if neig2 != 0 and neig2.get_type() == TileTypes.WALL:
                         one_step_valid.append(neig)
                         two_step_valid.append(neig2)
             if not one_step_valid:
@@ -240,8 +211,6 @@ class Dungeon():
                 two.set_type(TileTypes.FLOOR)
                 self.corridor_tiles.append(two)
                 cells.append(one)
-
-        return level_with_rooms
 
     def randint_odd(self, start, stop):
         num = randint(start, stop)
@@ -256,7 +225,6 @@ class Dungeon():
         return num
 
     def generate_rooms(self):
-        level_with_rooms = Map(self.screen, self.logview, 33, 33)
         roomnum = randint(7, 17)
         maxtries = 100
         tries = 0
@@ -264,27 +232,22 @@ class Dungeon():
         self.logview.post("Maxtries: {}".format(maxtries), MsgType.INFO)
 
         while tries < maxtries and len(self.rooms) < roomnum:
-            # Could move these into the Room-class, but might
-            # want to fiddle with them later...
             width = self.randint_odd(6, 16)
             height = self.randint_odd(6, 16)
-            left = self.randint_even(0, 33 - width)
-            top = self.randint_even(0, 33 - height)
-            while left <= 1 or top <= 1:
-                left = self.randint_even(0, 33 - width)
-                top = self.randint_even(0, 33 - height)
-
-            room = Room(left, top, width, height, level_with_rooms)
+            left = self.randint_even(1, 33 - width)
+            top = self.randint_even(1, 33 - height)
+            tiles_in_room = self.map.get_tiles_in_rect(left, top, width, height)
+            # Make sure we don't overlap existing rooms
             good = True
             for existing_room in self.rooms:
-                if room.overlap_room(existing_room):
-                    good = False
+                for tile in tiles_in_room:
+                    if existing_room.overlap_tile(tile):
+                        good = False
+
             if good:
-                room.set_floor_tiles()
+                room = Room(left, top, width, height, self.map)
                 self.rooms.append(room)
                 self.logview.post("Room nr: {}. left: {} top: {} width: {} height: {}".format(len(self.rooms), room.left, room.top, room.width, room.height), MsgType.DEBUG)
-            else:
-                del room
             tries += 1
 
         # Print the results to the logviewer.
@@ -292,8 +255,6 @@ class Dungeon():
         self.logview.post("Total rooms: {}".format(len(self.rooms)), MsgType.INFO)
         self.logview.post("Tries: {}".format(tries), MsgType.INFO)
         self.logview.post("\n", MsgType.INFO)
-
-        return level_with_rooms
 
     def draw(self, screen, x, y):
         """Draws the map on the screen."""

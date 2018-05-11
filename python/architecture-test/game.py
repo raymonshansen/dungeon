@@ -33,9 +33,8 @@ class Game():
         statsurface = pg.Surface(cons.STAT_DIM)
         self.statview = StatView(statsurface, cons.STAT_POS)
 
-        x, y = self.dungeon.get_starting_coor()
-        self.px = x
-        self.py = y
+        self.px = 16
+        self.py = 16
 
     def handle_events(self):
         events = pg.event.get()
