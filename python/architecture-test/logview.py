@@ -1,6 +1,7 @@
 """Log module."""
 import pygame
 from message import Message
+import constants as cons
 
 
 class LogView():
@@ -27,7 +28,7 @@ class LogView():
             if current_y < 0:
                 break
             message.rect.y = current_y
-            message.rect.x += 5
+            message.rect.x += 12
             message.draw(self.surface)
 
     def draw(self, screen):
@@ -38,9 +39,12 @@ class LogView():
             # Blit messages first
             self.draw_messages()
             # Draw border-line
-            linecol = pygame.color.Color('antiquewhite')
+            linecol = cons.MAINMENU_SELECTED_COL
             start_pos = (0, 0)
             end_pos = (0, self.rect.height)
+            pygame.draw.line(self.surface, linecol, start_pos, end_pos, 1)
+            start_pos = (7, 7)
+            end_pos = (7, self.rect.height - 7)            
             pygame.draw.line(self.surface, linecol, start_pos, end_pos, 1)
             # Blit to main screen last
             screen.blit(self.surface, self.rect)
