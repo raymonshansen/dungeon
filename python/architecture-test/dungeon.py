@@ -49,35 +49,33 @@ class Room():
         return False
 
     def get_top_wall(self):
-        wallist = list()
-        for x in range(self.left+1, self.left + self.width-1):
-            wallist.append(self.level.get_tile(x, self.top))
-        return wallist
+        x1, y1 = self.left + 1, self.top
+        x2, y2 = self.left + self.width - 2, y1
+        return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_bottom_wall(self):
-        wallist = list()
-        for x in range(self.left+1, self.left + self.width-1):
-            wallist.append(self.level.get_tile(x, self.top + self.height - 1))
-        return wallist
+        x1, y1 = self.left + 1, self.top + self.height - 1
+        x2, y2 = self.left + self.width - 1, y1
+        return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_left_wall(self):
-        wallist = list()
-        for y in range(self.top + 1, self.top + self.height - 1):
-            wallist.append(self.level.get_tile(self.left, y))
-        return wallist
+        x1, y1 = self.left, self.top + 1
+        x2, y2 = x1, self.top + self.height - 2
+        return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_right_wall(self):
-        wallist = list()
-        for y in range(self.top + 1, self.top + self.height - 1):
-            wallist.append(self.level.get_tile(self.left + self.width - 1, y))
-        return wallist
+        x1, y1 = self.left + self.width - 1, self.top + 1
+        x2, y2 = x1, self.top + self.height - 2
+        return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_corner_wall(self):
         wallist = list()
-        wallist.append(self.level.get_tile(self.left, self.top))
-        wallist.append(self.level.get_tile(self.left, self.top + self.height - 1))
-        wallist.append(self.level.get_tile(self.left + self.width - 1, self.top))
-        wallist.append(self.level.get_tile(self.left + self.width - 1, self.top + self.height - 1))
+        corners = [(self.left, self.top),
+                   (self.left, self.top + self.height - 1),
+                   (self.left + self.width - 1, self.top),
+                   (self.left + self.width - 1, self.top + self.height - 1)]
+        for corner in corners:
+            wallist.append(self.level.get_tile(*corner))
         return wallist
 
     def random_tile_from_list(self, tiles, tilenum):
@@ -106,7 +104,8 @@ class Room():
                 if neighbour and neighbour.get_type() == TileTypes.FLOOR:
                     possible_doors.append(tile)
         while doornum:
-            self.doors.append(choice(possible_doors))
+            door = choice(possible_doors)
+            self.doors.append(door)
             doornum -= 1
         # Finally dig those doors!
         for door in self.doors:
