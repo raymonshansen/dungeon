@@ -26,7 +26,7 @@ class Tile():
         self.set_type(0)
         darkpath = os.path.join('tiles', 'dark.png')
         self.light = pygame.image.load(darkpath).convert()
-        self.status = TileStatus.EXPLORED
+        self.status = TileStatus.UNEXPLORED
         self.set_light(255)
         self.debugmark = False
         self.debugcol = None
@@ -60,7 +60,7 @@ class Tile():
 
         # Make sure already explored tiles never go completely dark again.
         if self.status == TileStatus.EXPLORED and luminosity == 255:
-            self.light.set_alpha(100)
+            self.light.set_alpha(230)
             return
 
         self.light.set_alpha(luminosity)
