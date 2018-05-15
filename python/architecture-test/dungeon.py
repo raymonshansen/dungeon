@@ -49,26 +49,31 @@ class Room():
         return False
 
     def get_top_wall(self):
+        """Return a list of all tiles along the top wall, except corners."""
         x1, y1 = self.left + 1, self.top
         x2, y2 = self.left + self.width - 2, y1
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_bottom_wall(self):
+        """Return a list of all tiles along the bottom wall, except corners."""
         x1, y1 = self.left + 1, self.top + self.height - 1
         x2, y2 = self.left + self.width - 1, y1
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_left_wall(self):
+        """Return a list of all tiles along the left wall, except corners."""        
         x1, y1 = self.left, self.top + 1
         x2, y2 = x1, self.top + self.height - 2
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_right_wall(self):
+        """Return a list of all tiles along the right wall, except corners."""
         x1, y1 = self.left + self.width - 1, self.top + 1
         x2, y2 = x1, self.top + self.height - 2
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_corner_wall(self):
+        """Return a list of the four corner-tiles of a room."""
         wallist = list()
         corners = [(self.left, self.top),
                    (self.left, self.top + self.height - 1),
@@ -79,9 +84,11 @@ class Room():
         return wallist
 
     def random_tile_from_list(self, tiles, tilenum):
+        """Return a random tile from a list of tiles."""
         return sample(tiles, tilenum)
 
     def wall_tiles(self):
+        """Return the list of all the walltiles of a room."""
         wallist = list()
         wallist += self.get_top_wall()
         wallist += self.get_bottom_wall()
@@ -91,6 +98,8 @@ class Room():
         return wallist
 
     def set_doors(self, doornum):
+        """Set a random number of doors. Same tile might be chosen as
+        door several times."""
         possible_doors = list()
         list_and_dir = [(self.get_top_wall(), 'N'),
                         (self.get_bottom_wall(), 'S'),
@@ -112,6 +121,7 @@ class Room():
             door.set_type(TileTypes.FLOOR)
 
     def floor_tiles(self):
+        """Find the floor tiles of a room."""
         floorlist = list()
         for x in range(self.left + 1, self.left + self.width - 1):
             for y in range(self.top + 1, self.top + self.height - 1):
@@ -119,6 +129,7 @@ class Room():
         return floorlist
 
     def set_floor_tiles(self):
+        """Set all the floor-tiles in a room."""
         for tile in self.floor:
             tile.set_type(TileTypes.FLOOR)
 
@@ -172,12 +183,14 @@ class Dungeon():
                     done = False
 
     def generate_doors(self):
+        """Add doors to some of the walls that lead to corridor-tiles."""
         # For each room, pick a number of doors
         for room in self.rooms:
             doornum = randint(1, 5)
             room.set_doors(doornum)
 
     def find_maze_start(self):
+        """Find a valid place for the maze-algorithm to start."""
         starting = False
         map_width, map_height = self.map.get_width_height()
         while not starting:
@@ -197,6 +210,7 @@ class Dungeon():
                 starting = False
 
     def generate_corridors(self):
+        """Maze algorithm that digs a perfect maze(no loops)."""
         start = self.find_maze_start()
         cells = list()
         cells.append(start)
@@ -234,30 +248,23 @@ class Dungeon():
                 self.corridor_tiles.append(can_dig[idx])
                 cells.append(valid_neighbours[idx])
 
-    def randint_odd(self, start, stop):
-        num = randint(start, stop)
-        while not num % 2:
-            num = randint(start, stop)
-        return num
-
-    def randint_even(self, start, stop):
-        num = randint(start, stop)
-        while num % 2:
-            num = randint(start, stop)
-        return num
-
     def generate_rooms(self):
-        roomnum = randint(7, 17)
-        maxtries = 100
+        roomnum = randint(10, 25)
+        maxtries = 500
         tries = 0
+        actual_rooms = 0
         self.logview.post("Roomnum: {}".format(roomnum), MsgType.INFO)
         self.logview.post("Maxtries: {}".format(maxtries), MsgType.INFO)
         map_w, map_h = self.map.get_width_height()
+        width_range = [i for i in range(7, 11, 2)]
+        height_range = [i for i in range(7, 11, 2)]
+        left_range = [i for i in range(2, map_w - width, 2)]
+        top_range = 
         while tries < maxtries and len(self.rooms) < roomnum:
-            width = self.randint_odd(6, 16)
-            height = self.randint_odd(6, 16)
-            left = self.randint_even(2, map_w - width)
-            top = self.randint_even(2, map_h - height)
+            width = choice(width_range)
+            height = choice(height_range)
+            left = choice([i for i in range(2, map_w - width, 2)])
+            top = choice([i for i in range(2, map_h - height, 2)])
             tiles_in_rom = self.map.get_tiles_in_rect(left, top, width, height)
             # Make sure we don't overlap existing rooms
             good = True
@@ -268,7 +275,9 @@ class Dungeon():
             if good:
                 room = Room(left, top, width, height, self.map)
                 self.rooms.append(room)
+                actual_rooms += 1
             tries += 1
+        self.logview.post("Actual rooms: {}".format(actual_rooms), MsgType.INFO)        
 
     def draw(self, screen, x, y):
         """Draws the map on the screen."""
