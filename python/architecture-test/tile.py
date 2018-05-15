@@ -52,6 +52,8 @@ class Tile():
         self.status = status
 
     def set_debug(self, col):
+        """Set a colored dot in the middle of tile.
+        Used for debugging purposes."""
         self.debugmark = True
         self.debugcol = col
 
@@ -67,6 +69,7 @@ class Tile():
 
     @property
     def coor(self):
+        """Return coordinate tuple."""
         return (self.x, self.y)
 
     @property
