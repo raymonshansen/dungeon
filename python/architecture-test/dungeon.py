@@ -249,6 +249,9 @@ class Dungeon():
                 cells.append(valid_neighbours[idx])
 
     def generate_rooms(self):
+        """Try to place rooms of various size within the current level space.
+        Increase the number of maxtries to have higher room density.
+        """
         roomnum = randint(10, 25)
         maxtries = 500
         tries = 0
@@ -258,8 +261,7 @@ class Dungeon():
         map_w, map_h = self.map.get_width_height()
         width_range = [i for i in range(7, 11, 2)]
         height_range = [i for i in range(7, 11, 2)]
-        left_range = [i for i in range(2, map_w - width, 2)]
-        top_range = 
+
         while tries < maxtries and len(self.rooms) < roomnum:
             width = choice(width_range)
             height = choice(height_range)
