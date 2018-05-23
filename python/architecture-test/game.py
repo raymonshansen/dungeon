@@ -32,7 +32,7 @@ class Hero():
 class Monster():
     def __init__(self, name):
         self.speed = 50
-        self.next_action = False
+        self.next_action = True
         self.energy = 0
         self.name = name
 
@@ -51,6 +51,7 @@ class Monster():
 
     def can_take_turn(self):
         return self.energy >= TURN_COST
+
 
 class Game():
     def __init__(self, screen, statemanager):
@@ -73,6 +74,7 @@ class Game():
         # Testing time-management
         self.hero = Hero("Hero")
         self.rat = Monster("Rat")
+        self.actor_idx = 0
         self.actors = [self.hero, self.rat]
 
     def handle_events(self):
@@ -115,24 +117,32 @@ class Game():
                 self.hero.set_action(True)
 
     def tick(self):
-        # If the player doesn't go no one else does either
-        if self.hero.can_take_turn() and self.hero.next_action:
-            for actor in self.actors:
-                # Give everyone some energy
-                # This amount will be a function of actors speed later.
-                # For now, let's see if it works at all.
-                actor.energy += 20
-                # Everyone who can, gets to go!
-                if actor.can_take_turn():
-                    # Some actions spend less of your 1000 energy.
-                    # You will then regain a turn faster.
-                    actor.do_action()
-                    self.logview.post(actor.name + " " + str(actor.energy), MsgType.INFO)
-        elif not self.hero.can_take_turn():
-            for actor in self.actors:
-                actor.energy += 20
+        # Loop through monsters and player alike.
+        # If it now has enough to do an action, we ask it what
+        current_actor = self.actors[self.actor_idx]
+        if current_actor.can_take_turn():
+            # Ask it what it wants to do, all monsters will know
+            action = current_actor.next_action
+            # If it had an action prepared
+            if action:
+                current_actor.do_action()
+                string = current_actor.name + " " + str(current_actor.energy)
+                self.logview.post(string, MsgType.INFO)
+                # This will somehow deduct energy from the actor
+                # Give the current one some energy based on its speed attribute
+                current_actor.energy += 20
+                # Move on to the next
+                self.actor_idx = (self.actor_idx + 1) % len(self.actors)
+            # Only the player will sometimes NOT have decided what to do!
+            else:
+                # This will wait for the player to give the hero an action
+                return
+        # If it could not yet take a turn
         else:
-            return
+            # It gets some energy back
+            current_actor.energy += 20
+            # Move on to the next
+            self.actor_idx = (self.actor_idx + 1) % len(self.actors)
 
 # Run from the while loop of state-manager:
     def update(self):
