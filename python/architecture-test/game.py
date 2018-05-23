@@ -46,23 +46,20 @@ class Game():
             if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 self.statemanager.switch_state('EXITING')
                 break
-            # Move the player.
+            # Move the "player".
             if event.type == pg.KEYDOWN and event.key == pg.K_UP:
                 self.py -= 1
-                string = "{}, {}".format(self.px, self.py)
-                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_DOWN:
                 self.py += 1
-                string = "{}, {}".format(self.px, self.py)
-                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_LEFT:
                 self.px -= 1
-                string = "{}, {}".format(self.px, self.py)
-                #self.logview.post(string, MsgType.INFO)
             if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
                 self.px += 1
+<<<<<<< HEAD
                 string = "{}, {}".format(self.px, self.py)
                 # self.logview.post(string, MsgType.INFO)
+=======
+>>>>>>> 8563a1c9d3ebe41917e4d580bc5bff841592d817
             # Test log
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)

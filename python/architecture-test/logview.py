@@ -28,7 +28,7 @@ class LogView():
             if current_y < 0:
                 break
             message.rect.y = current_y
-            message.rect.x += 12
+            message.rect.x = 12
             message.draw(self.surface)
 
     def draw(self, screen):
@@ -48,4 +48,3 @@ class LogView():
             pygame.draw.line(self.surface, linecol, start_pos, end_pos, 1)
             # Blit to main screen last
             screen.blit(self.surface, self.rect)
-            self.dirty = False
