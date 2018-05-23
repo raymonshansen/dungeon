@@ -4,19 +4,53 @@ import constants as cons
 from dungeon import Dungeon
 from logview import LogView
 from message import MsgType
+from statsview import StatView
 
 
-class StatView():
-    def __init__(self, surface, pos_rect):
-        self.surface = surface
-        self.topleft = pos_rect
-        self.dirty = True
+TURN_COST = 1000
 
-    def draw(self, screen):
-        if self.dirty:
-            self.surface.fill(pg.color.Color("black"))
-            screen.blit(self.surface, self.topleft)
 
+class Hero():
+    def __init__(self, name):
+        self.speed = 100
+        self.next_action = False
+        self.energy = 0
+        self.name = name
+
+    def do_action(self, action=None):
+        # return self.next_action.get_cost()
+        self.energy -= 500
+        self.next_action = False
+
+    def set_action(self, action):
+        self.next_action = action
+
+    def can_take_turn(self):
+        return self.energy >= TURN_COST
+
+
+class Monster():
+    def __init__(self, name):
+        self.speed = 50
+        self.next_action = False
+        self.energy = 0
+        self.name = name
+
+    def do_action(self, action=None):
+        """Each action will be an instance of a class.
+        This way they can be given to anyone for
+        easy moding of behaviour.
+        """
+        # return self.next_action.get_cost()
+        self.energy -= 1000
+        # Monsters are always ready!
+        self.next_action = True
+
+    def set_action(self, action):
+        self.next_action = action
+
+    def can_take_turn(self):
+        return self.energy >= TURN_COST
 
 class Game():
     def __init__(self, screen, statemanager):
@@ -35,6 +69,11 @@ class Game():
 
         self.px = 16
         self.py = 16
+
+        # Testing time-management
+        self.hero = Hero("Hero")
+        self.rat = Monster("Rat")
+        self.actors = [self.hero, self.rat]
 
     def handle_events(self):
         events = pg.event.get()
@@ -55,11 +94,6 @@ class Game():
                 self.px -= 1
             if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
                 self.px += 1
-<<<<<<< HEAD
-                string = "{}, {}".format(self.px, self.py)
-                # self.logview.post(string, MsgType.INFO)
-=======
->>>>>>> 8563a1c9d3ebe41917e4d580bc5bff841592d817
             # Test log
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)
@@ -74,10 +108,36 @@ class Game():
             # Reload level
             if event.type == pg.KEYDOWN and event.key == pg.K_r:
                 self.setup()
+            # Test time management
+            if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                # Eventually, this will inject the appropriate action instance
+                # which governs itself and has it's own cost etc.
+                self.hero.set_action(True)
+
+    def tick(self):
+        # If the player doesn't go no one else does either
+        if self.hero.can_take_turn() and self.hero.next_action:
+            for actor in self.actors:
+                # Give everyone some energy
+                # This amount will be a function of actors speed later.
+                # For now, let's see if it works at all.
+                actor.energy += 20
+                # Everyone who can, gets to go!
+                if actor.can_take_turn():
+                    # Some actions spend less of your 1000 energy.
+                    # You will then regain a turn faster.
+                    actor.do_action()
+                    self.logview.post(actor.name + " " + str(actor.energy), MsgType.INFO)
+        elif not self.hero.can_take_turn():
+            for actor in self.actors:
+                actor.energy += 20
+        else:
+            return
 
 # Run from the while loop of state-manager:
     def update(self):
         self.handle_events()
+        self.tick()
 
     def draw(self):
         self.dungeon.draw(self.screen, self.px, self.py)
