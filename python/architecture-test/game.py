@@ -72,8 +72,9 @@ class Game():
         self.py = 16
 
         # Testing time-management
+        self.hero = Hero("Hero")
         self.actor_idx = 0
-        self.actors = [Hero("Hero"), Monster("Rat"), Monster("Bat")]
+        self.actors = [self.hero, Monster("Rat"), Monster("Bat")]
 
     def handle_events(self):
         events = pg.event.get()
