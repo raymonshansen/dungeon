@@ -62,7 +62,7 @@ class Game():
             if event.type == pg.KEYDOWN and event.key == pg.K_RIGHT:
                 self.px += 1
                 string = "{}, {}".format(self.px, self.py)
-                #self.logview.post(string, MsgType.INFO)
+                # self.logview.post(string, MsgType.INFO)
             # Test log
             if event.type == pg.KEYDOWN and event.key == pg.K_l:
                 self.logview.post("Testing log.", MsgType.BATTLE)
@@ -78,6 +78,7 @@ class Game():
             if event.type == pg.KEYDOWN and event.key == pg.K_r:
                 self.setup()
 
+# Run from the while loop of state-manager:
     def update(self):
         self.handle_events()
 
