@@ -11,11 +11,15 @@ TURN_COST = 1000
 
 
 class Hero():
-    def __init__(self, name):
+    def __init__(self, name, speed):
         self.speed = 100
         self.next_action = False
-        self.energy = 0
+        self.energy = 1000
         self.name = name
+        self.speed = speed
+
+    def get_energy(self):
+        self.energy += self.speed
 
     def do_action(self, action=None):
         # return self.next_action.get_cost()
@@ -30,11 +34,15 @@ class Hero():
 
 
 class Monster():
-    def __init__(self, name):
+    def __init__(self, name, speed):
         self.speed = 50
         self.next_action = True
         self.energy = 0
         self.name = name
+        self.speed = speed
+
+    def get_energy(self):
+        self.energy += self.speed
 
     def do_action(self, action=None):
         """Each action will be an instance of a class.
@@ -42,7 +50,7 @@ class Monster():
         easy moding of behaviour.
         """
         # return self.next_action.get_cost()
-        self.energy -= 1000
+        self.energy -= 500
         # Monsters are always ready!
         self.next_action = True
 
@@ -72,9 +80,9 @@ class Game():
         self.py = 16
 
         # Testing time-management
-        self.hero = Hero("Hero")
+        self.hero = Hero("Hero", 100)
         self.actor_idx = 0
-        self.actors = [self.hero, Monster("Rat"), Monster("Bat")]
+        self.actors = [self.hero, Monster("Rat", 50), Monster("Bat", 200)]
 
     def handle_events(self):
         events = pg.event.get()
@@ -129,7 +137,7 @@ class Game():
                 self.logview.post(string, MsgType.INFO)
                 # This will somehow deduct energy from the actor
                 # Give the current one some energy based on its speed attribute
-                current_actor.energy += 20
+                current_actor.get_energy()
                 # Move on to the next
                 self.actor_idx = (self.actor_idx + 1) % len(self.actors)
             # Only the player will sometimes NOT have decided what to do!
@@ -139,7 +147,7 @@ class Game():
         # If it could not yet take a turn
         else:
             # It gets some energy back
-            current_actor.energy += 20
+            current_actor.get_energy()
             # Move on to the next
             self.actor_idx = (self.actor_idx + 1) % len(self.actors)
 
