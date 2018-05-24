@@ -157,6 +157,6 @@ class Game():
         self.tick()
 
     def draw(self):
-        self.dungeon.draw(self.screen, self.px, self.py)
+        self.dungeon.draw(self.screen)
         self.statview.draw(self.screen)
         self.logview.draw(self.screen)

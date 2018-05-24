@@ -60,7 +60,7 @@ class Room():
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
 
     def get_left_wall(self):
-        """Return a list of all tiles along the left wall, except corners."""        
+        """Return a list of all tiles along the left wall, except corners."""
         x1, y1 = self.left, self.top + 1
         x2, y2 = x1, self.top + self.height - 2
         return self.level.get_tiles_along_line(x1, y1, x2, y2)
