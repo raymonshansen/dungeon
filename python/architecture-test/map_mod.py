@@ -8,7 +8,6 @@ from tile import Tile
 from tiletypes import TileStatus, TileTypes
 from typebank import TypeBank
 from utils import plot_line
-from message import MsgType
 
 
 class Map():
