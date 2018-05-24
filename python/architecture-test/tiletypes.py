@@ -1,6 +1,32 @@
 """Contains functions to mangae tiletypes."""
 
-from enum import Enum, IntEnum
+from enum import IntEnum
+
+
+class TileStatus(IntEnum):
+    """Tile-status enumeration."""
+
+    UNEXPLORED = 1
+    EXPLORED = 2
+    VISIBLE = 3
+
+
+class TileTypes(IntEnum):
+    """Tile-type enumeration."""
+
+    NONE = 0
+    FLOOR = 1
+    WALL = 2
+    DARK = 3
+
+
+class ActorTypes(IntEnum):
+    """Actor sprite enumeration."""
+
+    HERO = 0
+    RAT = 1
+    BAT = 2
+    GOBLIN = 3
 
 
 def get_tilenames():
@@ -9,6 +35,16 @@ def get_tilenames():
                  1: "floor.png",
                  2: "wall.png",
                  3: "dark.png"
+                 }
+    return filenames
+
+
+def get_actorsprites():
+    """Filename dictionary for players and monsters."""
+    filenames = {0: "@.png",
+                 1: "rat.png",
+                 2: "bat.png",
+                 3: "goblin.png"
                  }
     return filenames
 
@@ -67,20 +103,3 @@ translate_dict = {1: 47, 2: 44, 3: 44, 4: 46, 5: 45,
                   251: 49, 252: 3, 253: 3, 254: 49, 255: 49
                   }
 """
-
-
-class TileStatus(Enum):
-    """Tile-status enumeration."""
-
-    UNEXPLORED = 1
-    EXPLORED = 2
-    VISIBLE = 3
-
-
-class TileTypes(IntEnum):
-    """Tile-type enumeration."""
-
-    NONE = 0
-    FLOOR = 1
-    WALL = 2
-    DARK = 3
