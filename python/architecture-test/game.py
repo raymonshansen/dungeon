@@ -50,7 +50,7 @@ class Monster():
         easy moding of behaviour.
         """
         # return self.next_action.get_cost()
-        self.energy -= 500
+        self.energy -= 1000
         # Monsters are always ready!
         self.next_action = True
 
