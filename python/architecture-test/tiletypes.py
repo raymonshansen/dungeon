@@ -3,12 +3,13 @@
 from enum import Enum, IntEnum
 
 
-def get_filenames():
+def get_tilenames():
     """Tile-filename dictionary."""
     filenames = {0: "none.png",
                  1: "floor.png",
                  2: "wall.png",
-                 3: "dark.png"}
+                 3: "dark.png"
+                 }
     return filenames
 
 

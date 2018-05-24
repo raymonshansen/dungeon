@@ -8,6 +8,7 @@ from tile import Tile
 from tiletypes import TileStatus, TileTypes
 from typebank import TypeBank
 from utils import plot_line
+from tiletypes import get_tilenames
 
 
 class Map():
@@ -26,7 +27,7 @@ class Map():
         self.dirty = True
         self.view_width = cons.MAP_VIEW_TW
         self.view_height = cons.MAP_VIEW_TH
-        self.tiles = self.setup_tiles(self.width, self.height, TypeBank())
+        self.tiles = self.setup_tiles(self.width, self.height, TypeBank(get_tilenames))
     
     def get_width_height(self):
         """Return the width and height of the map."""

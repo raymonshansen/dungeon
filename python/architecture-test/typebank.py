@@ -1,12 +1,10 @@
 import pygame
 import os
 
-from tiletypes import get_filenames
-
 
 class TypeBank():
-    def __init__(self):
-        self.filenames = get_filenames()
+    def __init__(self, loadfunc):
+        self.filenames = loadfunc()
         self.images = list()
         self.load_all()
 
