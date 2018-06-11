@@ -12,7 +12,8 @@ This is a general list of the things that I'm currently working on, should you h
 ## Next up
 When all the above are fixed, what then?
 * Look at actual physics and simple AI for the monsters. It could be as simple as:
-```if the player is visible:
+```
+if the player is visible:
     walk towards player
 else:
     walk in a random direction
