@@ -268,8 +268,8 @@ def generate_rooms(dungeon):
     """Try to place rooms of various size within the current level space.
     Increase the number of maxtries to have higher room density.
     """
-    roomnum = randint(10, 25)
-    maxtries = 500
+    roomnum = randint(7, 14)
+    maxtries = 10
     tries = 0
     actual_rooms = 0
     dungeon.logview.post("Roomnum: {}".format(roomnum), MsgType.INFO)
