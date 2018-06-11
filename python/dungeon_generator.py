@@ -150,25 +150,25 @@ def generate_dungeon(dungeon):
     start = time()
     generate_rooms(dungeon)
     delta = time() - start
-    string = "generate_rooms( ) " + "{}".format(delta) + " sec"
+    string = "generate_rooms( ) " + "{:5f}".format(delta) + " sec"
     dungeon.logview.post(string, MsgType.DEBUG)
 
     start = time()
     generate_corridors(dungeon)
     delta = time()-start
-    string = "generate_corridors( ) " + "{}".format(delta) + " sec"
+    string = "generate_corridors( ) " + "{:5f}".format(delta) + " sec"
     dungeon.logview.post(string, MsgType.DEBUG)
 
     start = time()
     generate_doors(dungeon)
     delta = time()-start
-    string = "generate_doors( ) " + "{}".format(delta) + " sec"
+    string = "generate_doors( ) " + "{:5f}".format(delta) + " sec"
     dungeon.logview.post(string, MsgType.DEBUG)
 
     start = time()
     remove_dead_ends(dungeon)
     delta = time()-start
-    string = "remove_dead_ends( ) " + "{}".format(delta) + " sec"
+    string = "remove_dead_ends( ) " + "{:5f}".format(delta) + " sec"
     dungeon.logview.post(string, MsgType.DEBUG)
 
 
