@@ -44,9 +44,7 @@ Run with:
 ./dungeon <optional width> <optional height>
 or
 make run
-Example:
-```./dungeon 1000 500```
-### Screenshot using above example
+### Screenshot using make run
 ![alt tag](docs/dungeon-c.png)
 To play/test:
 Keypads or arrows to move around
