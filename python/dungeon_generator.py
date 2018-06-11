@@ -1,6 +1,7 @@
 """Dungeon generator."""
 
 from random import randint, choice, sample
+from time import time
 
 from tiletypes import TileTypes
 from message import MsgType
@@ -146,10 +147,29 @@ class Room():
 
 def generate_dungeon(dungeon):
     """Wrapper for various stages of random generation."""
+    start = time()
     generate_rooms(dungeon)
+    delta = time() - start
+    string = "generate_rooms( ) " + "{}".format(delta) + " sec"
+    dungeon.logview.post(string, MsgType.DEBUG)
+
+    start = time()
     generate_corridors(dungeon)
+    delta = time()-start
+    string = "generate_corridors( ) " + "{}".format(delta) + " sec"
+    dungeon.logview.post(string, MsgType.DEBUG)
+
+    start = time()
     generate_doors(dungeon)
+    delta = time()-start
+    string = "generate_doors( ) " + "{}".format(delta) + " sec"
+    dungeon.logview.post(string, MsgType.DEBUG)
+
+    start = time()
     remove_dead_ends(dungeon)
+    delta = time()-start
+    string = "remove_dead_ends( ) " + "{}".format(delta) + " sec"
+    dungeon.logview.post(string, MsgType.DEBUG)
 
 
 def is_dead_end(dungeon, tile):
