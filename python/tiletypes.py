@@ -49,6 +49,15 @@ def get_actorsprites():
     return filenames
 
 
+def get_actornames():
+    """Name dictionary for players and monsters."""
+    names = {0: "Hero",
+             1: "Rat",
+             2: "Bat",
+             3: "Goblin"
+             }
+    return names
+
 """
 translate_dict = {1: 47, 2: 44, 3: 44, 4: 46, 5: 45,
                   6: 44, 7: 44, 8: 38, 9: 38, 10: 36,
