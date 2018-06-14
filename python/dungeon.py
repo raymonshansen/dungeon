@@ -112,9 +112,12 @@ class Dungeon():
         # Make this depend on some stat of the dungeon later...
         for room in self.rooms:
             x, y = choice(room.floor).coor
+            speed = choice([i for i in range(50, 250, 50)])
             bank = TypeBank(get_actorsprites)
             typ = choice(list(ActorTypes)[1::])
-            actors.append(Monster(x, y, 50, bank, typ, get_actornames().get(typ)))
+            name = get_actornames().get(typ)
+
+            actors.append(Monster(x, y, speed, bank, typ, name))
 
         return actors
 
@@ -161,6 +164,10 @@ class Dungeon():
                 # Eventually, this will inject the appropriate action instance
                 # which governs itself and has it's own cost etc.
                 self.hero.set_action(True)
+            if event.type == pg.KEYDOWN and event.key == pg.K_s:
+                for actor in self.actors:
+                    msg = actor.name + str(actor.speed)
+                    self.logview.post(msg, MsgType.INFO)
 
     def update(self, events):
         """Handle turn-based game loop."""
