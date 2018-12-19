@@ -1,12 +1,16 @@
 import pygame as pg
 
-TILE_D = 32
+TILE_D = 16
 
+# Comment in for small or big screen
 
-SCREEN_TW = 50
+# HD screen
+SCREEN_TW, SCREEN_TH = 50, 30
+# Low res screen
+SCREEN_TW, SCREEN_TH = 35, 20
+
 SCREEN_W_PX = SCREEN_TW * TILE_D
 
-SCREEN_TH = 30
 SCREEN_H_PX = SCREEN_TH * TILE_D
 
 SCREEN_SIZE = (SCREEN_W_PX, SCREEN_H_PX)

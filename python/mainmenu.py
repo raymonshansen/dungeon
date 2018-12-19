@@ -10,10 +10,7 @@ class MainMenuItem():
         self.text = text
         self.fontpath = os.path.join('Avara.otf')
         self.font = pg.font.Font(self.fontpath, cons.MAINMENU_FONTSIZE)
-        self.default_col = cons.MAINMENU_DEFAULT_COL
-        self.selected_col = cons.MAINMENU_SELECTED_COL
         self.bgcolor = cons.MAINMENU_BGCOL
-        self.textsurf = self.get_text_surface()
         self.selected = False
 
     def get_bottom_left(self):
@@ -22,30 +19,13 @@ class MainMenuItem():
     def get_width(self):
         return self.textsurf.get_width()
 
-    def is_selected(self):
-        return self.selected
-
-    def set_selected(self):
-        self.selected = True
-
-    def set_deselected(self):
-        self.selected = False
-
-    def get_text_surface(self):
-        return self.font.render(self.text, True, self.default_col, self.bgcolor)
-
-    def get_text(self):
-        return self.text
-
-    def set_text_color(self, color):
-        self.textsurf = self.font.render(self.text, True, color, self.bgcolor)
-
     def draw(self, surface):
+        color = cons.MAINMENU_DEFAULT_COL
         if self.selected:
-            self.set_text_color(self.selected_col)
-        elif not self.selected:
-            self.set_text_color(self.default_col)
-        surface.blit(self.textsurf, self.pos)
+            color = cons.MAINMENU_SELECTED_COL
+        textsurf = self.font.render(self.text, True, color, self.bgcolor)
+
+        surface.blit(textsurf, self.pos)
 
 
 class MainMenu():
@@ -54,9 +34,8 @@ class MainMenu():
         self.screen = screen
         self.func_name = {"Resume": self.resume, "Editor": self.editor, "Quit": self.quit}
         self.bgcolor = cons.MAINMENU_BGCOL
-        self.menu_items = self.item_list()
+        self.menu_items = self.generate_menu_items()
         self.current_choice = 0
-        self.menu_items[self.current_choice].set_selected()
         self.infoboxlist = self.infobox_list()
         self.headline = self.get_headline()
 
@@ -77,22 +56,24 @@ class MainMenu():
             retlist.append(info)
         return retlist
 
-    def item_list(self):
+    def generate_menu_items(self):
         retlist = list()
         for idx, item in enumerate(cons.MAINMENU_ITEM_LABELS):
             dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 10
             pos = (cons.SCREEN_W_PX//2-200, dist_from_top)
-            it = MainMenuItem(pos, self.screen, item)
-            retlist.append(it)
+            menu_item = MainMenuItem(pos, self.screen, item)
+            retlist.append(menu_item)
+            # Set the first menu-item to be selected
+            retlist[0].selected = True
         return retlist
 
     def up_or_down(self, step):
         """Select next or previous item in the item_list.
         Negative step is down, positive step is up."""
-        self.menu_items[self.current_choice].set_deselected()
+        self.menu_items[self.current_choice].selected = False
         self.current_choice -= step
         self.current_choice %= len(self.menu_items)
-        self.menu_items[self.current_choice].set_selected()
+        self.menu_items[self.current_choice].selected = True
 
     def handle_events(self):
         events = pg.event.get()
@@ -108,7 +89,7 @@ class MainMenu():
                 self.up_or_down(1)
             # Call apropriate method from menuitem
             if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
-                self.func_name.get(self.menu_items[self.current_choice].get_text())()
+                self.func_name.get(self.menu_items[self.current_choice].text)()
 
     def resume(self):
         self.statemanager.switch_state('GAME')
@@ -147,7 +128,7 @@ class MainMenu():
         for item_info in zip(self.menu_items, self.infoboxlist):
             # Draw text first
             item_info[0].draw(self.screen)
-            if item_info[0].is_selected():
+            if item_info[0].selected:
                 item_info[1].draw(self.screen)
                 # Then the lines...
                 self.draw_lines(item_info)
