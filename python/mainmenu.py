@@ -1,31 +1,50 @@
-import os
 import pygame as pg
 import constants as cons
 from message import Message, MsgType
 
 
 class MainMenuItem():
-    def __init__(self, pos, surface, text):
-        self.pos = pos
-        self.text = text
-        self.fontpath = os.path.join('Avara.otf')
-        self.font = pg.font.Font(self.fontpath, cons.MAINMENU_FONTSIZE)
-        self.bgcolor = cons.MAINMENU_BGCOL
+    def __init__(self, idx, surface, label_obj, info_obj):
+        self.text_obj = self.calc_label_obj(idx, label_obj)
+        self.info_obj = self.calc_info_box(info_obj)
         self.selected = False
 
-    def get_bottom_left(self):
-        return (self.pos[0], self.pos[1]+cons.MAINMENU_FONTSIZE)
+    def calc_label_obj(self, idx, label_obj):
+        y = (idx * cons.TILE_D * 3) + cons.TILE_D * 10
+        x = cons.SCREEN_W_PX // 2 - 200
+        w = cons.SCREEN_W_PX // 4
+        h = cons.SCREEN_H_PX // 8
+        label_obj.set_rect(x, y, w, h)
+        label_obj.set_size(cons.MAINMENU_FONTSIZE)
+        return label_obj
 
-    def get_width(self):
-        return self.textsurf.get_width()
+    def calc_info_box(self, info_obj):
+        info_obj.set_size(cons.TILE_D)
+        x = (cons.SCREEN_W_PX // 2) + 150
+        y = cons.TILE_D * 10
+        w = cons.SCREEN_W_PX // 3
+        h = cons.SCREEN_H_PX // 2
+        info_obj.set_rect(x, y, w, h)
+        info_obj.set_color(cons.MAINMENU_SELECTED_COL)
+        return info_obj
+
+    def draw_lines(self, surface):
+        col = cons.MAINMENU_SELECTED_COL
+        x1, y1 = self.text_obj.rect.bottomleft
+        x2, y2 = self.text_obj.rect.bottomright
+        pg.draw.line(surface, col, (x1, y1), (x2, y2), 1)
+        pg.draw.line(surface, col, (x1 + 7, y1 + 7), (x2 - 7, y2 + 7), 1)
 
     def draw(self, surface):
         color = cons.MAINMENU_DEFAULT_COL
         if self.selected:
             color = cons.MAINMENU_SELECTED_COL
-        textsurf = self.font.render(self.text, True, color, self.bgcolor)
+            self.draw_lines(surface)
+            self.info_obj.draw(surface)
+        self.text_obj.set_color(color)
 
-        surface.blit(textsurf, self.pos)
+        # Draw both messages
+        self.text_obj.draw(surface)
 
 
 class MainMenu():
@@ -36,36 +55,25 @@ class MainMenu():
         self.bgcolor = cons.MAINMENU_BGCOL
         self.menu_items = self.generate_menu_items()
         self.current_choice = 0
-        self.infoboxlist = self.infobox_list()
-        self.headline = self.get_headline()
+        self.headline = self.generate_headline()
 
-    def get_headline(self):
+    def generate_menu_items(self):
+        retlist = list()
+        label_and_txt = zip(cons.MAINMENU_ITEM_LABELS, cons.MAINMENU_ITEM_INFO)
+        for idx, item in enumerate(label_and_txt):
+            label = Message(item[0], MsgType.INFO)
+            info = Message(item[1], MsgType.INFO)
+            retlist.append(MainMenuItem(idx, self.screen, label, info))
+            # Set the first menu-item to be selected
+            retlist[0].selected = True
+        return retlist
+
+    def generate_headline(self):
         headline = Message("Dungeon", MsgType.INFO)
         headline.set_size(cons.TILE_D * 4)
         headline.set_rect(cons.SCREEN_W_PX//12, cons.TILE_D, 400, cons.TILE_D * 2)
         headline.set_color(cons.MAINMENU_DEFAULT_COL)
         return headline
-
-    def infobox_list(self):
-        retlist = list()
-        for text in cons.MAINMENU_ITEM_INFO:
-            info = Message(text, MsgType.INFO)
-            info.set_size(cons.TILE_D)
-            info.set_rect((cons.SCREEN_W_PX//2)+150, cons.TILE_D * 10, cons.SCREEN_W_PX//4, cons.SCREEN_H_PX//2)
-            info.set_color(cons.MAINMENU_SELECTED_COL)
-            retlist.append(info)
-        return retlist
-
-    def generate_menu_items(self):
-        retlist = list()
-        for idx, item in enumerate(cons.MAINMENU_ITEM_LABELS):
-            dist_from_top = (idx * cons.TILE_D * 3) + cons.TILE_D * 10
-            pos = (cons.SCREEN_W_PX//2-200, dist_from_top)
-            menu_item = MainMenuItem(pos, self.screen, item)
-            retlist.append(menu_item)
-            # Set the first menu-item to be selected
-            retlist[0].selected = True
-        return retlist
 
     def up_or_down(self, step):
         """Select next or previous item in the item_list.
@@ -103,33 +111,8 @@ class MainMenu():
     def update(self):
         self.handle_events()
 
-    def draw_lines(self, item_info):
-        """Draw some ey-candy."""
-        # Draw underscore
-        item, infobox = item_info
-        col = cons.MAINMENU_SELECTED_COL
-        x1, y1 = item.get_bottom_left()
-        x2, y2 = infobox.get_rect().left-cons.TILE_D//2, y1
-        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
-        pg.draw.line(self.screen, col, (x1 + 7, y1 + 7), (x2 - 7, y2 + 7), 1)
-        # Draw vertical
-        x1, y1 = infobox.get_rect().x-cons.TILE_D//2, infobox.get_rect().y
-        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
-        pg.draw.line(self.screen, col, (x1 - 7, y1 + 7), (x2 - 7, y2 + 7), 1)
-        # Headline... lines
-        hrec = self.headline.get_rect()
-        x1, y1 = hrec.left, hrec.bottom + 5
-        x2, y2 = hrec.right + hrec.width + hrec.width, hrec.bottom + 5
-        pg.draw.line(self.screen, col, (x1, y1), (x2, y2), 1)
-        pg.draw.line(self.screen, col, (x1 + 7, y1 + 7), (x2 + 7, y2 + 7), 1)
-
     def draw(self):
         self.screen.fill(self.bgcolor)
-        for item_info in zip(self.menu_items, self.infoboxlist):
-            # Draw text first
-            item_info[0].draw(self.screen)
-            if item_info[0].selected:
-                item_info[1].draw(self.screen)
-                # Then the lines...
-                self.draw_lines(item_info)
         self.headline.draw(self.screen)
+        for menu_item in self.menu_items:
+            menu_item.draw(self.screen)

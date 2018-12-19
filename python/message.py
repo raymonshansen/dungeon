@@ -27,7 +27,7 @@ class Message():
         self.textsurf = self.generate_surface()
 
     def set_rect(self, left, top, width, height):
-        self.rect = pygame.Rect(left, top, width, height)      
+        self.rect = pygame.Rect(left, top, width, height)
 
     def get_rect(self):
         return self.rect
@@ -48,14 +48,14 @@ class Message():
     def get_height(self):
         """Return the hight of the textsurf in pixels."""
         return self.textsurf.get_height()
-    
+
     def get_width(self):
         """Return the width of the textsurf in pixels."""
         return self.textsurf.get_width()
 
     def set_color(self, color):
         self.color = color
-        self.textsurf = self.generate_surface()        
+        self.textsurf = self.generate_surface()
 
     def set_color_by_type(self):
         """Set the color based on what type it is."""
